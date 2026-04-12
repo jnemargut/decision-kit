@@ -2,7 +2,7 @@
 
 **Outsource the thinking. Keep the judgment.**
 
-<p align="center"><img src="assets/decision-kit-demo.gif" alt="Decision Kit in action: type one sentence, get a visual decision page" width="800"></p>
+<p align="center"><img src="assets/decision-kit-demo.gif" alt="Animated demo of Decision Kit: four cycles showing different prompts being typed into a terminal, decision pages opening in a browser, and users choosing options in varied ways" width="800"></p>
 
 Here's the thing people get wrong about AI: they say "don't outsource the thinking." And yeah, that sounds right. You shouldn't outsource ALL the thinking. The critical thinking is still yours. The part where you look at a set of options and know which one is right because you've been living this problem for months and you understand things the AI never will. That part stays with you. That's the whole point.
 
@@ -18,7 +18,7 @@ Decision Kit is a system that makes that separation clean. AI does all the work 
 
 You said one sentence. And then this shows up:
 
-<p align="center"><img src="assets/example-trust-model.png" alt="A visual decision page with options, tradeoffs, and a comparison table" width="700"></p>
+<p align="center"><img src="assets/example-trust-model.png" alt="Decision page asking How Do Neighbors Build Trust, showing two options side by side: Reputation System and Deposit Hold, each with step-by-step flows and pros and cons" width="700"></p>
 
 You didn't ask for this. You didn't design it. You didn't even know this was a decision you needed to make. The AI built this whole page out of nothing: the question, the four options, the visual previews, the tradeoffs, the comparison table, the recommendation. It read your one sentence, understood what you were actually trying to do, and surfaced the decision that makes or breaks the entire thing. "How do neighbors build trust?" Yeah. Obviously. How did you not think of that?
 
@@ -94,7 +94,7 @@ A decision page pops open in your browser. Pick an option. Watch the next decisi
 
 The system has two types of skills, and the boundary between them is everything.
 
-<p align="center"><img src="assets/diagram-system.png" alt="Think, Decision Gate, Act" width="800"></p>
+<p align="center"><img src="assets/diagram-system.png" alt="System diagram showing three layers: Think (thinking skills like strategize, shape, product-strategy generate options), Decision Gate (browsable HTML artifacts in a .decisions folder that carry forward), and Act (action skills like game-plan, product-plan, brief execute on your decisions)" width="800"></p>
 
 **Thinking skills** do the thinking. They gather context, generate options, build comparisons, and recommend. Then they stop and wait for you to judge. They never execute anything. Their entire job is to make your judgment call as informed as possible, as fast as possible.
 
@@ -108,7 +108,7 @@ The system has two types of skills, and the boundary between them is everything.
 
 Every decision produces a real, tangible artifact you can open in a browser. Not notes buried in a doc. Not a Slack message someone will scroll past. A beautiful, structured page that lays out exactly what was considered and what was chosen.
 
-<p align="center"><img src="assets/decision-pages-showcase.gif" alt="Decision pages with visual options, comparisons, and tradeoffs" width="500"></p>
+<p align="center"><img src="assets/decision-pages-showcase.gif" alt="Animated showcase of a food truck brand identity decision page with four menu board mockups in different visual styles: Retro Diner, Street Culture, Minimal and Premium, and Neighborhood Joint, each with rendered previews and pros and cons" width="500"></p>
 
 Each page includes:
 
@@ -116,11 +116,11 @@ Each page includes:
 - **Options** - 4 visual options with rendered previews (UI mockups, flow diagrams, persona cards, revenue models, whatever makes the difference visible)
 - **Tradeoffs** - honest pros and cons for every option
 
-<p align="center"><img src="assets/example-pros-cons.png" alt="Pros and cons" width="600"></p>
+<p align="center"><img src="assets/example-pros-cons.png" alt="Two option cards side by side for Smash Burgers and Gourmet Tacos, each showing a green Pros list and red Cons list with specific tradeoffs like speed of service and crave factor" width="600"></p>
 
 - **Comparison** - side-by-side across the dimensions that matter
 
-<p align="center"><img src="assets/example-comparison-table.png" alt="Comparison table" width="700"></p>
+<p align="center"><img src="assets/example-comparison-table.png" alt="Side-by-side comparison table rating four food truck concepts across six dimensions: menu simplicity, speed of service, repeat customer potential, ingredient cost, and Instagram factor" width="700"></p>
 
 - **Your choice** - what you decided
 - **Your reasoning** - why you chose it (captured when you volunteer it, never nagged out of you)
@@ -227,7 +227,7 @@ Your codebase is a graveyard of decisions nobody can see anymore.
 /excavate
 ```
 
-<p align="center"><img src="assets/doomhiddendecisions.png" alt="The hidden decisions encoded in your codebase" width="450"></p>
+<p align="center"><img src="assets/doomhiddendecisions.png" alt="Excavate results from the Doom source code showing hidden decisions grouped by category: Game Feel findings like view bobbing tied to momentum, UX Design findings like Doomguy having 42 face states as an emotional dashboard, and Game Design findings like monsters hearing through walls via recursive sound flooding" width="450"></p>
 
 It scans in layers: configs and dependencies first, then architecture, then patterns like error handling and state management, then higher-level signals like UX patterns and business model decisions. You confirm, review, or reject findings. Every confirmed finding becomes a recorded decision. The invisible becomes browsable.
 
@@ -237,7 +237,7 @@ From there, `/journal` evolves those decisions over time:
 /journal our target user ended up being suburban homeowners, not urban renters
 ```
 
-<p align="center"><img src="assets/example-journal-entry.png" alt="Journal entry with reasoning and decision history" width="450"></p>
+<p align="center"><img src="assets/example-journal-entry.png" alt="Decision journal entry showing reasoning in quotes: They have garages full of tools and love lending them out, with an expanded change history showing the decision was changed from Urban Renters to Suburban Homeowners with a dated trail of why" width="450"></p>
 
 Decisions mature: early sketch (no reasoning) becomes firmed up (has reasoning) becomes evolved (has reasoning + history of changes). You can look at any decision and immediately know how mature it is.
 
