@@ -4,9 +4,11 @@
 
 <p align="center"><img src="assets/decision-kit-demo.gif" alt="Decision Kit in action: type one sentence, get a visual decision page" width="800"></p>
 
-Here's the thing people get wrong about AI: they say "don't outsource the thinking." And yeah, that sounds right. Except... the thinking IS the part AI is good at. The exploration. The option generation. The comparison tables. The tradeoff analysis. AI can dig into four pricing models, visualize them, and compare them across six dimensions in two minutes. You can't. I can't. Nobody can.
+Here's the thing people get wrong about AI: they say "don't outsource the thinking." And yeah, that sounds right. You shouldn't outsource ALL the thinking. The critical thinking is still yours. The part where you look at a set of options and know which one is right because you've been living this problem for months and you understand things the AI never will. That part stays with you. That's the whole point.
 
-What AI can't do is look at those four options and say "this one, because it fits who we are." That's not thinking. That's judgment. And judgment is yours.
+But the other kind of thinking? The grunt work of exploring four pricing models, visualizing them, comparing them across six dimensions, pulling together context you'd otherwise spend a week assembling? AI can do that in two minutes. You can't. I can't. Nobody can. And there's no reason to pretend otherwise.
+
+So the real move isn't "don't outsource the thinking." It's outsource the legwork, keep the critical thinking. Let AI do the work around the decision so you can do the part that actually matters: looking at four options and saying "this one, because it fits who we are." That's judgment. And judgment is yours.
 
 Decision Kit is a system that makes that separation clean. AI does all the work *around* the decision - the exploration, the options, the visual comparisons, the tradeoffs. Then it stops and waits for you to make the call. Every decision gets a beautiful visual page you can actually look at and compare. You pick. It remembers. The next decision builds on the last one.
 
