@@ -10,7 +10,7 @@ But the other kind of thinking? The grunt work of exploring four pricing models,
 
 That's the separation that matters. AI does the work around the decision so you can do the part that actually requires you: looking at four options and saying "this one, because it fits who we are." That's judgment. And judgment is yours.
 
-Decision Kit is a system that makes that separation clean. AI does all the work *around* the decision - the exploration, the options, the visual comparisons, the tradeoffs. Then it stops and waits for you to make the call. Every decision gets a beautiful visual page you can actually look at and compare. You pick. It remembers. The next decision builds on the last one.
+Decision Kit is a system that makes that separation clean. You tell it what you're working on, and it figures out the 5-7 decisions that actually matter, stack-ranked from most critical to least. For each one, AI does all the work *around* the decision: the exploration, the options, the visual comparisons, the tradeoffs. Then it stops and waits for you to make the call. Every decision gets a beautiful visual page you can actually look at and compare. You pick. It remembers. On to the next one, which builds on what you just chose.
 
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
@@ -22,7 +22,7 @@ You said one sentence. And then this shows up:
 
 You didn't ask for this. You didn't design it. You didn't even know this was a decision you needed to make. The AI built this whole page out of nothing: the question, the four options, the visual previews, the tradeoffs, the comparison table, the recommendation. It read your one sentence, understood what you were actually trying to do, and surfaced the decision that makes or breaks the entire thing. "How do neighbors build trust?" Yeah. Obviously. How did you not think of that?
 
-That keeps happening. You came in with an idea and Decision Kit pulls out the decisions hiding inside it, the ones you would have eventually stumbled into three weeks from now, except now they're in front of you with options you can actually see and compare.
+That keeps happening. Decision after decision, each one building on what you chose before. You came in with an idea and Decision Kit pulled out every decision hiding inside it, ordered them by what matters most, and walked you through each one with options you can actually see and compare. Not too many that you get decision fatigue, not too few that you're left wondering "wait, what are we actually building?"
 
 You pick. It remembers. On to the next one. Go ahead, argue with the AI's recommendation. It's more fun that way.
 
@@ -96,7 +96,7 @@ The system has two types of skills, and the boundary between them is everything.
 
 <p align="center"><img src="assets/diagram-system.png" alt="System diagram showing three layers: Think (thinking skills like strategize, shape, product-strategy generate options), Decision Gate (browsable HTML artifacts in a .decisions folder that carry forward), and Act (action skills like game-plan, product-plan, brief execute on your decisions)" width="800"></p>
 
-**Thinking skills** do the thinking. They gather context, generate options, build comparisons, and recommend. Then they stop and wait for you to judge. They never execute anything. Their entire job is to make your judgment call as informed as possible, as fast as possible.
+**Thinking skills** do the thinking. They identify the decisions that matter for your situation, put them in order from most critical to least, and walk you through each one with visual options, comparisons, and a recommendation. Then they stop and wait for you to judge. They never execute anything. Their entire job is to surface the right decisions and make your judgment call as informed as possible.
 
 **Action skills** execute on your judgment. They read what you decided and produce deliverables: roadmaps, launch plans, briefs, code. They never make judgment calls. They just do what you already decided.
 
