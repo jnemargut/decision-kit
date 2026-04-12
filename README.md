@@ -195,6 +195,8 @@ AI:         [reads .decisions/, your full decision record]
 
 You started with one sentence. You ended with working code. In between, you thought it through with AI as your partner and made every decision that mattered. Nobody skipped the thinking. Nobody rushed the judgment. Every choice is in `.decisions/`, every reason is captured, and a week from now you can open the folder and see exactly why the app looks the way it looks. You didn't just get code. You built something great, together.
 
+(Pairs well with Spec Kit and similar spec-driven tools - Decision Kit handles the thinking, they handle the building.)
+
 ---
 
 ## Greenfield and brownfield
