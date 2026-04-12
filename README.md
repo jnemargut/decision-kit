@@ -30,6 +30,36 @@ When you're done thinking, you can hand the whole stack of decisions to an AI co
 
 ---
 
+## Contents
+
+- [The separation that matters](#the-separation-that-matters)
+- [Questions you didn't know you needed to answer](#questions-you-didnt-know-you-needed-to-answer)
+- [Start here in 2 minutes](#start-here-in-2-minutes)
+- [How it works](#how-it-works)
+- [The decision artifact](#the-decision-artifact)
+- [Decisions compound](#decisions-compound)
+- [Idea to code, at a glance](#idea-to-code-at-a-glance)
+- [Greenfield and brownfield](#greenfield-and-brownfield)
+- [Beyond software](#beyond-software)
+- [How this compares](#how-this-compares)
+- [Skills](#skills)
+- [Install](#install)
+- [Hooks](#hooks)
+- [Build your own thinking skill](#build-your-own-thinking-skill)
+- [Try it](#try-it-tell-us-what-happened)
+
+---
+
+## The separation that matters
+
+**AI thinks. You judge. Things get built.**
+
+That's the whole idea. When you structure it that way, when the roles are explicit and the handoff is clean, something kind of magical happens. You make decisions in minutes that used to take days. The decisions themselves get better because you can see them, compare them, and revisit them months later. And nothing gets lost.
+
+This is Decision Driven Development. Software (and everything else) is built through decisions. Make those decisions structured, visual, and fast, and the building gets better. The output isn't slop because a human was in the loop at every point that mattered.
+
+---
+
 ## Questions you didn't know you needed to answer
 
 You said "food truck." It came back with:
@@ -69,35 +99,6 @@ You said "tool-sharing app." It came back with:
 > Option D: **Community Fund** - Everyone chips in $2/month. Breakage comes out of the pool. Nobody points fingers. Very co-op energy.
 
 You're not writing essays in a text box. You're looking at four well-framed options, each with a real point of view, and picking the one that fits. Or combining two. Or telling it to throw them all out and start over. The thinking is done for you. The judgment is all yours.
-
----
-
-## Contents
-
-- [The separation that matters](#the-separation-that-matters)
-- [Start here in 2 minutes](#start-here-in-2-minutes)
-- [How it works](#how-it-works)
-- [The decision artifact](#the-decision-artifact)
-- [Decisions compound](#decisions-compound)
-- [Idea to code, at a glance](#idea-to-code-at-a-glance)
-- [Greenfield and brownfield](#greenfield-and-brownfield)
-- [Beyond software](#beyond-software)
-- [How this compares](#how-this-compares)
-- [Skills](#skills)
-- [Install](#install)
-- [Hooks](#hooks)
-- [Build your own thinking skill](#build-your-own-thinking-skill)
-- [Try it](#try-it-tell-us-what-happened)
-
----
-
-## The separation that matters
-
-**AI thinks. You judge. Things get built.**
-
-That's the whole idea. When you structure it that way, when the roles are explicit and the handoff is clean, something kind of magical happens. You make decisions in minutes that used to take days. The decisions themselves get better because you can see them, compare them, and revisit them months later. And nothing gets lost.
-
-This is Decision Driven Development. Software (and everything else) is built through decisions. Make those decisions structured, visual, and fast, and the building gets better. The output isn't slop because a human was in the loop at every point that mattered.
 
 ---
 
