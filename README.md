@@ -258,10 +258,8 @@ Decisions mature: early sketch (no reasoning) becomes firmed up (has reasoning) 
 
 **Outside software:**
 
-- **Plan a wedding** - Venue style, guest experience, photography approach, timeline. Each decision gets the same visual treatment as a product decision. You and your partner look at options side by side instead of going back and forth in a group chat.
 - **Launch a business** - Food truck, consulting practice, online store. Strategy first, then an operational game plan with concrete tasks and timelines.
 - **Write a difficult email** - Run `/strategize` on "I need to tell my team we're restructuring." It surfaces the decisions you need to make about framing, tone, what to include, what to leave out. The email you write afterward is deliberate, not reactive.
-- **Plan a home renovation** - Kitchen layout, materials, contractor approach, budget allocation. See the tradeoffs visually before you commit to tearing out a wall.
 - **Plan an event** - Conference, workshop series, team offsite. Run `/shape` and walk through format, schedule, venue, content structure, guest experience. Each decision builds on the last.
 
 The examples in this repo include a [food truck launch](examples/food-truck/), a [neighborhood tool library](examples/community-app/), and [wedding planning](examples/wedding-planning/).
