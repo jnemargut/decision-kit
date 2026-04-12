@@ -1,0 +1,115 @@
+{
+  "project": "Food Truck Launch Strategy",
+  "created": "2026-03-28",
+  "status": "complete",
+  "decisions": [
+    {
+      "id": "decision-001",
+      "title": "What's Your Food Truck Concept?",
+      "file": "decision-001-concept.html",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Gourmet Tacos",
+          "subtitle": "Elevated street tacos, seasonal menus, craft salsas",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Smash Burgers",
+          "subtitle": "Simple menu, fast execution, cult-following potential",
+          "recommended": true,
+          "chosen": true
+        },
+        {
+          "id": "C",
+          "title": "Asian Fusion Bowls",
+          "subtitle": "Build-your-own bowls, healthy-ish, vibrant flavors",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "D",
+          "title": "Wood-Fired Pizza",
+          "subtitle": "Artisan pies, spectacle of the oven, event-friendly",
+          "recommended": false,
+          "chosen": false
+        }
+      ]
+    },
+    {
+      "id": "decision-002",
+      "title": "Where Do You Set Up?",
+      "file": "decision-002-location-strategy.html",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Lunch Rush Circuit",
+          "subtitle": "Office parks and business districts, M-F 11am-2pm",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Event Chaser",
+          "subtitle": "Festivals, farmers markets, concerts, weekend focus",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "C",
+          "title": "Brewery Partner",
+          "subtitle": "Permanent spot at a brewery with no kitchen",
+          "recommended": true,
+          "chosen": true
+        },
+        {
+          "id": "D",
+          "title": "Neighborhood Rotation",
+          "subtitle": "Different residential neighborhoods each day, evening focus",
+          "recommended": false,
+          "chosen": false
+        }
+      ]
+    },
+    {
+      "id": "decision-003",
+      "title": "What's the Vibe?",
+      "file": "decision-003-brand-identity.html",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Retro Diner",
+          "subtitle": "Checkered patterns, neon accents, classic Americana",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Street Culture",
+          "subtitle": "Bold typography, graffiti-inspired, urban edge",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "C",
+          "title": "Minimal & Premium",
+          "subtitle": "Clean lines, black/white, let the food speak",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "D",
+          "title": "Neighborhood Joint",
+          "subtitle": "Warm, hand-lettered, approachable, local feel",
+          "recommended": true,
+          "chosen": true
+        }
+      ]
+    }
+  ]
+}

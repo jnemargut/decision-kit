@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the spec
+    url: https://github.com/jnemargut/decision-kit/blob/main/SPEC.md
+    about: Before opening an issue, the SPEC explains how Decision Kit's three rules work.
+  - name: Build a thinking skill
+    url: https://github.com/jnemargut/decision-kit/blob/main/docs/building-a-thinking-skill.md
+    about: Step-by-step guide to creating your own thinking skill.
+  - name: Build a hook provider
+    url: https://github.com/jnemargut/decision-kit/blob/main/docs/building-a-provider.md
+    about: How to build a hook package that connects Decision Kit to an external service.

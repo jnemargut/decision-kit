@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Truck Launch Strategy -- Decision History</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(45, 212, 168, 0.1);
+    border: 1px solid rgba(45, 212, 168, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 28px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #2dd4a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    color: #8888a0;
+    font-size: 17px;
+  }
+  .header .project-name {
+    display: inline-block;
+    margin-top: 16px;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 14px;
+    color: #2dd4a8;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* Stats Bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #2dd4a8;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #8888a0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #2dd4a8, #2a2a3a);
+  }
+
+  .decision-card {
+    position: relative;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+  }
+  .decision-card:hover {
+    border-color: #2dd4a8;
+    box-shadow: 0 0 30px rgba(45, 212, 168, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -33px;
+    top: 32px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #2dd4a8;
+    border: 3px solid #0a0a0f;
+    box-shadow: 0 0 10px rgba(45, 212, 168, 0.3);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .decision-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #2dd4a8;
+  }
+  .decision-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+  }
+
+  .decision-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .decision-desc {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .chosen-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1a1a25;
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .chosen-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .chosen-icon.icon-b { background: rgba(45, 212, 168, 0.15); color: #2dd4a8; }
+  .chosen-icon.icon-c { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+  .chosen-icon.icon-d { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+
+  .chosen-info { flex: 1; }
+  .chosen-label {
+    font-size: 11px;
+    color: #8888a0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .chosen-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e0e0e8;
+  }
+  .chosen-sub {
+    font-size: 12px;
+    color: #8888a0;
+  }
+
+  .card-arrow {
+    color: #2dd4a8;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .decision-card:hover .card-arrow { opacity: 1; }
+
+  /* Brief Link */
+  .brief-section {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid #1a1a25;
+  }
+  .brief-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 12px;
+    padding: 16px 28px;
+    color: #e0e0e8;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .brief-link:hover {
+    border-color: #2dd4a8;
+    box-shadow: 0 0 20px rgba(45, 212, 168, 0.08);
+  }
+  .brief-link .link-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(45, 212, 168, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2dd4a8;
+    font-size: 16px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding: 24px;
+    color: #8888a0;
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 26px; }
+    .stats-bar { gap: 24px; }
+    .stat-value { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">&#x1F69A;</div>
+    <h1>Food Truck Launch Strategy</h1>
+    <p class="subtitle">3 strategic decisions for launching SMASH STACK</p>
+    <div class="project-name">SMASH STACK -- Smash Burgers at a Brewery</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Decisions Made</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">12</div>
+      <div class="stat-label">Options Evaluated</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Strategies Chosen</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline">
+
+    <!-- Decision 1 -->
+    <a href="decision-001-concept.html" class="decision-card">
+      <div class="timeline-dot"></div>
+      <div class="card-top">
+        <div class="decision-number">Decision 1 of 3</div>
+        <div class="decision-status">Chosen</div>
+      </div>
+      <div class="decision-title">What's Your Food Truck Concept?</div>
+      <div class="decision-desc">The foundation -- menu complexity, equipment, brand, and target market all flow from this choice.</div>
+      <div class="chosen-result">
+        <div class="chosen-icon icon-b">B</div>
+        <div class="chosen-info">
+          <div class="chosen-label">Chosen</div>
+          <div class="chosen-name">Smash Burgers</div>
+          <div class="chosen-sub">Simple menu, fast execution, cult-following potential</div>
+        </div>
+        <div class="card-arrow">&rarr;</div>
+      </div>
+    </a>
+
+    <!-- Decision 2 -->
+    <a href="decision-002-location-strategy.html" class="decision-card">
+      <div class="timeline-dot"></div>
+      <div class="card-top">
+        <div class="decision-number">Decision 2 of 3</div>
+        <div class="decision-status">Chosen</div>
+      </div>
+      <div class="decision-title">Where Do You Set Up?</div>
+      <div class="decision-desc">Location strategy defines revenue ceiling, schedule, and lifestyle for a smash burger truck.</div>
+      <div class="chosen-result">
+        <div class="chosen-icon icon-c">C</div>
+        <div class="chosen-info">
+          <div class="chosen-label">Chosen</div>
+          <div class="chosen-name">Brewery Partner</div>
+          <div class="chosen-sub">Permanent spot at a brewery with no kitchen</div>
+        </div>
+        <div class="card-arrow">&rarr;</div>
+      </div>
+    </a>
+
+    <!-- Decision 3 -->
+    <a href="decision-003-brand-identity.html" class="decision-card">
+      <div class="timeline-dot"></div>
+      <div class="card-top">
+        <div class="decision-number">Decision 3 of 3</div>
+        <div class="decision-status">Chosen</div>
+      </div>
+      <div class="decision-title">What's the Vibe?</div>
+      <div class="decision-desc">Brand identity shapes every touchpoint -- truck wrap, menu board, social media, and customer feeling.</div>
+      <div class="chosen-result">
+        <div class="chosen-icon icon-d">D</div>
+        <div class="chosen-info">
+          <div class="chosen-label">Chosen</div>
+          <div class="chosen-name">Neighborhood Joint</div>
+          <div class="chosen-sub">Warm, hand-lettered, approachable, local feel</div>
+        </div>
+        <div class="card-arrow">&rarr;</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Strategy Brief Link -->
+  <div class="brief-section">
+    <a href="strategy-brief.md" class="brief-link">
+      <div class="link-icon">&#x1F4CB;</div>
+      <div>
+        <div>View Strategy Brief</div>
+        <div style="font-size: 12px; color: #8888a0; font-weight: 400;">Full summary of all decisions and next steps</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Food Truck Launch Strategy &middot; SMASH STACK &middot; 3 decisions complete</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 3: What Should It Look and Feel Like? — ToolShare</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 48px; }
+  .decision-badge {
+    display: inline-block;
+    background: rgba(224, 124, 62, 0.15);
+    border: 1px solid rgba(224, 124, 62, 0.3);
+    color: #e07c3e;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e8, #8888a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p { color: #8888a0; font-size: 16px; max-width: 600px; margin: 0 auto; }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .option-card.not-chosen { opacity: 0.55; }
+  .option-card.recommended { border-color: #e07c3e; box-shadow: 0 0 24px rgba(224, 124, 62, 0.1); }
+  .option-card.chosen { border-color: #4ade80; box-shadow: 0 0 24px rgba(74, 222, 128, 0.1); }
+  .option-card.chosen.recommended { border-color: #4ade80; }
+
+  .badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 0 0 10px 10px;
+    color: #fff;
+  }
+  .badge.chosen-badge { background: #4ade80; color: #0a0a0f; }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.a { color: #60a5fa; }
+  .option-label.b { color: #e07c3e; }
+  .option-label.c { color: #fbbf24; }
+  .option-label.d { color: #a78bfa; }
+
+  .option-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pros-cons { display: flex; flex-direction: column; gap: 8px; }
+  .pro, .con {
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #8888a0;
+  }
+  .pro .icon { color: #4ade80; flex-shrink: 0; font-weight: 700; }
+  .con .icon { color: #f87171; flex-shrink: 0; font-weight: 700; }
+
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #e0e0e8; }
+  .comparison-table .chosen-col {
+    background: rgba(74, 222, 128, 0.06);
+    border-left: 2px solid #4ade80;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid #2a2a3a;
+    color: #8888a0;
+    font-size: 13px;
+  }
+  .footer strong { color: #e0e0e8; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="decision-badge">Decision 3 of 3</div>
+    <h1>What Should It Look and Feel Like?</h1>
+    <p>The visual direction sets the emotional tone. For urban renters using a neighbor vouching model, the design should feel approachable, warm, and community-oriented.</p>
+  </div>
+
+  <div class="options-grid">
+
+    <!-- Option A: Warm Community — Chosen -->
+    <div class="option-card recommended chosen">
+      <span class="badge chosen-badge">Chosen</span>
+      <div class="option-label a">Option A — Recommended</div>
+      <div class="option-title">Warm Community</div>
+      <div class="option-subtitle">Earth tones, rounded corners, friendly and inviting</div>
+      <div class="visual-preview">
+        <div style="width:100%;max-width:280px;background:#FDF8F3;border-radius:16px;overflow:hidden;font-family:-apple-system,system-ui,sans-serif;box-shadow:0 4px 24px rgba(139,115,85,0.15);">
+          <div style="height:8px;background:linear-gradient(90deg,#8B7355,#A89070,#C4AD8F);"></div>
+          <div style="padding:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#3D2E1F;">DeWalt Circular Saw</div>
+                <div style="font-size:11px;color:#8B7355;margin-top:2px;">Listed by Sarah M.</div>
+              </div>
+              <div style="background:#E8F5E9;color:#2E7D32;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;">Available</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#F5EDE3,#EDE0D0);border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;overflow:hidden;">
+              <div style="width:60px;height:60px;border-radius:50%;background:#D4C4AD;display:flex;align-items:center;justify-content:center;">
+                <div style="width:32px;height:32px;border:3px solid #8B7355;border-radius:50%;position:relative;">
+                  <div style="position:absolute;top:50%;left:50%;width:8px;height:8px;background:#8B7355;border-radius:50%;transform:translate(-50%,-50%);"></div>
+                </div>
+              </div>
+              <div style="position:absolute;bottom:8px;right:10px;font-size:9px;color:#A89070;font-weight:600;">POWER TOOLS</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+              <div style="width:6px;height:6px;background:#8B7355;border-radius:50%;"></div>
+              <span style="font-size:12px;color:#8B7355;">0.3 mi away</span>
+              <div style="margin-left:auto;font-size:10px;color:#A89070;background:#F5EDE3;padding:2px 8px;border-radius:10px;">Vouched</div>
+            </div>
+            <button style="width:100%;background:#8B7355;color:#FDF8F3;border:none;padding:12px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:0.3px;">Request to Borrow</button>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Warm tones build trust and approachability for neighbor interactions</div>
+        <div class="pro"><span class="icon">+</span> Rounded corners and soft palette feel friendly, not corporate</div>
+        <div class="pro"><span class="icon">+</span> Differentiates from cold marketplace apps like Craigslist</div>
+        <div class="con"><span class="icon">-</span> Earth tones can feel dated if not executed carefully</div>
+        <div class="con"><span class="icon">-</span> May not convey "tech-forward" to younger urban renters</div>
+      </div>
+    </div>
+
+    <!-- Option B: Clean Utility -->
+    <div class="option-card not-chosen">
+      <div class="option-label b">Option B</div>
+      <div class="option-title">Clean Utility</div>
+      <div class="option-subtitle">Minimal, gray tones, tool-focused and efficient</div>
+      <div class="visual-preview">
+        <div style="width:100%;max-width:280px;background:#FFFFFF;border-radius:6px;overflow:hidden;font-family:-apple-system,system-ui,sans-serif;border:1px solid #E2E8F0;">
+          <div style="height:3px;background:#475569;"></div>
+          <div style="padding:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <div style="font-size:14px;font-weight:600;color:#1E293B;">DeWalt Circular Saw</div>
+              <div style="background:#F0FDF4;color:#16A34A;font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;">Available</div>
+            </div>
+            <div style="font-size:11px;color:#94A3B8;margin-bottom:12px;">Sarah M. · 0.3 mi</div>
+            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:4px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                <div style="width:40px;height:2px;background:#CBD5E1;"></div>
+                <div style="width:50px;height:2px;background:#94A3B8;"></div>
+                <div style="width:30px;height:30px;border:2px solid #64748B;border-radius:50%;margin:4px 0;"></div>
+                <div style="width:50px;height:2px;background:#94A3B8;"></div>
+                <div style="width:40px;height:2px;background:#CBD5E1;"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button style="flex:1;background:#475569;color:#fff;border:none;padding:10px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Request</button>
+              <button style="background:transparent;color:#475569;border:1px solid #CBD5E1;padding:10px 14px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Clean and scannable — users find tools fast</div>
+        <div class="pro"><span class="icon">+</span> Timeless design that won't feel trendy or dated</div>
+        <div class="con"><span class="icon">-</span> Feels impersonal — could be any utility app</div>
+        <div class="con"><span class="icon">-</span> Lacks warmth needed for neighbor-to-neighbor trust</div>
+      </div>
+    </div>
+
+    <!-- Option C: Friendly Marketplace -->
+    <div class="option-card not-chosen">
+      <div class="option-label c">Option C</div>
+      <div class="option-title">Friendly Marketplace</div>
+      <div class="option-subtitle">Bright coral, card-based, playful and energetic</div>
+      <div class="visual-preview">
+        <div style="width:100%;max-width:280px;background:#FFFFFF;border-radius:20px;overflow:hidden;font-family:-apple-system,system-ui,sans-serif;box-shadow:0 8px 32px rgba(255,107,107,0.15);border:2px solid #FFE0E0;">
+          <div style="background:linear-gradient(135deg,#FF6B6B,#FF8E8E);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:13px;font-weight:700;color:#fff;">NEARBY</div>
+            <div style="background:rgba(255,255,255,0.25);padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;color:#fff;">0.3 mi</div>
+          </div>
+          <div style="padding:18px;">
+            <div style="font-size:16px;font-weight:700;color:#2D2D2D;margin-bottom:2px;">DeWalt Circular Saw</div>
+            <div style="font-size:11px;color:#999;margin-bottom:12px;">Sarah M. · Vouched by 3 neighbors</div>
+            <div style="background:linear-gradient(135deg,#FFF5F5,#FFE8E8);border-radius:16px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;">
+              <div style="font-size:36px;filter:drop-shadow(0 2px 4px rgba(255,107,107,0.3));">
+                <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFB3B3,#FF8E8E);display:flex;align-items:center;justify-content:center;">
+                  <div style="width:20px;height:20px;border:3px solid #fff;border-radius:50%;"></div>
+                </div>
+              </div>
+              <div style="position:absolute;top:8px;left:10px;background:#22C55E;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:8px;">AVAILABLE</div>
+            </div>
+            <button style="width:100%;background:#FF6B6B;color:#fff;border:none;padding:13px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(255,107,107,0.3);">Request to Borrow</button>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Eye-catching and fun — appeals to younger urban audience</div>
+        <div class="pro"><span class="icon">+</span> Playful tone lowers the barrier to first borrow</div>
+        <div class="con"><span class="icon">-</span> Coral/red tones can feel like a food or dating app</div>
+        <div class="con"><span class="icon">-</span> Too playful may undermine trust for high-value tool lending</div>
+      </div>
+    </div>
+
+    <!-- Option D: Local & Crafted -->
+    <div class="option-card not-chosen">
+      <div class="option-label d">Option D</div>
+      <div class="option-title">Local &amp; Crafted</div>
+      <div class="option-subtitle">Deep green, serif headings, artisanal and grounded</div>
+      <div class="visual-preview">
+        <div style="width:100%;max-width:280px;background:#F7FAF5;border-radius:10px;overflow:hidden;font-family:-apple-system,system-ui,sans-serif;border:1px solid #C5D9C0;">
+          <div style="background:#2D6A4F;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:14px;font-weight:700;color:#E8F5E9;font-family:Georgia,'Times New Roman',serif;letter-spacing:0.5px;">ToolShare</div>
+            <div style="width:20px;height:2px;background:#A3C9A8;position:relative;"><div style="position:absolute;top:-5px;width:20px;height:2px;background:#A3C9A8;"></div><div style="position:absolute;top:5px;width:20px;height:2px;background:#A3C9A8;"></div></div>
+          </div>
+          <div style="padding:18px;">
+            <div style="font-size:17px;font-weight:700;color:#1B3A2D;font-family:Georgia,'Times New Roman',serif;margin-bottom:2px;">DeWalt Circular Saw</div>
+            <div style="font-size:11px;color:#6B8F71;margin-bottom:12px;border-bottom:1px solid #E0EDE0;padding-bottom:10px;">Listed by Sarah M. · 0.3 mi</div>
+            <div style="background:#EFF5EC;border-radius:6px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;border:1px dashed #C5D9C0;">
+              <div style="text-align:center;">
+                <div style="width:40px;height:40px;margin:0 auto 6px;border:2px solid #2D6A4F;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                  <div style="width:10px;height:10px;background:#2D6A4F;border-radius:50%;"></div>
+                </div>
+                <div style="font-size:9px;color:#6B8F71;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Power Tool</div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-size:10px;color:#2D6A4F;font-weight:700;text-transform:uppercase;letter-spacing:1px;background:#E8F5E9;padding:4px 10px;border-radius:4px;">Available</div>
+              <div style="font-size:10px;color:#6B8F71;font-style:italic;">Vouched</div>
+            </div>
+            <button style="width:100%;background:#2D6A4F;color:#F7FAF5;border:none;padding:12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:Georgia,'Times New Roman',serif;letter-spacing:0.5px;">Request to Borrow</button>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Distinctive, premium feel that stands out from generic apps</div>
+        <div class="pro"><span class="icon">+</span> Green tones signal sustainability without being preachy</div>
+        <div class="con"><span class="icon">-</span> Serif fonts can feel old-fashioned on mobile</div>
+        <div class="con"><span class="icon">-</span> Artisanal aesthetic may set wrong expectations for a utility tool</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Criteria</th>
+          <th class="chosen-col">A: Warm Community</th>
+          <th>B: Clean Utility</th>
+          <th>C: Friendly Marketplace</th>
+          <th>D: Local &amp; Crafted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Primary Accent</strong></td>
+          <td class="chosen-col"><strong>#8B7355 (warm brown)</strong></td>
+          <td>#475569 (slate gray)</td>
+          <td>#FF6B6B (coral)</td>
+          <td>#2D6A4F (deep green)</td>
+        </tr>
+        <tr>
+          <td><strong>Emotional Tone</strong></td>
+          <td class="chosen-col"><strong>Warm, trustworthy, neighborly</strong></td>
+          <td>Professional, efficient</td>
+          <td>Fun, energetic, casual</td>
+          <td>Artisanal, grounded, premium</td>
+        </tr>
+        <tr>
+          <td><strong>Trust Signal</strong></td>
+          <td class="chosen-col"><strong>High — warmth builds social trust</strong></td>
+          <td>Medium — clean = reliable</td>
+          <td>Low — playful may undermine</td>
+          <td>High — premium = care</td>
+        </tr>
+        <tr>
+          <td><strong>Urban Renter Fit</strong></td>
+          <td class="chosen-col"><strong>Strong — approachable for first-timers</strong></td>
+          <td>Good — familiar utility style</td>
+          <td>Strong — appeals to younger users</td>
+          <td>Moderate — niche aesthetic</td>
+        </tr>
+        <tr>
+          <td><strong>Scalability</strong></td>
+          <td class="chosen-col"><strong>Good — works across categories</strong></td>
+          <td>Excellent — neutral scales well</td>
+          <td>Limited — playful doesn't fit all</td>
+          <td>Limited — strong aesthetic choice</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p><strong>Decision 3 of 3</strong> — Visual Direction</p>
+    <p>Respond with <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, or <strong>D</strong> to choose a direction.</p>
+  </div>
+
+</div>
+</body>
+</html>

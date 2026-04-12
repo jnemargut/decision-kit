@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 2 of 3: How Should Guests Experience the Day?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px 60px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 48px; }
+  .badge {
+    display: inline-block;
+    background: rgba(108, 99, 255, 0.15);
+    color: #6c63ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #6c63ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .header .description {
+    color: #8888a0;
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ── Grid ── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: opacity 0.3s, border-color 0.3s;
+  }
+  .card.not-chosen { opacity: 0.55; }
+  .card.recommended { border-color: #6c63ff; box-shadow: 0 0 24px rgba(108, 99, 255, 0.12); }
+  .card.chosen { border-color: #4ade80; box-shadow: 0 0 24px rgba(74, 222, 128, 0.12); }
+
+  .card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 12px;
+    color: #fff;
+  }
+  .card-badge.recommended-badge { background: #6c63ff; }
+  .card-badge.chosen-badge { background: #4ade80; color: #0a0a0f; }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .option-label.a { color: #6c63ff; }
+  .option-label.b { color: #fbbf24; }
+  .option-label.c { color: #4ade80; }
+  .option-label.d { color: #60a5fa; }
+
+  .option-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  /* ── Visual Preview: Flow Steps ── */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+  }
+  .step-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .step-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .step-circle.a { background: rgba(108, 99, 255, 0.25); border: 2px solid #6c63ff; }
+  .step-circle.b { background: rgba(251, 191, 36, 0.2); border: 2px solid #fbbf24; }
+  .step-circle.c { background: rgba(74, 222, 128, 0.2); border: 2px solid #4ade80; }
+  .step-circle.d { background: rgba(96, 165, 250, 0.2); border: 2px solid #60a5fa; }
+  .step-line {
+    width: 2px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .step-line.a { background: rgba(108, 99, 255, 0.3); }
+  .step-line.b { background: rgba(251, 191, 36, 0.2); }
+  .step-line.c { background: rgba(74, 222, 128, 0.2); }
+  .step-line.d { background: rgba(96, 165, 250, 0.2); }
+  .step-content {
+    padding-bottom: 12px;
+  }
+  .step-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e0e0e8;
+  }
+  .step-desc {
+    font-size: 0.75rem;
+    color: #8888a0;
+  }
+
+  /* ── Pros / Cons ── */
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros-title, .cons-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pros-title { color: #4ade80; }
+  .cons-title { color: #f87171; }
+  .pro-item, .con-item {
+    font-size: 0.85rem;
+    color: #c0c0d0;
+    margin-bottom: 5px;
+    padding-left: 16px;
+    position: relative;
+  }
+  .pro-item::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .con-item::before {
+    content: "-";
+    position: absolute;
+    left: 2px;
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  /* ── Comparison Table ── */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #2a2a3a;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .comparison-table td { color: #c0c0d0; }
+  .comparison-table td.highlight {
+    background: rgba(108, 99, 255, 0.08);
+    color: #fff;
+    font-weight: 600;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+  .comparison-table td:first-child, .comparison-table th:first-child {
+    text-align: left;
+    color: #8888a0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #8888a0;
+    font-size: 0.85rem;
+    padding-top: 24px;
+    border-top: 1px solid #2a2a3a;
+  }
+  .footer a { color: #6c63ff; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Decision 2 of 3</div>
+    <h1>How Should Guests Experience the Day?</h1>
+    <p class="description">The format of the reception shapes how people connect, eat, and remember the evening. Choose the rhythm that matches your personalities.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Traditional Seated -->
+    <div class="card not-chosen">
+      <div class="option-label a">Option A</div>
+      <div class="option-title">Traditional Seated</div>
+      <div class="option-subtitle">Formal dinner, assigned tables, multi-course meal</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle a">1</div><div class="step-line a"></div></div>
+            <div class="step-content"><div class="step-title">Cocktail Hour</div><div class="step-desc">Passed appetizers, welcome drinks</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle a">2</div><div class="step-line a"></div></div>
+            <div class="step-content"><div class="step-title">Guests Find Assigned Seats</div><div class="step-desc">Escort cards, table numbers</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle a">3</div><div class="step-line a"></div></div>
+            <div class="step-content"><div class="step-title">Multi-Course Dinner</div><div class="step-desc">Plated service, 3-4 courses</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle a">4</div><div class="step-line a"></div></div>
+            <div class="step-content"><div class="step-title">Toasts &amp; Cake Cutting</div><div class="step-desc">Speeches between courses</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle a">5</div></div>
+            <div class="step-content"><div class="step-title">Dancing &amp; Send-Off</div><div class="step-desc">Open floor after dinner service</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Clear structure guests understand</div>
+          <div class="pro-item">Everyone is guaranteed a seat</div>
+          <div class="pro-item">Elegant, timeless format</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Guests stuck at one table all night</div>
+          <div class="con-item">Higher per-plate catering cost</div>
+          <div class="con-item">Can feel stiff and predictable</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Stations & Mingling -->
+    <div class="card not-chosen">
+      <div class="option-label b">Option B</div>
+      <div class="option-title">Stations &amp; Mingling</div>
+      <div class="option-subtitle">Food stations, open seating, cocktail-party energy</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle b">1</div><div class="step-line b"></div></div>
+            <div class="step-content"><div class="step-title">Welcome &amp; First Drinks</div><div class="step-desc">Bar opens, music starts</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle b">2</div><div class="step-line b"></div></div>
+            <div class="step-content"><div class="step-title">Stations Open</div><div class="step-desc">Italian, sushi, BBQ, dessert carts</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle b">3</div><div class="step-line b"></div></div>
+            <div class="step-content"><div class="step-title">Mingle &amp; Graze</div><div class="step-desc">Guests move freely, try everything</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle b">4</div></div>
+            <div class="step-content"><div class="step-title">Dance Floor &amp; Late-Night Bites</div><div class="step-desc">Slider station, fries, espresso bar</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Guests meet more people</div>
+          <div class="pro-item">Variety satisfies all dietary needs</div>
+          <div class="pro-item">High energy, social atmosphere</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Elderly guests may struggle standing</div>
+          <div class="con-item">Harder to do formal toasts</div>
+          <div class="con-item">Lines can form at popular stations</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Family Style (Recommended + Chosen) -->
+    <div class="card recommended chosen">
+      <span class="card-badge recommended-badge">Recommended</span>
+      <span class="card-badge chosen-badge" style="top: 42px;">Chosen</span>
+      <div class="option-label c">Option C</div>
+      <div class="option-title">Family Style</div>
+      <div class="option-subtitle">Long communal tables, shared platters, conversation-driven</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle c">1</div><div class="step-line c"></div></div>
+            <div class="step-content"><div class="step-title">Garden Cocktails</div><div class="step-desc">Lawn games, passed canapes</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle c">2</div><div class="step-line c"></div></div>
+            <div class="step-content"><div class="step-title">Gather at Long Tables</div><div class="step-desc">Communal seating under the tent</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle c">3</div><div class="step-line c"></div></div>
+            <div class="step-content"><div class="step-title">Shared Platters Arrive</div><div class="step-desc">Pass-the-dish warmth, seasonal menu</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle c">4</div><div class="step-line c"></div></div>
+            <div class="step-content"><div class="step-title">Toasts Over Dessert</div><div class="step-desc">Intimate speeches, family-style sweets</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle c">5</div></div>
+            <div class="step-content"><div class="step-title">Dancing Under the Stars</div><div class="step-desc">Tables cleared, string lights glow</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Encourages genuine conversation</div>
+          <div class="pro-item">Feels warm and inclusive</div>
+          <div class="pro-item">Beautiful long-table aesthetics</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Requires longer tables and more space</div>
+          <div class="con-item">Dietary accommodations need planning</div>
+          <div class="con-item">Less control over portion sizing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Progressive Party -->
+    <div class="card not-chosen">
+      <div class="option-label d">Option D</div>
+      <div class="option-title">Progressive Party</div>
+      <div class="option-subtitle">Ceremony in one spot, appetizers in another, dinner in a third</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle d">1</div><div class="step-line d"></div></div>
+            <div class="step-content"><div class="step-title">Ceremony in the Rose Garden</div><div class="step-desc">Intimate setting, close seating</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle d">2</div><div class="step-line d"></div></div>
+            <div class="step-content"><div class="step-title">Move to the Terrace</div><div class="step-desc">Cocktails &amp; appetizers with a view</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle d">3</div><div class="step-line d"></div></div>
+            <div class="step-content"><div class="step-title">Dinner in the Grand Tent</div><div class="step-desc">Full seated meal, dramatic reveal</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-circle d">4</div></div>
+            <div class="step-content"><div class="step-title">After-Party at the Pool House</div><div class="step-desc">Lounge music, dessert, nightcaps</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Each space feels like a new event</div>
+          <div class="pro-item">Keeps energy high with movement</div>
+          <div class="pro-item">Maximizes the venue's full property</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Complex logistics and timing</div>
+          <div class="con-item">Guests with mobility issues may struggle</div>
+          <div class="con-item">Higher setup cost across multiple spaces</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Traditional</th>
+          <th>Stations</th>
+          <th>Family Style</th>
+          <th>Progressive</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Social Interaction</td>
+          <td>Moderate</td>
+          <td>High</td>
+          <td class="highlight">Very High</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>Guest Comfort</td>
+          <td>High</td>
+          <td>Moderate</td>
+          <td class="highlight">High</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td>Food Quality</td>
+          <td>Very High</td>
+          <td>High</td>
+          <td class="highlight">Very High</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>Venue Fit (Garden Estate)</td>
+          <td>Good</td>
+          <td>Good</td>
+          <td class="highlight">Excellent</td>
+          <td>Excellent</td>
+        </tr>
+        <tr>
+          <td>Budget Range</td>
+          <td>$$$</td>
+          <td>$$</td>
+          <td class="highlight">$$</td>
+          <td>$$$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><a href="decision-001-venue-style.html">&larr; Previous: Venue Style</a> &nbsp;&middot;&nbsp; <a href="index.html">All Decisions</a> &nbsp;&middot;&nbsp; <a href="decision-003-photography.html">Next: Photography &rarr;</a></p>
+  </div>
+
+</div>
+</body>
+</html>

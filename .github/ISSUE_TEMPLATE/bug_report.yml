@@ -1,0 +1,72 @@
+name: Bug report
+description: Something in Decision Kit isn't working the way the spec says it should.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. The more specific you can be, the faster we can fix it.
+
+  - type: input
+    id: skill
+    attributes:
+      label: Which skill?
+      description: The skill where you saw the bug (e.g., `/strategize`, `/decide`, `/excavate`).
+      placeholder: "/strategize"
+    validations:
+      required: true
+
+  - type: input
+    id: ai-tool
+    attributes:
+      label: Which AI tool?
+      description: Where were you running the skill? (Claude Code, Cursor, Codex, etc.)
+      placeholder: "Claude Code"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of what went wrong.
+      placeholder: "I ran /strategize and the decision page didn't open in my browser."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      description: What should have happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this? Include the exact command/input you used.
+      placeholder: |
+        1. Run `/strategize launch a food truck`
+        2. AI generates the first decision page
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: decisions-state
+    attributes:
+      label: State of `.decisions/` (if relevant)
+      description: If the bug involves decision composition or persistence, paste a relevant snippet from your `.decisions/decisions.json` (redact anything sensitive).
+      render: json
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/jnemargut/decision-kit/blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow the Code of Conduct.
+          required: true

@@ -1,0 +1,46 @@
+{
+  "projectName": "ToolShare",
+  "projectDescription": "A neighborhood tool-sharing app where people list tools and borrow from neighbors",
+  "createdAt": "2026-03-28T10:00:00Z",
+  "decisions": [
+    {
+      "id": "decision-001",
+      "slug": "target-user",
+      "title": "Who Is This For?",
+      "status": "chosen",
+      "chosenOption": "B",
+      "chosenTitle": "The Urban Renter",
+      "options": ["A", "B", "C", "D"],
+      "recommended": "B",
+      "htmlFile": "decision-001-target-user.html",
+      "decidedAt": "2026-03-28T10:15:00Z",
+      "summary": "Primary target user for the tool-sharing app"
+    },
+    {
+      "id": "decision-002",
+      "slug": "trust-model",
+      "title": "How Do Neighbors Build Trust?",
+      "status": "chosen",
+      "chosenOption": "C",
+      "chosenTitle": "Neighbor Vouching",
+      "options": ["A", "B", "C", "D"],
+      "recommended": "C",
+      "htmlFile": "decision-002-trust-model.html",
+      "decidedAt": "2026-03-28T10:30:00Z",
+      "summary": "Trust and safety model for borrowing between strangers"
+    },
+    {
+      "id": "decision-003",
+      "slug": "visual-direction",
+      "title": "What Should It Look and Feel Like?",
+      "status": "chosen",
+      "chosenOption": "A",
+      "chosenTitle": "Warm Community",
+      "options": ["A", "B", "C", "D"],
+      "recommended": "A",
+      "htmlFile": "decision-003-visual-direction.html",
+      "decidedAt": "2026-03-28T10:45:00Z",
+      "summary": "Overall visual direction and design language"
+    }
+  ]
+}

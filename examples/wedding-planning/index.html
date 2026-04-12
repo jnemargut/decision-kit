@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Planning - Decision History</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px 60px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 800px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 56px; }
+  .top-badge {
+    display: inline-block;
+    background: rgba(108, 99, 255, 0.15);
+    color: #6c63ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8 30%, #6c63ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .header .subtitle {
+    color: #8888a0;
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-section {
+    margin-bottom: 40px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: #8888a0;
+  }
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: #1a1a25;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #6c63ff, #4ade80);
+    border-radius: 3px;
+  }
+
+  /* ── Decision Cards ── */
+  .decision-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 48px; }
+
+  .decision-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .decision-card:hover {
+    border-color: #6c63ff;
+    box-shadow: 0 0 24px rgba(108, 99, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .decision-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(108, 99, 255, 0.12);
+    border: 1px solid rgba(108, 99, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #6c63ff;
+    flex-shrink: 0;
+  }
+
+  .decision-info { flex: 1; }
+
+  .decision-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .decision-desc {
+    font-size: 0.88rem;
+    color: #8888a0;
+    margin-bottom: 12px;
+  }
+
+  .decision-choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+  .choice-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+  }
+  .choice-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4ade80;
+  }
+
+  .arrow {
+    color: #2a2a3a;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    align-self: center;
+    transition: color 0.2s;
+  }
+  .decision-card:hover .arrow { color: #6c63ff; }
+
+  /* ── Strategy Brief Link ── */
+  .brief-link {
+    display: block;
+    text-align: center;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 24px;
+    text-decoration: none;
+    color: #e0e0e8;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 48px;
+  }
+  .brief-link:hover {
+    border-color: #6c63ff;
+    box-shadow: 0 0 24px rgba(108, 99, 255, 0.1);
+  }
+  .brief-link .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6c63ff;
+    margin-bottom: 6px;
+  }
+  .brief-link .title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .brief-link .desc {
+    font-size: 0.85rem;
+    color: #8888a0;
+    margin-top: 4px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #8888a0;
+    font-size: 0.82rem;
+    padding-top: 24px;
+    border-top: 1px solid #2a2a3a;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="top-badge">Thinking Skills Example</div>
+    <h1>Wedding Planning</h1>
+    <p class="subtitle">A couple planning their wedding, making the big decisions that shape the whole event. Three decisions made, all resolved.</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="progress-label">
+      <span>Decision Progress</span>
+      <span>3 of 3 complete</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Decision List -->
+  <div class="decision-list">
+
+    <a href="decision-001-venue-style.html" class="decision-card">
+      <div class="decision-number">1</div>
+      <div class="decision-info">
+        <div class="decision-title">What Kind of Venue?</div>
+        <div class="decision-desc">The venue sets the tone for everything: dress code, menu, flowers, photos.</div>
+        <div class="decision-choice">
+          <div class="choice-dot"></div>
+          <span class="choice-label">Garden Estate</span>
+        </div>
+      </div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a href="decision-002-guest-experience.html" class="decision-card">
+      <div class="decision-number">2</div>
+      <div class="decision-info">
+        <div class="decision-title">How Should Guests Experience the Day?</div>
+        <div class="decision-desc">The format shapes how people connect, eat, and remember the evening.</div>
+        <div class="decision-choice">
+          <div class="choice-dot"></div>
+          <span class="choice-label">Family Style</span>
+        </div>
+      </div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a href="decision-003-photography.html" class="decision-card">
+      <div class="decision-number">3</div>
+      <div class="decision-info">
+        <div class="decision-title">How Do We Capture the Day?</div>
+        <div class="decision-desc">The style you choose determines how you'll remember it decades from now.</div>
+        <div class="decision-choice">
+          <div class="choice-dot"></div>
+          <span class="choice-label">Documentary Style</span>
+        </div>
+      </div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <!-- Strategy Brief -->
+  <a href="strategy-brief.md" class="brief-link">
+    <div class="label">Strategy Brief</div>
+    <div class="title">View the Complete Wedding Strategy</div>
+    <div class="desc">How all three decisions connect to create a coherent wedding identity</div>
+  </a>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Wedding Planning &mdash; Thinking Skills Example &mdash; 3 decisions resolved</p>
+  </div>
+
+</div>
+</body>
+</html>

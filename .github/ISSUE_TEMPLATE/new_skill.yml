@@ -1,0 +1,89 @@
+name: Propose a new skill
+description: You want to add a new thinking skill, action skill, or hook provider.
+title: "[Skill]: "
+labels: ["new-skill", "discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Awesome. Before you start building, talk it through here so we can make sure the skill belongs in Decision Kit and composes well with the rest of the system.
+
+        First, read [docs/building-a-thinking-skill.md](https://github.com/jnemargut/decision-kit/blob/main/docs/building-a-thinking-skill.md) (or [building-a-provider.md](https://github.com/jnemargut/decision-kit/blob/main/docs/building-a-provider.md) for hook providers).
+
+  - type: input
+    id: name
+    attributes:
+      label: Skill name
+      description: What would you call it? Use the same kebab-case format as existing skills.
+      placeholder: "/your-skill-name"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of skill?
+      options:
+        - Thinking skill (presents decisions, waits for human judgment)
+        - Action skill (reads decisions, produces a deliverable)
+        - Configuration skill (captures preferences before other skills run)
+        - Hook provider (connects Decision Kit to an external service)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-it-does
+    attributes:
+      label: What does it do?
+      description: One paragraph. What's the job? Who's the user? What problem does it solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: example-input
+    attributes:
+      label: What does a typical invocation look like?
+      description: Show what the user would type and what they'd get back.
+      placeholder: |
+        /your-skill-name an example input
+
+        Skill responds with:
+        - Decision page about X
+        - Decision page about Y
+        - Generates Z
+    validations:
+      required: true
+
+  - type: textarea
+    id: composability
+    attributes:
+      label: How does it compose?
+      description: Which existing skills does this read from? Which downstream skills could read its output? If it doesn't compose, why not?
+    validations:
+      required: true
+
+  - type: textarea
+    id: not-this-if
+    attributes:
+      label: When NOT to use it
+      description: What sibling skills sound similar but aren't this? This helps the orchestrator route correctly.
+
+  - type: checkboxes
+    id: spec-check
+    attributes:
+      label: Spec compliance
+      description: For thinking skills only.
+      options:
+        - label: This skill SHOWS decisions as visual HTML pages with options.
+        - label: This skill MAKES decisions wait for human judgment.
+        - label: This skill REMEMBERS decisions in `.decisions/`.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of conduct
+      description: By submitting this proposal, you agree to follow our [Code of Conduct](https://github.com/jnemargut/decision-kit/blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow the Code of Conduct.
+          required: true

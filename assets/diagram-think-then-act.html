@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 48px;
+  }
+  .diagram {
+    display: flex; flex-direction: column; align-items: center; width: 660px;
+  }
+  .title {
+    font-size: 18px; font-weight: 700; color: #e6edf3;
+    margin-bottom: 24px; text-align: center;
+  }
+  .title span { color: #58a6ff; }
+  .title .green { color: #3fb950; }
+
+  .section {
+    width: 100%; border-radius: 14px; padding: 20px;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; }
+
+  .think-section {
+    background: rgba(163,113,247,0.05); border: 1px solid rgba(163,113,247,0.2);
+  }
+  .think-section .section-label { color: #a371f7; }
+  .think-section .section-label::after { background: rgba(163,113,247,0.2); }
+
+  .remember-section {
+    background: rgba(63,185,80,0.05); border: 1px solid rgba(63,185,80,0.2);
+  }
+
+  .act-section {
+    background: rgba(56,139,253,0.05); border: 1px solid rgba(56,139,253,0.2);
+  }
+  .act-section .section-label { color: #58a6ff; }
+  .act-section .section-label::after { background: rgba(56,139,253,0.2); }
+
+  .skills-row { display: flex; gap: 10px; width: 100%; }
+  .skill-chip {
+    flex: 1; padding: 10px 8px; border-radius: 8px; text-align: center;
+  }
+  .skill-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .skill-desc { font-size: 10px; line-height: 1.3; }
+
+  .think-chip {
+    background: rgba(163,113,247,0.1); border: 1px solid rgba(163,113,247,0.25);
+  }
+  .think-chip .skill-name { color: #a371f7; }
+  .think-chip .skill-desc { color: #8b949e; }
+
+  .act-chip {
+    background: rgba(56,139,253,0.1); border: 1px solid rgba(56,139,253,0.25);
+  }
+  .act-chip .skill-name { color: #58a6ff; }
+  .act-chip .skill-desc { color: #8b949e; }
+
+  .decisions-store {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px; width: 100%;
+  }
+  .folder-icon {
+    width: 40px; height: 36px;
+    background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.3);
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .store-label { font-size: 14px; font-weight: 600; color: #3fb950; margin-bottom: 2px; }
+  .store-desc { font-size: 11px; color: #8b949e; }
+  .store-files { display: flex; gap: 6px; margin-top: 6px; }
+  .file-tag {
+    font-size: 9px; font-weight: 600; color: #3fb950;
+    background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.2);
+    padding: 2px 8px; border-radius: 4px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+  }
+
+  .arrow {
+    display: flex; flex-direction: column; align-items: center; padding: 6px 0;
+  }
+  .arrow-line { width: 2px; height: 14px; background: #30363d; }
+  .arrow-head {
+    width: 0; height: 0;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid #30363d;
+  }
+  .arrow-label {
+    font-size: 10px; color: #484f58; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px;
+  }
+
+  /* Vertical mapping columns */
+  .mapping-section {
+    width: 100%;
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    justify-content: center;
+  }
+  .mapping-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .mapping-skill {
+    width: 100%;
+    padding: 10px 8px;
+    background: rgba(56,139,253,0.1);
+    border: 1px solid rgba(56,139,253,0.25);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .mapping-skill .skill-name { color: #58a6ff; font-size: 12px; font-weight: 700; }
+  .mapping-arrow-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px 0;
+  }
+  .mapping-arrow-down .ma-line { width: 2px; height: 10px; background: #30363d; }
+  .mapping-arrow-down .ma-head {
+    width: 0; height: 0;
+    border-left: 4px solid transparent; border-right: 4px solid transparent;
+    border-top: 5px solid #30363d;
+  }
+  .mapping-output {
+    width: 100%;
+    padding: 10px 8px;
+    background: rgba(56,139,253,0.06);
+    border: 1px solid rgba(56,139,253,0.15);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .mapping-output .output-icon { font-size: 16px; margin-bottom: 2px; }
+  .mapping-output .output-name { font-size: 11px; font-weight: 600; color: #e6edf3; }
+  .mapping-output .output-desc { font-size: 9px; color: #8b949e; }
+</style>
+</head>
+<body>
+
+<div class="diagram">
+  <div class="title"><span>Think</span>, then <span class="green">act</span></div>
+
+  <!-- THINK -->
+  <div class="section think-section">
+    <div class="section-label">Think — you make the decisions</div>
+    <div class="skills-row">
+      <div class="skill-chip think-chip">
+        <div class="skill-name">/strategize</div>
+        <div class="skill-desc">Any domain</div>
+      </div>
+      <div class="skill-chip think-chip">
+        <div class="skill-name">/shape</div>
+        <div class="skill-desc">Any domain</div>
+      </div>
+      <div class="skill-chip think-chip">
+        <div class="skill-name">/product-strategy</div>
+        <div class="skill-desc">Products</div>
+      </div>
+      <div class="skill-chip think-chip">
+        <div class="skill-name">/product-design</div>
+        <div class="skill-desc">Products</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-head"></div>
+    <div class="arrow-label">decisions stored</div>
+  </div>
+
+  <!-- REMEMBER -->
+  <div class="section remember-section">
+    <div class="decisions-store">
+      <div class="folder-icon">&#x1f4c1;</div>
+      <div class="store-content">
+        <div class="store-label">.decisions/</div>
+        <div class="store-desc">Every decision remembered — browsable, persistent, composable</div>
+        <div class="store-files">
+          <span class="file-tag">decisions.json</span>
+          <span class="file-tag">strategy-brief.md</span>
+          <span class="file-tag">*.html</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-head"></div>
+    <div class="arrow-label">decisions feed action</div>
+  </div>
+
+  <!-- ACT -->
+  <div class="section act-section">
+    <div class="section-label">Act — AI produces artifacts from your decisions</div>
+    <div class="mapping-section">
+      <div class="mapping-col">
+        <div class="mapping-skill"><div class="skill-name">/game-plan</div></div>
+        <div class="mapping-arrow-down"><div class="ma-line"></div><div class="ma-head"></div></div>
+        <div class="mapping-output">
+          <div class="output-icon">&#x1f4cb;</div>
+          <div class="output-name">Operational Roadmap</div>
+          <div class="output-desc">Phased tasks, timelines, priorities</div>
+        </div>
+      </div>
+      <div class="mapping-col">
+        <div class="mapping-skill"><div class="skill-name">/product-plan</div></div>
+        <div class="mapping-arrow-down"><div class="ma-line"></div><div class="ma-head"></div></div>
+        <div class="mapping-output">
+          <div class="output-icon">&#x1f680;</div>
+          <div class="output-name">Launch Playbook</div>
+          <div class="output-desc">Partnerships, go-to-market, operations</div>
+        </div>
+      </div>
+      <div class="mapping-col">
+        <div class="mapping-skill"><div class="skill-name">/brief</div></div>
+        <div class="mapping-arrow-down"><div class="ma-line"></div><div class="ma-head"></div></div>
+        <div class="mapping-output">
+          <div class="output-icon">&#x1f4c4;</div>
+          <div class="output-name">Shareable Brief</div>
+          <div class="output-desc">One-pager for stakeholders</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

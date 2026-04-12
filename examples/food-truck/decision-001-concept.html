@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 1: What's Your Food Truck Concept?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .badge {
+    display: inline-block;
+    background: rgba(45, 212, 168, 0.15);
+    color: #2dd4a8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(45, 212, 168, 0.25);
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 40px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #2dd4a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header .description {
+    color: #8888a0;
+    font-size: 17px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Cards */
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .option-card.dimmed { opacity: 0.55; }
+  .option-card.recommended {
+    border-color: #2dd4a8;
+    box-shadow: 0 0 30px rgba(45, 212, 168, 0.08);
+  }
+  .option-card.chosen {
+    border-color: #4ade80;
+    box-shadow: 0 0 30px rgba(74, 222, 128, 0.1);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    padding: 5px 14px;
+    border-radius: 0 0 10px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .card-badge.recommended-badge {
+    background: #2dd4a8;
+    color: #0a0a0f;
+  }
+  .card-badge.chosen-badge {
+    background: #4ade80;
+    color: #0a0a0f;
+  }
+
+  .option-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.label-a { color: #60a5fa; }
+  .option-label.label-b { color: #2dd4a8; }
+  .option-label.label-c { color: #fbbf24; }
+  .option-label.label-d { color: #f87171; }
+
+  .option-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Visual Preview - Dimension Bars */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .dimension-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .dimension-row:last-child { margin-bottom: 0; }
+  .dimension-label {
+    font-size: 11px;
+    color: #8888a0;
+    width: 140px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .dimension-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .dimension-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .dimension-score {
+    font-size: 11px;
+    color: #8888a0;
+    width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .fill-blue { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+  .fill-teal { background: linear-gradient(90deg, #2dd4a8, #14b8a6); }
+  .fill-amber { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+  .fill-red { background: linear-gradient(90deg, #f87171, #ef4444); }
+
+  /* Pros / Cons */
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros-title, .cons-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pros-title { color: #4ade80; }
+  .cons-title { color: #f87171; }
+  .pros li, .cons li {
+    list-style: none;
+    font-size: 13px;
+    color: #c0c0d0;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .pros li::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .cons li::before {
+    content: "-";
+    position: absolute;
+    left: 2px;
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  /* Comparison Table */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 24px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #c0c0d0; }
+  .comparison-table .highlight-col {
+    background: rgba(45, 212, 168, 0.06);
+    color: #2dd4a8;
+    font-weight: 600;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: #8888a0;
+    font-size: 13px;
+    border-top: 1px solid #1a1a25;
+  }
+  .footer a { color: #2dd4a8; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Decision 1 of 3</div>
+    <h1>What's Your Food Truck Concept?</h1>
+    <p class="description">Your concept is the foundation of everything else -- menu complexity, equipment needs, brand identity, and target market. Choose wisely.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Gourmet Tacos -->
+    <div class="option-card dimmed">
+      <div class="option-label label-a">Option A</div>
+      <div class="option-title">Gourmet Tacos</div>
+      <div class="option-subtitle">Elevated street tacos, seasonal menus, craft salsas</div>
+
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <div class="dimension-label">Menu Simplicity</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-blue" style="width:50%"></div></div>
+          <div class="dimension-score">5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Repeat Customers</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-blue" style="width:70%"></div></div>
+          <div class="dimension-score">7/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Ingredient Costs</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-blue" style="width:40%"></div></div>
+          <div class="dimension-score">4/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Speed of Service</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-blue" style="width:60%"></div></div>
+          <div class="dimension-score">6/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Instagram Factor</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-blue" style="width:80%"></div></div>
+          <div class="dimension-score">8/10</div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Huge flavor variety and creativity</li>
+            <li>Seasonal menus keep it fresh</li>
+            <li>Strong Instagram appeal</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Ingredient sourcing complexity</li>
+            <li>Higher food cost percentage</li>
+            <li>Crowded taco truck market</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Smash Burgers (RECOMMENDED + CHOSEN) -->
+    <div class="option-card recommended chosen">
+      <div class="card-badge recommended-badge">Recommended</div>
+      <div class="card-badge chosen-badge" style="right: 140px;">Chosen</div>
+      <div class="option-label label-b">Option B</div>
+      <div class="option-title">Smash Burgers</div>
+      <div class="option-subtitle">Simple menu, fast execution, cult-following potential</div>
+
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <div class="dimension-label">Menu Simplicity</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-teal" style="width:95%"></div></div>
+          <div class="dimension-score">9.5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Repeat Customers</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-teal" style="width:90%"></div></div>
+          <div class="dimension-score">9/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Ingredient Costs</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-teal" style="width:80%"></div></div>
+          <div class="dimension-score">8/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Speed of Service</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-teal" style="width:90%"></div></div>
+          <div class="dimension-score">9/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Instagram Factor</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-teal" style="width:75%"></div></div>
+          <div class="dimension-score">7.5/10</div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Dead-simple operations and training</li>
+            <li>Cult-following potential (think In-N-Out)</li>
+            <li>Low food costs, high margins</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Burger market is competitive</li>
+            <li>Less perceived "foodie" appeal</li>
+            <li>Menu variety is intentionally limited</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Asian Fusion Bowls -->
+    <div class="option-card dimmed">
+      <div class="option-label label-c">Option C</div>
+      <div class="option-title">Asian Fusion Bowls</div>
+      <div class="option-subtitle">Build-your-own bowls, healthy-ish, vibrant flavors</div>
+
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <div class="dimension-label">Menu Simplicity</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-amber" style="width:60%"></div></div>
+          <div class="dimension-score">6/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Repeat Customers</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-amber" style="width:75%"></div></div>
+          <div class="dimension-score">7.5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Ingredient Costs</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-amber" style="width:55%"></div></div>
+          <div class="dimension-score">5.5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Speed of Service</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-amber" style="width:50%"></div></div>
+          <div class="dimension-score">5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Instagram Factor</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-amber" style="width:90%"></div></div>
+          <div class="dimension-score">9/10</div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Highly Instagrammable presentations</li>
+            <li>Customization drives engagement</li>
+            <li>Appeals to health-conscious crowd</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Lots of prep and ingredients to manage</li>
+            <li>Slower service with customization</li>
+            <li>Ingredient spoilage risk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Wood-Fired Pizza -->
+    <div class="option-card dimmed">
+      <div class="option-label label-d">Option D</div>
+      <div class="option-title">Wood-Fired Pizza</div>
+      <div class="option-subtitle">Artisan pies, spectacle of the oven, event-friendly</div>
+
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <div class="dimension-label">Menu Simplicity</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-red" style="width:70%"></div></div>
+          <div class="dimension-score">7/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Repeat Customers</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-red" style="width:65%"></div></div>
+          <div class="dimension-score">6.5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Ingredient Costs</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-red" style="width:60%"></div></div>
+          <div class="dimension-score">6/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Speed of Service</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-red" style="width:35%"></div></div>
+          <div class="dimension-score">3.5/10</div>
+        </div>
+        <div class="dimension-row">
+          <div class="dimension-label">Instagram Factor</div>
+          <div class="dimension-bar-track"><div class="dimension-bar-fill fill-red" style="width:85%"></div></div>
+          <div class="dimension-score">8.5/10</div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Built-in spectacle draws crowds</li>
+            <li>Premium pricing accepted</li>
+            <li>Perfect for events and catering</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Extremely slow throughput per pie</li>
+            <li>Oven is expensive and heavy</li>
+            <li>Fire permits and safety regulations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Gourmet Tacos</th>
+          <th class="highlight-col">Smash Burgers</th>
+          <th>Fusion Bowls</th>
+          <th>Wood-Fired Pizza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Startup Cost</td>
+          <td>$55K - $75K</td>
+          <td class="highlight-col">$40K - $55K</td>
+          <td>$50K - $70K</td>
+          <td>$70K - $100K</td>
+        </tr>
+        <tr>
+          <td>Food Cost %</td>
+          <td>32-38%</td>
+          <td class="highlight-col">25-30%</td>
+          <td>30-35%</td>
+          <td>28-33%</td>
+        </tr>
+        <tr>
+          <td>Avg. Ticket</td>
+          <td>$11-14</td>
+          <td class="highlight-col">$10-13</td>
+          <td>$12-15</td>
+          <td>$14-18</td>
+        </tr>
+        <tr>
+          <td>Orders/Hour</td>
+          <td>25-35</td>
+          <td class="highlight-col">40-55</td>
+          <td>20-30</td>
+          <td>12-18</td>
+        </tr>
+        <tr>
+          <td>Staff Needed</td>
+          <td>2-3</td>
+          <td class="highlight-col">2</td>
+          <td>2-3</td>
+          <td>2-3</td>
+        </tr>
+        <tr>
+          <td>Training Time</td>
+          <td>2-3 weeks</td>
+          <td class="highlight-col">3-5 days</td>
+          <td>1-2 weeks</td>
+          <td>3-4 weeks</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>Decision 1 of 3</strong> &middot; Food Truck Launch Strategy</p>
+    <p style="margin-top:8px;">Next: <a href="decision-002-location-strategy.html">Where Do You Set Up? &rarr;</a></p>
+  </div>
+
+</div>
+</body>
+</html>
