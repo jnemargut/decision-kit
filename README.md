@@ -42,7 +42,6 @@ When you're done thinking, you can hand the whole stack of decisions to an AI co
 - [Beyond software](#beyond-software)
 - [How this compares](#how-this-compares)
 - [Skills](#skills)
-- [Install](#install)
 - [Hooks](#hooks)
 - [Build your own thinking skill](#build-your-own-thinking-skill)
 - [Try it](#try-it-tell-us-what-happened)
@@ -533,43 +532,6 @@ Walks through provider selection, project identity, visibility defaults, auto-sy
 ```
 
 </details>
-
----
-
-## Install
-
-```bash
-git clone https://github.com/jnemargut/decision-kit.git
-```
-
-**Install everything:**
-```bash
-cp -r decision-kit/thinking/* ~/.skills/
-cp -r decision-kit/action/* ~/.skills/
-cp -r decision-kit/configuration/* ~/.skills/
-cp -r decision-kit/orchestrator/* ~/.skills/
-```
-
-**Or install just the skills you want:**
-```bash
-# The orchestrator (just say what's on your mind)
-cp -r decision-kit/orchestrator/decide ~/.skills/
-
-# Just the general-purpose thinking skill
-cp -r decision-kit/thinking/strategize ~/.skills/
-
-# Just the product pipeline
-cp -r decision-kit/thinking/product-strategy ~/.skills/
-cp -r decision-kit/thinking/product-design ~/.skills/
-cp -r decision-kit/action/product-plan ~/.skills/
-
-# Configuration skills
-cp -r decision-kit/configuration/whoiam ~/.skills/
-cp -r decision-kit/configuration/research-sources ~/.skills/
-cp -r decision-kit/configuration/hook-init ~/.skills/
-```
-
-Copy skills to wherever your AI coding tool reads SKILL.md files from (e.g., `~/.skills/`, `~/.claude/skills/`, `~/.cursor/skills/`). Works with any tool that supports the SKILL.md format.
 
 ---
 
