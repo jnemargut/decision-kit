@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thinking Skills -- Examples Gallery</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #12121a; --surface2: #1a1a25; --border: #2a2a3a;
+    --text: #e0e0e8; --text-dim: #8888a0; --accent: #6c63ff;
+    --green: #4ade80; --orange: #e07c3e; --teal: #2dd4a8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 900px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 3rem; padding: 2.5rem 2rem; background: linear-gradient(135deg, var(--surface), var(--surface2)); border-radius: 16px; border: 1px solid var(--border); }
+  .header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, #c0c0ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { color: var(--text-dim); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+  .intro-note { background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(45, 212, 168, 0.08)); border: 1px solid rgba(108, 99, 255, 0.3); border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; text-align: center; }
+  .intro-note h2 { font-size: 1rem; color: var(--accent); margin-bottom: 0.5rem; }
+  .intro-note p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; }
+  .intro-note strong { color: var(--text); }
+  .examples-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+  .example-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem 2rem; transition: all 0.2s; }
+  .example-card:hover { border-color: var(--accent); transform: translateX(4px); }
+  .example-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 0.75rem; }
+  .badge-purple { background: rgba(108, 99, 255, 0.15); color: var(--accent); border: 1px solid rgba(108, 99, 255, 0.3); }
+  .badge-orange { background: rgba(224, 124, 62, 0.15); color: var(--orange); border: 1px solid rgba(224, 124, 62, 0.3); }
+  .badge-teal { background: rgba(45, 212, 168, 0.15); color: var(--teal); border: 1px solid rgba(45, 212, 168, 0.3); }
+  .example-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .example-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1rem; }
+  .example-stats { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+  .stat { font-size: 0.8rem; color: var(--text-dim); }
+  .stat strong { color: var(--text); }
+  .example-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .example-link { display: inline-block; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+  .link-primary { color: white; }
+  .link-primary.purple { background: var(--accent); }
+  .link-primary.orange { background: var(--orange); }
+  .link-primary.teal { background: var(--teal); color: #0a0a0f; }
+  .link-primary:hover { opacity: 0.9; }
+  .link-secondary { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+  .link-secondary:hover { border-color: var(--accent); color: var(--text); }
+  .footer { text-align: center; padding: 2rem 0; color: var(--text-dim); font-size: 0.8rem; margin-top: 2rem; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Thinking Skills Gallery</h1>
+  <p>Browse real decision pages from three different domains. Each example shows how thinking skills work for any kind of decision -- not just code.</p>
+</div>
+
+<div class="intro-note">
+  <h2>One Pattern, Any Domain</h2>
+  <p>A thinking skill <strong>researches the domain, presents visual options, and waits for you to decide.</strong> Every choice is stored as browsable context. The pattern works whether you're building an app, planning a wedding, or launching a business.</p>
+</div>
+
+<div class="examples-list">
+  <div class="example-card">
+    <span class="example-badge badge-orange">PRODUCT DECISIONS</span>
+    <div class="example-title">Neighborhood Tool Library</div>
+    <div class="example-desc">Building a tool-sharing app for neighbors. Decisions about target users, trust model, and visual direction -- each with rendered UI mockups showing the design options.</div>
+    <div class="example-stats">
+      <span class="stat"><strong>3</strong> decisions</span>
+      <span class="stat"><strong>3</strong> resolved</span>
+      <span class="stat">Skill: <strong>/strategize</strong></span>
+    </div>
+    <div class="example-links">
+      <a href="community-app/index.html" class="example-link link-primary orange">Browse Decisions</a>
+      <a href="community-app/strategy-brief.md" class="example-link link-secondary">Strategy Brief</a>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <span class="example-badge badge-purple">LIFE DECISIONS</span>
+    <div class="example-title">Planning a Wedding</div>
+    <div class="example-desc">Making the big choices that shape the whole event. Venue style, guest experience, and how to capture the day -- with visual comparisons for each option.</div>
+    <div class="example-stats">
+      <span class="stat"><strong>3</strong> decisions</span>
+      <span class="stat"><strong>3</strong> resolved</span>
+      <span class="stat">Skill: <strong>/strategize</strong></span>
+    </div>
+    <div class="example-links">
+      <a href="wedding-planning/index.html" class="example-link link-primary purple">Browse Decisions</a>
+      <a href="wedding-planning/strategy-brief.md" class="example-link link-secondary">Strategy Brief</a>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <span class="example-badge badge-teal">BUSINESS DECISIONS</span>
+    <div class="example-title">Launching a Food Truck</div>
+    <div class="example-desc">Starting a smash burger food truck from scratch. Concept, location strategy, and brand identity -- with rendered menu board mockups in different visual directions.</div>
+    <div class="example-stats">
+      <span class="stat"><strong>3</strong> decisions</span>
+      <span class="stat"><strong>3</strong> resolved</span>
+      <span class="stat">Skill: <strong>/strategize</strong></span>
+    </div>
+    <div class="example-links">
+      <a href="food-truck/index.html" class="example-link link-primary teal">Browse Decisions</a>
+      <a href="food-truck/strategy-brief.md" class="example-link link-secondary">Strategy Brief</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>9 decisions across 3 domains: product, life, and business.</p>
+  <p style="margin-top: 0.5rem;">Generated with Thinking Skills -- composable AI skills for the decisions that shape what you build.</p>
+</div>
+
+</body>
+</html>

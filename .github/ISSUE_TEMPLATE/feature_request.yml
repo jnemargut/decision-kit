@@ -1,0 +1,64 @@
+name: Feature request
+description: Suggest a new capability or improvement to an existing skill.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Before you fill this out, check if it's already in [SPEC.md](https://github.com/jnemargut/decision-kit/blob/main/SPEC.md) or covered by an existing skill.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: What are you trying to do that Decision Kit doesn't currently support? Be specific.
+      placeholder: "When I run /strategize, I want to be able to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would solve it?
+      description: What should change? Which skill? What new behavior?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: How big is this change?
+      options:
+        - Tweak to an existing skill
+        - New thinking skill
+        - New action skill
+        - New configuration skill
+        - New hook provider
+        - Spec change
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What else have you considered?
+      description: Are there workarounds you've tried, or other ways to solve this?
+
+  - type: textarea
+    id: composability
+    attributes:
+      label: How does this compose with other skills?
+      description: Decision Kit's whole point is that skills compose. How does your idea read prior decisions or feed into downstream skills?
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/jnemargut/decision-kit/blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow the Code of Conduct.
+          required: true

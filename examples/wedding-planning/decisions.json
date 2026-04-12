@@ -1,0 +1,121 @@
+{
+  "project": "Wedding Planning",
+  "scenario": "A couple planning their wedding, making the big decisions that shape the whole event.",
+  "totalDecisions": 3,
+  "decisions": [
+    {
+      "id": "decision-001",
+      "slug": "venue-style",
+      "file": "decision-001-venue-style.html",
+      "title": "What Kind of Venue?",
+      "description": "The venue sets the tone for everything: the dress code, the menu, the flowers, the photos.",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Rustic Barn",
+          "subtitle": "Countryside charm, string lights, natural wood, relaxed elegance",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Urban Rooftop",
+          "subtitle": "City skyline views, modern minimalist, cocktail-style energy",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "C",
+          "title": "Garden Estate",
+          "subtitle": "Manicured grounds, tented reception, classic romance",
+          "recommended": true,
+          "chosen": true
+        },
+        {
+          "id": "D",
+          "title": "Beach Celebration",
+          "subtitle": "Waterfront ceremony, barefoot elegance, sunset reception",
+          "recommended": false,
+          "chosen": false
+        }
+      ]
+    },
+    {
+      "id": "decision-002",
+      "slug": "guest-experience",
+      "file": "decision-002-guest-experience.html",
+      "title": "How Should Guests Experience the Day?",
+      "description": "The format of the reception shapes how people connect, eat, and remember the evening.",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Traditional Seated",
+          "subtitle": "Formal dinner, assigned tables, multi-course meal",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Stations & Mingling",
+          "subtitle": "Food stations, open seating, cocktail-party energy",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "C",
+          "title": "Family Style",
+          "subtitle": "Long communal tables, shared platters, conversation-driven",
+          "recommended": true,
+          "chosen": true
+        },
+        {
+          "id": "D",
+          "title": "Progressive Party",
+          "subtitle": "Ceremony in one spot, appetizers in another, dinner in a third",
+          "recommended": false,
+          "chosen": false
+        }
+      ]
+    },
+    {
+      "id": "decision-003",
+      "slug": "photography",
+      "file": "decision-003-photography.html",
+      "title": "How Do We Capture the Day?",
+      "description": "Your photos and videos are the only thing that lasts forever from the wedding day.",
+      "status": "chosen",
+      "options": [
+        {
+          "id": "A",
+          "title": "Editorial & Posed",
+          "subtitle": "Magazine-quality portraits, dramatic lighting, curated shots",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "B",
+          "title": "Documentary Style",
+          "subtitle": "Candid moments, minimal posing, storytelling approach",
+          "recommended": true,
+          "chosen": true
+        },
+        {
+          "id": "C",
+          "title": "Film & Digital Hybrid",
+          "subtitle": "Mix of film grain and digital clarity, artistic look",
+          "recommended": false,
+          "chosen": false
+        },
+        {
+          "id": "D",
+          "title": "Photo + Video Package",
+          "subtitle": "Full coverage both mediums, cinematic highlight reel",
+          "recommended": false,
+          "chosen": false
+        }
+      ]
+    }
+  ]
+}

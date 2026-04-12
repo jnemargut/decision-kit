@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 3: What's the Vibe?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .badge {
+    display: inline-block;
+    background: rgba(45, 212, 168, 0.15);
+    color: #2dd4a8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(45, 212, 168, 0.25);
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 40px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #2dd4a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header .description {
+    color: #8888a0;
+    font-size: 17px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Cards */
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .option-card.dimmed { opacity: 0.55; }
+  .option-card.recommended {
+    border-color: #2dd4a8;
+    box-shadow: 0 0 30px rgba(45, 212, 168, 0.08);
+  }
+  .option-card.chosen {
+    border-color: #4ade80;
+    box-shadow: 0 0 30px rgba(74, 222, 128, 0.1);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    padding: 5px 14px;
+    border-radius: 0 0 10px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .card-badge.recommended-badge {
+    background: #2dd4a8;
+    color: #0a0a0f;
+  }
+  .card-badge.chosen-badge {
+    background: #4ade80;
+    color: #0a0a0f;
+  }
+
+  .option-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.label-a { color: #60a5fa; }
+  .option-label.label-b { color: #2dd4a8; }
+  .option-label.label-c { color: #fbbf24; }
+  .option-label.label-d { color: #f87171; }
+
+  .option-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Visual Preview - Menu Board Mockups */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu-board {
+    width: 100%;
+    max-width: 280px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  /* Style A: Retro Diner */
+  .menu-retro {
+    background: #1a0a0a;
+    border: 3px solid #ff4444;
+    font-family: 'Courier New', monospace;
+  }
+  .menu-retro .menu-header {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .menu-retro .menu-header::before,
+  .menu-retro .menu-header::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 20px;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 8px,
+      rgba(255,255,255,0.15) 8px,
+      rgba(255,255,255,0.15) 16px
+    );
+  }
+  .menu-retro .menu-header::before { left: 0; }
+  .menu-retro .menu-header::after { right: 0; }
+  .menu-retro .truck-name {
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .menu-retro .menu-items { padding: 16px; }
+  .menu-retro .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dashed #ff444444;
+    color: #ffcccc;
+    font-size: 14px;
+  }
+  .menu-retro .menu-item:last-child { border-bottom: none; }
+  .menu-retro .menu-item .item-name { font-weight: 700; text-transform: uppercase; }
+  .menu-retro .menu-item .item-price { color: #ff6666; font-weight: 700; }
+
+  /* Style B: Street Culture */
+  .menu-street {
+    background: #0d0d0d;
+    border: 3px solid #00ff88;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-street::before {
+    content: "SMASH";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(0, 255, 136, 0.04);
+    letter-spacing: 10px;
+    pointer-events: none;
+  }
+  .menu-street .menu-header {
+    background: #00ff88;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    padding-bottom: 22px;
+  }
+  .menu-street .truck-name {
+    font-size: 26px;
+    font-weight: 900;
+    color: #0d0d0d;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+  .menu-street .menu-items { padding: 16px; position: relative; z-index: 1; }
+  .menu-street .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 2px solid #00ff8822;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-family: 'Arial Black', sans-serif;
+  }
+  .menu-street .menu-item:last-child { border-bottom: none; }
+  .menu-street .menu-item .item-name { text-transform: uppercase; letter-spacing: 1px; }
+  .menu-street .menu-item .item-price { color: #00ff88; font-weight: 700; font-size: 16px; }
+
+  /* Style C: Minimal & Premium */
+  .menu-minimal {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  }
+  .menu-minimal .menu-header {
+    background: #ffffff;
+    padding: 20px 16px 12px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .menu-minimal .truck-name {
+    font-size: 18px;
+    font-weight: 300;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+  }
+  .menu-minimal .menu-items { padding: 16px; }
+  .menu-minimal .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    color: #333;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .menu-minimal .menu-item .item-name { letter-spacing: 0.5px; }
+  .menu-minimal .menu-item .item-price { color: #666; font-weight: 300; }
+  .menu-minimal .menu-item + .menu-item { border-top: 1px solid #f0f0f0; }
+
+  /* Style D: Neighborhood Joint */
+  .menu-neighborhood {
+    background: #2c1810;
+    border: 3px solid #d4956a;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    position: relative;
+  }
+  .menu-neighborhood .menu-header {
+    background: linear-gradient(135deg, #d4956a, #b87a50);
+    padding: 16px;
+    text-align: center;
+  }
+  .menu-neighborhood .truck-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c1810;
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+  .menu-neighborhood .menu-tagline {
+    font-size: 11px;
+    color: #4a2a18;
+    margin-top: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .menu-neighborhood .menu-items { padding: 16px; }
+  .menu-neighborhood .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid #d4956a33;
+    color: #e8d5c4;
+    font-size: 14px;
+  }
+  .menu-neighborhood .menu-item:last-child { border-bottom: none; }
+  .menu-neighborhood .menu-item .item-name { font-style: italic; }
+  .menu-neighborhood .menu-item .item-price { color: #d4956a; font-weight: 700; font-family: -apple-system, sans-serif; }
+  .menu-neighborhood .menu-item .item-desc {
+    font-size: 11px;
+    color: #a08070;
+    display: block;
+    margin-top: 2px;
+    font-style: normal;
+  }
+
+  /* Pros / Cons */
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros-title, .cons-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pros-title { color: #4ade80; }
+  .cons-title { color: #f87171; }
+  .pros li, .cons li {
+    list-style: none;
+    font-size: 13px;
+    color: #c0c0d0;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .pros li::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .cons li::before {
+    content: "-";
+    position: absolute;
+    left: 2px;
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  /* Comparison Table */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 24px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #c0c0d0; }
+  .comparison-table .highlight-col {
+    background: rgba(45, 212, 168, 0.06);
+    color: #2dd4a8;
+    font-weight: 600;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: #8888a0;
+    font-size: 13px;
+    border-top: 1px solid #1a1a25;
+  }
+  .footer a { color: #2dd4a8; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Decision 3 of 3</div>
+    <h1>What's the Vibe?</h1>
+    <p class="description">Your brand identity shapes every customer touchpoint -- the truck wrap, the menu board, social media, and the feeling people get when they see you pull up.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Retro Diner -->
+    <div class="option-card dimmed">
+      <div class="option-label label-a">Option A</div>
+      <div class="option-title">Retro Diner</div>
+      <div class="option-subtitle">Checkered patterns, neon accents, classic Americana</div>
+
+      <div class="visual-preview">
+        <div class="menu-board menu-retro">
+          <div class="menu-header">
+            <div class="truck-name">Smash Stack</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <span class="item-name">Classic Smash</span>
+              <span class="item-price">$9</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Double Stack</span>
+              <span class="item-price">$12</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Loaded Fries</span>
+              <span class="item-price">$7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Nostalgic, universally understood</li>
+            <li>Perfect pairing with burgers</li>
+            <li>Eye-catching truck wrap potential</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Can feel gimmicky or dated</li>
+            <li>Hard to stand out in retro crowd</li>
+            <li>Doesn't signal "premium"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Street Culture -->
+    <div class="option-card dimmed">
+      <div class="option-label label-b">Option B</div>
+      <div class="option-title">Street Culture</div>
+      <div class="option-subtitle">Bold typography, graffiti-inspired, urban edge</div>
+
+      <div class="visual-preview">
+        <div class="menu-board menu-street">
+          <div class="menu-header">
+            <div class="truck-name">Smash Stack</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <span class="item-name">Classic Smash</span>
+              <span class="item-price">$9</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Double Stack</span>
+              <span class="item-price">$12</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Loaded Fries</span>
+              <span class="item-price">$7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Extremely Instagrammable</li>
+            <li>Appeals to younger demographics</li>
+            <li>Strong merchandise potential</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>May alienate older customers</li>
+            <li>Can feel try-hard at a brewery</li>
+            <li>Trend-dependent aesthetic</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Minimal & Premium -->
+    <div class="option-card dimmed">
+      <div class="option-label label-c">Option C</div>
+      <div class="option-title">Minimal & Premium</div>
+      <div class="option-subtitle">Clean lines, black/white, let the food speak</div>
+
+      <div class="visual-preview">
+        <div class="menu-board menu-minimal">
+          <div class="menu-header">
+            <div class="truck-name">Smash Stack</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <span class="item-name">Classic Smash</span>
+              <span class="item-price">$9</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Double Stack</span>
+              <span class="item-price">$12</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Loaded Fries</span>
+              <span class="item-price">$7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Signals quality and confidence</li>
+            <li>Timeless, won't date itself</li>
+            <li>Clean, easy to reproduce on merch</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Can feel cold or corporate</li>
+            <li>Harder to spot from a distance</li>
+            <li>Doesn't match food truck energy</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Neighborhood Joint (RECOMMENDED + CHOSEN) -->
+    <div class="option-card recommended chosen">
+      <div class="card-badge recommended-badge">Recommended</div>
+      <div class="card-badge chosen-badge" style="right: 140px;">Chosen</div>
+      <div class="option-label label-d">Option D</div>
+      <div class="option-title">Neighborhood Joint</div>
+      <div class="option-subtitle">Warm, hand-lettered, approachable, local feel</div>
+
+      <div class="visual-preview">
+        <div class="menu-board menu-neighborhood">
+          <div class="menu-header">
+            <div class="truck-name">Smash Stack</div>
+            <div class="menu-tagline">Smashed fresh daily</div>
+          </div>
+          <div class="menu-items">
+            <div class="menu-item">
+              <div>
+                <span class="item-name">Classic Smash</span>
+                <span class="item-desc">American cheese, pickles, secret sauce</span>
+              </div>
+              <span class="item-price">$9</span>
+            </div>
+            <div class="menu-item">
+              <div>
+                <span class="item-name">Double Stack</span>
+                <span class="item-desc">Two patties, double cheese, the works</span>
+              </div>
+              <span class="item-price">$12</span>
+            </div>
+            <div class="menu-item">
+              <div>
+                <span class="item-name">Loaded Fries</span>
+                <span class="item-desc">Cheese sauce, bacon bits, green onion</span>
+              </div>
+              <span class="item-price">$7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Warm and welcoming to all ages</li>
+            <li>Perfect fit for brewery setting</li>
+            <li>Builds community connection</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Less "wow" factor on social media</li>
+            <li>Hand-lettered look needs a designer</li>
+            <li>Could feel too casual for catering</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Retro Diner</th>
+          <th>Street Culture</th>
+          <th>Minimal</th>
+          <th class="highlight-col">Neighborhood</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Brewery Fit</td>
+          <td>Fair</td>
+          <td>Fair</td>
+          <td>Good</td>
+          <td class="highlight-col">Excellent</td>
+        </tr>
+        <tr>
+          <td>Age Appeal</td>
+          <td>35+</td>
+          <td>18-30</td>
+          <td>25-45</td>
+          <td class="highlight-col">All ages</td>
+        </tr>
+        <tr>
+          <td>Social Media</td>
+          <td>Good</td>
+          <td>Excellent</td>
+          <td>Good</td>
+          <td class="highlight-col">Very Good</td>
+        </tr>
+        <tr>
+          <td>Design Cost</td>
+          <td>$1,500-$3,000</td>
+          <td>$2,500-$5,000</td>
+          <td>$1,000-$2,000</td>
+          <td class="highlight-col">$2,000-$3,500</td>
+        </tr>
+        <tr>
+          <td>Longevity</td>
+          <td>Medium</td>
+          <td>Short</td>
+          <td>Long</td>
+          <td class="highlight-col">Long</td>
+        </tr>
+        <tr>
+          <td>Catering Appeal</td>
+          <td>Good</td>
+          <td>Niche</td>
+          <td>Excellent</td>
+          <td class="highlight-col">Very Good</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>Decision 3 of 3</strong> &middot; Food Truck Launch Strategy</p>
+    <p style="margin-top:8px;"><a href="decision-002-location-strategy.html">&larr; Previous</a> &middot; <a href="index.html">View All Decisions &rarr;</a></p>
+  </div>
+
+</div>
+</body>
+</html>

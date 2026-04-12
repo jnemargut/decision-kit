@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 2: Where Do You Set Up?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .badge {
+    display: inline-block;
+    background: rgba(45, 212, 168, 0.15);
+    color: #2dd4a8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(45, 212, 168, 0.25);
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 40px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #2dd4a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header .description {
+    color: #8888a0;
+    font-size: 17px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Cards */
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .option-card.dimmed { opacity: 0.55; }
+  .option-card.recommended {
+    border-color: #2dd4a8;
+    box-shadow: 0 0 30px rgba(45, 212, 168, 0.08);
+  }
+  .option-card.chosen {
+    border-color: #4ade80;
+    box-shadow: 0 0 30px rgba(74, 222, 128, 0.1);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    padding: 5px 14px;
+    border-radius: 0 0 10px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .card-badge.recommended-badge {
+    background: #2dd4a8;
+    color: #0a0a0f;
+  }
+  .card-badge.chosen-badge {
+    background: #4ade80;
+    color: #0a0a0f;
+  }
+
+  .option-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.label-a { color: #60a5fa; }
+  .option-label.label-b { color: #2dd4a8; }
+  .option-label.label-c { color: #fbbf24; }
+  .option-label.label-d { color: #f87171; }
+
+  .option-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Visual Preview - Flow Steps */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .flow-title {
+    font-size: 11px;
+    color: #8888a0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0;
+    position: relative;
+    padding-left: 36px;
+    padding-bottom: 16px;
+  }
+  .flow-step:last-child { padding-bottom: 0; }
+  .flow-step::before {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 24px;
+    bottom: 0;
+    width: 2px;
+    background: #2a2a3a;
+  }
+  .flow-step:last-child::before { display: none; }
+  .step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-number.num-a { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+  .step-number.num-b { background: rgba(45, 212, 168, 0.15); color: #2dd4a8; }
+  .step-number.num-c { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+  .step-number.num-d { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+  .step-content {
+    margin-top: 2px;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e8;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: #8888a0;
+    margin-top: 2px;
+  }
+
+  /* Pros / Cons */
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros-title, .cons-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pros-title { color: #4ade80; }
+  .cons-title { color: #f87171; }
+  .pros li, .cons li {
+    list-style: none;
+    font-size: 13px;
+    color: #c0c0d0;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .pros li::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .cons li::before {
+    content: "-";
+    position: absolute;
+    left: 2px;
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  /* Comparison Table */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 24px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #c0c0d0; }
+  .comparison-table .highlight-col {
+    background: rgba(45, 212, 168, 0.06);
+    color: #2dd4a8;
+    font-weight: 600;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: #8888a0;
+    font-size: 13px;
+    border-top: 1px solid #1a1a25;
+  }
+  .footer a { color: #2dd4a8; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Decision 2 of 3</div>
+    <h1>Where Do You Set Up?</h1>
+    <p class="description">Location strategy defines your revenue ceiling, schedule, and lifestyle. A smash burger truck needs consistent, hungry crowds with fast turnover.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Lunch Rush Circuit -->
+    <div class="option-card dimmed">
+      <div class="option-label label-a">Option A</div>
+      <div class="option-title">Lunch Rush Circuit</div>
+      <div class="option-subtitle">Office parks and business districts, M-F 11am-2pm</div>
+
+      <div class="visual-preview">
+        <div class="flow-title">Typical Day</div>
+        <div class="flow-step">
+          <div class="step-number num-a">1</div>
+          <div class="step-content">
+            <div class="step-label">6:00 AM -- Prep Kitchen</div>
+            <div class="step-desc">Prep patties, slice toppings, load truck</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-a">2</div>
+          <div class="step-content">
+            <div class="step-label">10:30 AM -- Drive to Location</div>
+            <div class="step-desc">Rotate between 3-4 office park spots weekly</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-a">3</div>
+          <div class="step-content">
+            <div class="step-label">11:00 AM -- Service Starts</div>
+            <div class="step-desc">Peak rush 11:30-1:00, 80% of revenue in 90 min</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-a">4</div>
+          <div class="step-content">
+            <div class="step-label">2:00 PM -- Wrap Up</div>
+            <div class="step-desc">Close service, head back for cleaning</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-a">5</div>
+          <div class="step-content">
+            <div class="step-label">3:00 PM -- Done</div>
+            <div class="step-desc">Clean truck, restock, prep for tomorrow</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Predictable weekday schedule</li>
+            <li>Repeat office worker customers</li>
+            <li>Afternoons and weekends free</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>All revenue in a 3-hour window</li>
+            <li>Vulnerable to remote work trends</li>
+            <li>Permit competition for prime spots</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Event Chaser -->
+    <div class="option-card dimmed">
+      <div class="option-label label-b">Option B</div>
+      <div class="option-title">Event Chaser</div>
+      <div class="option-subtitle">Festivals, farmers markets, concerts, weekend focus</div>
+
+      <div class="visual-preview">
+        <div class="flow-title">Typical Weekend</div>
+        <div class="flow-step">
+          <div class="step-number num-b">1</div>
+          <div class="step-content">
+            <div class="step-label">Thursday -- Book &amp; Prep</div>
+            <div class="step-desc">Confirm weekend events, bulk prep ingredients</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-b">2</div>
+          <div class="step-content">
+            <div class="step-label">Friday PM -- Load Heavy</div>
+            <div class="step-desc">Double inventory for high-volume weekend events</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-b">3</div>
+          <div class="step-content">
+            <div class="step-label">Saturday -- Farmers Market</div>
+            <div class="step-desc">8am-2pm service, steady all-day traffic</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-b">4</div>
+          <div class="step-content">
+            <div class="step-label">Sunday -- Festival/Concert</div>
+            <div class="step-desc">High volume, long hours, premium pricing</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-b">5</div>
+          <div class="step-content">
+            <div class="step-label">Monday -- Recovery</div>
+            <div class="step-desc">Deep clean, accounting, book next events</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Huge single-day revenue potential</li>
+            <li>Built-in crowds, no marketing needed</li>
+            <li>Weekdays mostly free</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Unpredictable and seasonal income</li>
+            <li>High event fees ($200-$2000+)</li>
+            <li>Exhausting weekend-only grind</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Brewery Partner (RECOMMENDED + CHOSEN) -->
+    <div class="option-card recommended chosen">
+      <div class="card-badge recommended-badge">Recommended</div>
+      <div class="card-badge chosen-badge" style="right: 140px;">Chosen</div>
+      <div class="option-label label-c">Option C</div>
+      <div class="option-title">Brewery Partner</div>
+      <div class="option-subtitle">Permanent spot at a brewery with no kitchen</div>
+
+      <div class="visual-preview">
+        <div class="flow-title">Typical Week</div>
+        <div class="flow-step">
+          <div class="step-number num-c">1</div>
+          <div class="step-content">
+            <div class="step-label">Mon-Tue -- Off / Light Prep</div>
+            <div class="step-desc">Brewery is closed or slow; rest and restock</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-c">2</div>
+          <div class="step-content">
+            <div class="step-label">Wed-Thu -- Evening Service</div>
+            <div class="step-desc">4pm-9pm at brewery, steady taproom traffic</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-c">3</div>
+          <div class="step-content">
+            <div class="step-label">Friday -- Peak Night</div>
+            <div class="step-desc">4pm-10pm, highest volume, beer + burgers magic</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-c">4</div>
+          <div class="step-content">
+            <div class="step-label">Saturday -- All Day</div>
+            <div class="step-desc">12pm-10pm, brewery events, live music crowds</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-c">5</div>
+          <div class="step-content">
+            <div class="step-label">Sunday -- Brunch &amp; Wind Down</div>
+            <div class="step-desc">11am-6pm, family-friendly afternoon crowd</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Guaranteed foot traffic every night</li>
+            <li>No driving or permit hunting</li>
+            <li>Symbiotic: brewery promotes you</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Revenue share or rent to brewery</li>
+            <li>Tied to one location's success</li>
+            <li>Limited lunch revenue</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Neighborhood Rotation -->
+    <div class="option-card dimmed">
+      <div class="option-label label-d">Option D</div>
+      <div class="option-title">Neighborhood Rotation</div>
+      <div class="option-subtitle">Different residential neighborhoods each day, evening focus</div>
+
+      <div class="visual-preview">
+        <div class="flow-title">Typical Week</div>
+        <div class="flow-step">
+          <div class="step-number num-d">1</div>
+          <div class="step-content">
+            <div class="step-label">Monday -- Maple Heights</div>
+            <div class="step-desc">5pm-8pm, young families, early dinner rush</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-d">2</div>
+          <div class="step-content">
+            <div class="step-label">Tuesday -- Riverside District</div>
+            <div class="step-desc">5pm-8pm, college crowd, high volume low ticket</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-d">3</div>
+          <div class="step-content">
+            <div class="step-label">Wednesday -- Oak Park</div>
+            <div class="step-desc">5pm-8pm, affluent area, premium add-ons</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-d">4</div>
+          <div class="step-content">
+            <div class="step-label">Thu-Fri -- Downtown Arts</div>
+            <div class="step-desc">6pm-10pm, nightlife crowd, late-night smashes</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number num-d">5</div>
+          <div class="step-content">
+            <div class="step-label">Sat-Sun -- Flex / Events</div>
+            <div class="step-desc">Pop up at parks, markets, or rest days</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Pros</div>
+          <ul>
+            <li>Build neighborhood loyalty</li>
+            <li>Test multiple markets quickly</li>
+            <li>Social media "where are we today" buzz</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Cons</div>
+          <ul>
+            <li>Driving and setup time every day</li>
+            <li>Inconsistent traffic by location</li>
+            <li>Residential permit complexities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Lunch Rush</th>
+          <th>Event Chaser</th>
+          <th class="highlight-col">Brewery Partner</th>
+          <th>Neighborhood</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Weekly Revenue</td>
+          <td>$3,500-$5,000</td>
+          <td>$4,000-$8,000</td>
+          <td class="highlight-col">$4,500-$7,000</td>
+          <td>$3,000-$5,500</td>
+        </tr>
+        <tr>
+          <td>Consistency</td>
+          <td>High (M-F)</td>
+          <td>Low (seasonal)</td>
+          <td class="highlight-col">Very High</td>
+          <td>Medium</td>
+        </tr>
+        <tr>
+          <td>Fuel / Driving</td>
+          <td>$150-250/wk</td>
+          <td>$200-400/wk</td>
+          <td class="highlight-col">$30-50/wk</td>
+          <td>$250-350/wk</td>
+        </tr>
+        <tr>
+          <td>Marketing Effort</td>
+          <td>Medium</td>
+          <td>Low</td>
+          <td class="highlight-col">Low (shared)</td>
+          <td>High</td>
+        </tr>
+        <tr>
+          <td>Work-Life Balance</td>
+          <td>Good (done by 3pm)</td>
+          <td>Poor (all weekend)</td>
+          <td class="highlight-col">Good (set schedule)</td>
+          <td>Fair</td>
+        </tr>
+        <tr>
+          <td>Growth Ceiling</td>
+          <td>Medium</td>
+          <td>High</td>
+          <td class="highlight-col">Medium-High</td>
+          <td>Medium</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>Decision 2 of 3</strong> &middot; Food Truck Launch Strategy</p>
+    <p style="margin-top:8px;"><a href="decision-001-concept.html">&larr; Previous</a> &middot; <a href="decision-003-brand-identity.html">Next: What's the Vibe? &rarr;</a></p>
+  </div>
+
+</div>
+</body>
+</html>

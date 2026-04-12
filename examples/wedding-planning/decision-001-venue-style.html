@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 1 of 3: What Kind of Venue?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px 60px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 48px; }
+  .badge {
+    display: inline-block;
+    background: rgba(108, 99, 255, 0.15);
+    color: #6c63ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0e0e8, #6c63ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .header .description {
+    color: #8888a0;
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ── Grid ── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: opacity 0.3s, border-color 0.3s;
+  }
+  .card.not-chosen { opacity: 0.55; }
+  .card.recommended { border-color: #6c63ff; box-shadow: 0 0 24px rgba(108, 99, 255, 0.12); }
+  .card.chosen { border-color: #4ade80; box-shadow: 0 0 24px rgba(74, 222, 128, 0.12); }
+
+  .card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 12px;
+    color: #fff;
+  }
+  .card-badge.recommended-badge { background: #6c63ff; }
+  .card-badge.chosen-badge { background: #4ade80; color: #0a0a0f; }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .option-label.a { color: #6c63ff; }
+  .option-label.b { color: #fbbf24; }
+  .option-label.c { color: #4ade80; }
+  .option-label.d { color: #60a5fa; }
+
+  .option-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  /* ── Visual Preview: Dimension Bars ── */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .dimension-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .dimension-row:last-child { margin-bottom: 0; }
+  .dimension-label {
+    width: 130px;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    color: #8888a0;
+    font-weight: 500;
+  }
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .bar-fill.green { background: linear-gradient(90deg, #4ade80, #22c55e); }
+  .bar-fill.amber { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+  .bar-fill.blue { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+  .bar-fill.accent { background: linear-gradient(90deg, #6c63ff, #8b5cf6); }
+  .bar-fill.red { background: linear-gradient(90deg, #f87171, #ef4444); }
+  .dimension-score {
+    width: 32px;
+    text-align: right;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #e0e0e8;
+    margin-left: 10px;
+  }
+
+  /* ── Pros / Cons ── */
+  .pros-cons { display: flex; gap: 16px; }
+  .pros, .cons { flex: 1; }
+  .pros-title, .cons-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pros-title { color: #4ade80; }
+  .cons-title { color: #f87171; }
+  .pro-item, .con-item {
+    font-size: 0.85rem;
+    color: #c0c0d0;
+    margin-bottom: 5px;
+    padding-left: 16px;
+    position: relative;
+  }
+  .pro-item::before {
+    content: "+";
+    position: absolute;
+    left: 0;
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .con-item::before {
+    content: "-";
+    position: absolute;
+    left: 2px;
+    color: #f87171;
+    font-weight: 700;
+  }
+
+  /* ── Comparison Table ── */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #2a2a3a;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .comparison-table td { color: #c0c0d0; }
+  .comparison-table td.highlight {
+    background: rgba(108, 99, 255, 0.08);
+    color: #fff;
+    font-weight: 600;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+  .comparison-table td:first-child, .comparison-table th:first-child {
+    text-align: left;
+    color: #8888a0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #8888a0;
+    font-size: 0.85rem;
+    padding-top: 24px;
+    border-top: 1px solid #2a2a3a;
+  }
+  .footer a { color: #6c63ff; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Decision 1 of 3</div>
+    <h1>What Kind of Venue?</h1>
+    <p class="description">The venue sets the tone for everything: the dress code, the menu, the flowers, the photos. This is the single decision that shapes every other choice.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Rustic Barn -->
+    <div class="card not-chosen">
+      <div class="option-label a">Option A</div>
+      <div class="option-title">Rustic Barn</div>
+      <div class="option-subtitle">Countryside charm, string lights, natural wood, relaxed elegance</div>
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <span class="dimension-label">Ambiance</span>
+          <div class="bar-track"><div class="bar-fill green" style="width:85%"></div></div>
+          <span class="dimension-score">8.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Guest Comfort</span>
+          <div class="bar-track"><div class="bar-fill amber" style="width:60%"></div></div>
+          <span class="dimension-score">6.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Photo Opportunities</span>
+          <div class="bar-track"><div class="bar-fill blue" style="width:80%"></div></div>
+          <span class="dimension-score">8.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Weather Risk</span>
+          <div class="bar-track"><div class="bar-fill red" style="width:35%"></div></div>
+          <span class="dimension-score">3.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Budget Impact</span>
+          <div class="bar-track"><div class="bar-fill accent" style="width:55%"></div></div>
+          <span class="dimension-score">5.5</span>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Unique, photogenic character</div>
+          <div class="pro-item">Built-in rustic decor saves on florals</div>
+          <div class="pro-item">Casual vibe puts guests at ease</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Limited climate control</div>
+          <div class="con-item">Remote location complicates logistics</div>
+          <div class="con-item">Can feel trendy rather than timeless</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Urban Rooftop -->
+    <div class="card not-chosen">
+      <div class="option-label b">Option B</div>
+      <div class="option-title">Urban Rooftop</div>
+      <div class="option-subtitle">City skyline views, modern minimalist, cocktail-style energy</div>
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <span class="dimension-label">Ambiance</span>
+          <div class="bar-track"><div class="bar-fill green" style="width:80%"></div></div>
+          <span class="dimension-score">8.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Guest Comfort</span>
+          <div class="bar-track"><div class="bar-fill amber" style="width:55%"></div></div>
+          <span class="dimension-score">5.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Photo Opportunities</span>
+          <div class="bar-track"><div class="bar-fill blue" style="width:90%"></div></div>
+          <span class="dimension-score">9.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Weather Risk</span>
+          <div class="bar-track"><div class="bar-fill red" style="width:75%"></div></div>
+          <span class="dimension-score">7.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Budget Impact</span>
+          <div class="bar-track"><div class="bar-fill accent" style="width:80%"></div></div>
+          <span class="dimension-score">8.0</span>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Dramatic backdrop requires less decor</div>
+          <div class="pro-item">Convenient for city-based guests</div>
+          <div class="pro-item">Feels chic and contemporary</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">High exposure to wind and weather</div>
+          <div class="con-item">Noise restrictions and curfews</div>
+          <div class="con-item">Limited capacity and space constraints</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Garden Estate (Recommended + Chosen) -->
+    <div class="card recommended chosen">
+      <span class="card-badge recommended-badge">Recommended</span>
+      <span class="card-badge chosen-badge" style="top: 42px;">Chosen</span>
+      <div class="option-label c">Option C</div>
+      <div class="option-title">Garden Estate</div>
+      <div class="option-subtitle">Manicured grounds, tented reception, classic romance</div>
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <span class="dimension-label">Ambiance</span>
+          <div class="bar-track"><div class="bar-fill green" style="width:95%"></div></div>
+          <span class="dimension-score">9.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Guest Comfort</span>
+          <div class="bar-track"><div class="bar-fill amber" style="width:85%"></div></div>
+          <span class="dimension-score">8.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Photo Opportunities</span>
+          <div class="bar-track"><div class="bar-fill blue" style="width:95%"></div></div>
+          <span class="dimension-score">9.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Weather Risk</span>
+          <div class="bar-track"><div class="bar-fill red" style="width:40%"></div></div>
+          <span class="dimension-score">4.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Budget Impact</span>
+          <div class="bar-track"><div class="bar-fill accent" style="width:70%"></div></div>
+          <span class="dimension-score">7.0</span>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Timeless, universally beautiful setting</div>
+          <div class="pro-item">Tent provides weather backup</div>
+          <div class="pro-item">Endless photo locations on grounds</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Tent rental adds to cost</div>
+          <div class="con-item">Seasonal availability constraints</div>
+          <div class="con-item">Requires more vendor coordination</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Beach Celebration -->
+    <div class="card not-chosen">
+      <div class="option-label d">Option D</div>
+      <div class="option-title">Beach Celebration</div>
+      <div class="option-subtitle">Waterfront ceremony, barefoot elegance, sunset reception</div>
+      <div class="visual-preview">
+        <div class="dimension-row">
+          <span class="dimension-label">Ambiance</span>
+          <div class="bar-track"><div class="bar-fill green" style="width:90%"></div></div>
+          <span class="dimension-score">9.0</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Guest Comfort</span>
+          <div class="bar-track"><div class="bar-fill amber" style="width:45%"></div></div>
+          <span class="dimension-score">4.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Photo Opportunities</span>
+          <div class="bar-track"><div class="bar-fill blue" style="width:85%"></div></div>
+          <span class="dimension-score">8.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Weather Risk</span>
+          <div class="bar-track"><div class="bar-fill red" style="width:85%"></div></div>
+          <span class="dimension-score">8.5</span>
+        </div>
+        <div class="dimension-row">
+          <span class="dimension-label">Budget Impact</span>
+          <div class="bar-track"><div class="bar-fill accent" style="width:65%"></div></div>
+          <span class="dimension-score">6.5</span>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-title">Strengths</div>
+          <div class="pro-item">Breathtaking natural beauty</div>
+          <div class="pro-item">Built-in vacation feel for guests</div>
+          <div class="pro-item">Sunset ceremony is unforgettable</div>
+        </div>
+        <div class="cons">
+          <div class="cons-title">Trade-offs</div>
+          <div class="con-item">Sand, wind, and humidity challenges</div>
+          <div class="con-item">Accessibility issues for some guests</div>
+          <div class="con-item">Sound systems struggle outdoors</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Rustic Barn</th>
+          <th>Urban Rooftop</th>
+          <th>Garden Estate</th>
+          <th>Beach</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ambiance</td>
+          <td>8.5</td>
+          <td>8.0</td>
+          <td class="highlight">9.5</td>
+          <td>9.0</td>
+        </tr>
+        <tr>
+          <td>Guest Comfort</td>
+          <td>6.0</td>
+          <td>5.5</td>
+          <td class="highlight">8.5</td>
+          <td>4.5</td>
+        </tr>
+        <tr>
+          <td>Photo Opportunities</td>
+          <td>8.0</td>
+          <td>9.0</td>
+          <td class="highlight">9.5</td>
+          <td>8.5</td>
+        </tr>
+        <tr>
+          <td>Weather Risk</td>
+          <td>3.5</td>
+          <td>7.5</td>
+          <td class="highlight">4.0</td>
+          <td>8.5</td>
+        </tr>
+        <tr>
+          <td>Budget Impact</td>
+          <td>5.5</td>
+          <td>8.0</td>
+          <td class="highlight">7.0</td>
+          <td>6.5</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><a href="index.html">&larr; Back to all decisions</a> &nbsp;&middot;&nbsp; <a href="decision-002-guest-experience.html">Next: Guest Experience &rarr;</a></p>
+  </div>
+
+</div>
+</body>
+</html>

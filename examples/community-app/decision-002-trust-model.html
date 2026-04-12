@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 2: How Do Neighbors Build Trust? — ToolShare</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .decision-badge {
+    display: inline-block;
+    background: rgba(224, 124, 62, 0.15);
+    border: 1px solid rgba(224, 124, 62, 0.3);
+    color: #e07c3e;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e8, #8888a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p { color: #8888a0; font-size: 16px; max-width: 600px; margin: 0 auto; }
+
+  /* Grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Cards */
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .option-card.not-chosen { opacity: 0.55; }
+  .option-card.recommended { border-color: #e07c3e; box-shadow: 0 0 24px rgba(224, 124, 62, 0.1); }
+  .option-card.chosen { border-color: #4ade80; box-shadow: 0 0 24px rgba(74, 222, 128, 0.1); }
+  .option-card.chosen.recommended { border-color: #4ade80; }
+
+  .badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 0 0 10px 10px;
+    color: #fff;
+  }
+  .badge.recommended-badge { background: #e07c3e; }
+  .badge.chosen-badge { background: #4ade80; color: #0a0a0f; }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.a { color: #60a5fa; }
+  .option-label.b { color: #e07c3e; }
+  .option-label.c { color: #fbbf24; }
+  .option-label.d { color: #a78bfa; }
+
+  .option-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Visual Preview — Flow Steps */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+  }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+  }
+  .step-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 32px;
+  }
+  .step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .option-card:nth-child(1) .step-number { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+  .option-card:nth-child(2) .step-number { background: rgba(224, 124, 62, 0.2); color: #e07c3e; }
+  .option-card:nth-child(3) .step-number { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+  .option-card:nth-child(4) .step-number { background: rgba(167, 139, 250, 0.2); color: #a78bfa; }
+
+  .step-line {
+    width: 2px;
+    height: 20px;
+    background: #2a2a3a;
+  }
+  .chosen .step-line { background: rgba(74, 222, 128, 0.25); }
+  .recommended .step-line { background: rgba(224, 124, 62, 0.25); }
+
+  .step-content {
+    padding-bottom: 12px;
+  }
+  .step-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e8;
+    margin-bottom: 2px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: #8888a0;
+    line-height: 1.4;
+  }
+
+  /* Pros / Cons */
+  .pros-cons { display: flex; flex-direction: column; gap: 8px; }
+  .pro, .con {
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .pro .icon { color: #4ade80; flex-shrink: 0; font-weight: 700; }
+  .con .icon { color: #f87171; flex-shrink: 0; font-weight: 700; }
+
+  /* Comparison Table */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #e0e0e8; }
+  .comparison-table .highlight {
+    background: rgba(224, 124, 62, 0.08);
+    border-left: 2px solid #e07c3e;
+  }
+  .comparison-table .chosen-col {
+    background: rgba(74, 222, 128, 0.06);
+    border-left: 2px solid #4ade80;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid #2a2a3a;
+    color: #8888a0;
+    font-size: 13px;
+  }
+  .footer strong { color: #e0e0e8; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="decision-badge">Decision 2 of 3</div>
+    <h1>How Do Neighbors Build Trust?</h1>
+    <p>Lending a $300 tool to someone you've never met requires a trust mechanism. The right model balances safety with the frictionless experience urban renters expect.</p>
+  </div>
+
+  <!-- Options Grid -->
+  <div class="options-grid">
+
+    <!-- Option A: Reputation System -->
+    <div class="option-card not-chosen">
+      <div class="option-label a">Option A</div>
+      <div class="option-title">Reputation System</div>
+      <div class="option-subtitle">Star ratings and reviews after each borrow</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">1</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">New User Signs Up</div><div class="step-desc">Creates profile with photo and bio. Starts with zero rating.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">2</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Requests a Borrow</div><div class="step-desc">Sends request to lender, who can see the borrower's empty profile.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">3</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Tool Returned</div><div class="step-desc">Both parties rate each other 1-5 stars after the exchange.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">4</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Reputation Builds</div><div class="step-desc">Over time, high-rated users get more approvals and trust badges.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">5</div></div>
+            <div class="step-content"><div class="step-title">Low Ratings Flagged</div><div class="step-desc">Users below 3.5 stars get warnings; repeat offenders are suspended.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Familiar model — users understand it from Uber, Airbnb</div>
+        <div class="pro"><span class="icon">+</span> Self-policing community over time</div>
+        <div class="con"><span class="icon">-</span> Cold-start problem — no one trusts new users with zero ratings</div>
+        <div class="con"><span class="icon">-</span> Rating inflation makes scores meaningless</div>
+      </div>
+    </div>
+
+    <!-- Option B: Deposit Hold -->
+    <div class="option-card not-chosen">
+      <div class="option-label b">Option B</div>
+      <div class="option-title">Deposit Hold</div>
+      <div class="option-subtitle">Small security deposit held until tool is returned</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">1</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Borrower Requests Tool</div><div class="step-desc">Selects tool and sees deposit amount (set by lender, e.g. $25).</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">2</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Deposit Authorized</div><div class="step-desc">Credit card hold placed — no charge unless tool is damaged or lost.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">3</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Tool Picked Up</div><div class="step-desc">Both parties confirm handoff in app. Borrow timer starts.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">4</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Tool Returned</div><div class="step-desc">Lender confirms return and condition. Deposit hold released.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">5</div></div>
+            <div class="step-content"><div class="step-title">Dispute Resolution</div><div class="step-desc">If damaged, lender files claim and deposit is charged to borrower.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Strong financial incentive to return tools in good condition</div>
+        <div class="pro"><span class="icon">+</span> Works from day one — no reputation needed</div>
+        <div class="con"><span class="icon">-</span> Feels transactional — undermines community spirit</div>
+        <div class="con"><span class="icon">-</span> Requires payment infrastructure and dispute handling</div>
+      </div>
+    </div>
+
+    <!-- Option C: Neighbor Vouching — Recommended + Chosen -->
+    <div class="option-card recommended chosen">
+      <span class="badge chosen-badge">Chosen</span>
+      <div class="option-label c">Option C — Recommended</div>
+      <div class="option-title">Neighbor Vouching</div>
+      <div class="option-subtitle">Existing members vouch for new ones to join</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">1</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Seed the Neighborhood</div><div class="step-desc">First 5-10 members join via invite. They become the founding circle.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">2</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Invite a Neighbor</div><div class="step-desc">Members share invite links with people they know and trust.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">3</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Vouch to Activate</div><div class="step-desc">New member needs 1 vouch from an existing member to borrow. 2 vouches unlocks high-value tools.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">4</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Trust Cascades</div><div class="step-desc">As vouched members prove reliable, they earn the ability to vouch others.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">5</div></div>
+            <div class="step-content"><div class="step-title">Accountability Chain</div><div class="step-desc">If a member damages a tool, the voucher's trust score is also affected.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Leverages real social connections — the strongest trust signal</div>
+        <div class="pro"><span class="icon">+</span> No cold-start problem — new users arrive pre-trusted</div>
+        <div class="pro"><span class="icon">+</span> Built-in viral growth loop through invitations</div>
+        <div class="con"><span class="icon">-</span> Slower initial growth — requires existing social ties</div>
+        <div class="con"><span class="icon">-</span> Could feel exclusionary if not managed carefully</div>
+      </div>
+    </div>
+
+    <!-- Option D: Verified Identity -->
+    <div class="option-card not-chosen">
+      <div class="option-label d">Option D</div>
+      <div class="option-title">Verified Identity</div>
+      <div class="option-subtitle">Government ID verification + address proof</div>
+      <div class="visual-preview">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">1</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Sign Up with Email</div><div class="step-desc">Create basic account and provide address within the neighborhood.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">2</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Upload Government ID</div><div class="step-desc">Photo of driver's license or passport processed by identity service.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">3</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Address Verification</div><div class="step-desc">Confirm residency via utility bill, lease, or postcard code.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">4</div><div class="step-line"></div></div>
+            <div class="step-content"><div class="step-title">Verified Badge Issued</div><div class="step-desc">Profile shows verified checkmark. Can now borrow and lend freely.</div></div>
+          </div>
+          <div class="flow-step">
+            <div class="step-connector"><div class="step-number">5</div></div>
+            <div class="step-content"><div class="step-title">Annual Re-verification</div><div class="step-desc">Address confirmed yearly to keep badge current as people move.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pro"><span class="icon">+</span> Highest trust — real identity tied to every transaction</div>
+        <div class="pro"><span class="icon">+</span> Deters bad actors effectively</div>
+        <div class="con"><span class="icon">-</span> Massive friction — many users will abandon signup</div>
+        <div class="con"><span class="icon">-</span> Privacy concerns for a casual neighborhood app</div>
+        <div class="con"><span class="icon">-</span> Expensive third-party verification services ($1-3 per check)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h2>Side-by-Side Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Criteria</th>
+          <th>A: Reputation</th>
+          <th>B: Deposit</th>
+          <th class="chosen-col">C: Vouching</th>
+          <th>D: Verified ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Signup Friction</strong></td>
+          <td>Low</td>
+          <td>Medium (payment info)</td>
+          <td class="chosen-col"><strong>Low (invite link)</strong></td>
+          <td>Very High</td>
+        </tr>
+        <tr>
+          <td><strong>Day-1 Trust Level</strong></td>
+          <td>None — must be earned</td>
+          <td>Medium (deposit protects)</td>
+          <td class="chosen-col"><strong>High — social proof</strong></td>
+          <td>High — verified identity</td>
+        </tr>
+        <tr>
+          <td><strong>Community Feel</strong></td>
+          <td>Transactional</td>
+          <td>Transactional</td>
+          <td class="chosen-col"><strong>Warm, neighborhood-like</strong></td>
+          <td>Institutional</td>
+        </tr>
+        <tr>
+          <td><strong>Growth Model</strong></td>
+          <td>Open registration</td>
+          <td>Open registration</td>
+          <td class="chosen-col"><strong>Invite-driven (viral loop)</strong></td>
+          <td>Slow, high-friction</td>
+        </tr>
+        <tr>
+          <td><strong>Implementation Cost</strong></td>
+          <td>Low</td>
+          <td>High (payments)</td>
+          <td class="chosen-col"><strong>Low</strong></td>
+          <td>High (ID service fees)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>Decision 2 of 3</strong> — Trust Model</p>
+    <p>Respond with <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, or <strong>D</strong> to choose a direction, or ask questions about any option.</p>
+  </div>
+
+</div>
+</body>
+</html>
