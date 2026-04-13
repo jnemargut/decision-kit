@@ -130,7 +130,7 @@ Open `.decisions/index.html` six months from now. See exactly what was decided, 
 
 ## Decisions compound
 
-This is the part that surprised me the most. Each skill reads the previous skill's decisions. No re-asking. No lost context. It just builds.
+Each skill reads the previous skill's decisions. No re-asking. No lost context. It just builds.
 
 ### Any domain: Strategize, Game Plan, Brief
 ```
@@ -216,7 +216,7 @@ It identifies the decisions hiding in your idea. Who's this actually for? How do
 
 ### Brownfield (existing code, no decisions recorded)
 
-Here's something that took a minute to fully sink in: every line of code is a decision someone made. The framework you chose. The way you handle errors. Whether sessions live in cookies or JWTs. The fact that signups need email verification but password resets don't. None of those are written down anywhere. They're not in the docs. They're not in the commit messages. They're encoded in the code itself, and the code is the only place they exist.
+Every line of code is a decision someone made. The framework you chose. The way you handle errors. Whether sessions live in cookies or JWTs. The fact that signups need email verification but password resets don't. None of those are written down anywhere. They're not in the docs. They're not in the commit messages. They're encoded in the code itself, and the code is the only place they exist.
 
 Your codebase is a graveyard of decisions nobody can see anymore.
 
