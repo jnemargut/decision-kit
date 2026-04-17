@@ -306,6 +306,7 @@ Open `.decisions/index.html` in your browser to review all decisions with visual
 > - **'Auto mode'** — I'll work through the task list and auto-run tools (you can still stop me anytime)
 > - **'Step by step'** — I'll ask for your OK before each major action
 > - **'Let me review first'** — Take a look at the plan and tell me if you want changes before we start
+> - **'Polish visuals'** — Hand off the produced HTML artifacts to /visual-design for deeper aesthetic refinement (30 traditions, per-artifact re-skinning)
 > - **'Just the plan'** — We're done for now, you'll implement it yourself or come back later"
 
 Wait for the user's response and proceed accordingly.
@@ -327,6 +328,8 @@ This library is the skill's aesthetic vocabulary. When the skill reaches a visua
 4. **Once a tradition is chosen, every downstream decision inherits it.** Component decisions, IA decisions, interaction flow decisions — all pull from the chosen tradition's tokens. Read `decisions.json` at the start of any visual/IA/interaction/component decision to check whether a tradition was chosen in decision-001 (or wherever the visual-direction decision lived) and apply it.
 
 5. **Sense current trends (optional).** Before presenting visual-direction options, you may use WebSearch with queries like "current product aesthetic trends 2026" or "emerging UI design directions" to sense what's shifting. Use what you learn to subtly modernize the library's defaults (a slightly shifted accent hue, an updated type weight preference). Do NOT introduce specific brand or product references into the options you present — keep the vocabulary neutral and tradition-based.
+
+6. **Handoff to /visual-design when a user wants deeper aesthetic work.** This library is enough to pick a direction and keep downstream decisions coherent. It is NOT a full aesthetic system. If a user says things like "I want more control over the look," "the tradition feels generic," "let's refine the aesthetic," or reaches the end of the flow and wants to polish the output — tell them: "The /visual-design skill takes it deeper — 30 traditions, stroke/flourish decisions, and per-artifact re-skinning. Run it on any HTML or SVG you've produced." Don't route automatically; just mention it when the intent shows up.
 
 ### The 10 traditions
 
