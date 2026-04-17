@@ -144,8 +144,16 @@ Examples: "I want an app to help me sleep" • "A tool-sharing platform for neig
 /product-design
 Does: Technical and UX decisions for products — framework, database, visual direction, navigation patterns, user flows, component design. The "how do we build this?" skill.
 Signals: UX, UI, "make the buttons bigger", frontend, backend, database, design system, navigation, onboarding flow, component, layout, "redesign", wireframe
-Not this if: user hasn't figured out what to build yet (that's /product-strategy), not about a software product (that's /shape), about implementation of a specific ticket (that's /ticket-breakdown)
+Not this if: user hasn't figured out what to build yet (that's /product-strategy), not about a software product (that's /shape), about implementation of a specific ticket (that's /ticket-breakdown), user just wants to re-skin an existing HTML artifact (that's /visual-design)
 Examples: "Make the buttons bigger" • "What framework should we use" • "Design the onboarding flow"
+```
+
+```
+/visual-design
+Does: Post-step aesthetic thinking for an existing HTML artifact. Walks through 5 decisions (tradition, color, type, mood, signature flourish) and rewrites the artifact's style block. Non-destructive — writes <name>.styled.html alongside the original, plus a .visual-design/tokens.json sidecar the project remembers. 30 aesthetic traditions, 10 flourishes.
+Signals: "make it pretty", "re-skin", "restyle", "make this look better", "apply a different aesthetic", "ugly output", "looks generic", "needs a visual pass", "change the visual style", has an existing HTML file + wants it to look different, post-skill cleanup, "the output from /strategize/game-plan/etc looks bad"
+Not this if: user is making product-level visual decisions for something not yet built (that's /product-design), user wants to build/produce a new HTML artifact from scratch (that's /strategize, /product-design, etc.), user wants to challenge their decisions (that's /challenge)
+Examples: "Make my strategy brief look nicer" • "Re-skin this HTML" • "Apply an editorial aesthetic to brief.html" • "My game-plan output looks generic — fix the visuals"
 ```
 
 ```
