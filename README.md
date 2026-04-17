@@ -301,7 +301,7 @@ These do the thinking for you. Context gathering, option generation, visual comp
 | `/shape` | Design and implementation planning | You know *what*, now figure out *how* |
 | `/product-strategy` | Product "what and why" - problem, users, positioning, business model | You're about to build a product |
 | `/product-design` | Product "how" - framework, database, visual direction, UX flows | You know what to build, now make the tech and design calls |
-| `/visual-design` | Aesthetic polish for any HTML or SVG — pick a tradition, tune color/type/mood/flourish | You have an existing artifact that looks generic and you want it to feel like *something* |
+| `/visual-design` | Aesthetic polish for any HTML or SVG. Pick a tradition, tune color/type/mood/flourish | You have an existing artifact that looks generic and you want it to feel like *something* |
 | `/ticket-breakdown` | Ticket to implementation plan - scope, approach, testing, PR plan | You have a ticket and want to think before coding |
 | `/self-code-review` | Review your own code before the PR | You've written code and want to catch issues before a teammate sees it |
 | `/excavate` | Surface decisions hidden in an existing codebase | You inherited a project or want to audit what's already decided |
@@ -383,13 +383,13 @@ Technical and UX decisions. Frontend framework, database, visual direction, navi
 ```
 If you've run `/product-strategy` first, it reads your strategy brief and uses it to inform every design option. It won't re-ask who your users are. It already knows.
 
-Picks *which* visual direction to use (10 aesthetic traditions). When you want to go deeper on the aesthetic — stroke weight, color nuance, signature flourish, per-artifact re-skinning — hand off to `/visual-design` on any HTML or SVG artifact you've produced.
+Picks *which* visual direction to use (10 aesthetic traditions). When you want to go deeper on the aesthetic (stroke weight, color nuance, signature flourish, per-artifact re-skinning), hand off to `/visual-design` on any HTML or SVG artifact you've produced.
 
 ---
 
 #### `/visual-design` - Polish any HTML or SVG artifact
 
-Post-step aesthetic thinking. You already have an artifact — a brief from `/strategize`, a playbook from `/game-plan`, a one-pager from `/brief`, an icon from somewhere — and it looks generic. `/visual-design` walks through the aesthetic decisions and rewrites it.
+Post-step aesthetic thinking. You already have an artifact (a brief from `/strategize`, a playbook from `/game-plan`, a one-pager from `/brief`, an icon from somewhere) and it looks generic. `/visual-design` walks through the aesthetic decisions and rewrites it.
 
 ```
 /visual-design                                  # auto-detects recent HTML/SVG
@@ -402,7 +402,7 @@ Post-step aesthetic thinking. You already have an artifact — a brief from `/st
 - **HTML mode (5 steps):** tradition → color → type → mood → signature flourish
 - **SVG mode (3 steps):** tradition → stroke weight → color treatment (faithful / mono / accent / duotone)
 - Writes `<name>.styled.html` or `<name>.styled.svg` alongside the original (non-destructive)
-- Saves `.visual-design/tokens.json` at the project root — next run in the same project surfaces your saved aesthetic as suggestion #1
+- Saves `.visual-design/tokens.json` at the project root. Next run in the same project surfaces your saved aesthetic as suggestion #1
 
 The difference between this and `/product-design`: `/product-design` picks *which* direction at a system level. `/visual-design` goes deep on *how* for a specific artifact. Which vs. how.
 
