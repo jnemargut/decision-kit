@@ -56,7 +56,22 @@ Example:
 
 ## AUTO-MODE OVERRIDE (applies if /autodecide was used)
 
-**Detection:** Check `$ARGUMENTS` for a directive that looks like `[Auto directive: ...]`. If present, your behavior changes for this entire run — apply the rules below across every phase.
+**Detection:** Auto-mode applies if EITHER:
+
+- `$ARGUMENTS` contains a `[Auto directive: ...]` block (injected by the `/autodecide` orchestrator), OR
+- `$ARGUMENTS` starts with `/autodecide` (direct invocation modifier — the user typed `/core-principles /autodecide [idea]`)
+
+In the second case, strip `/autodecide` from the args before treating the rest as the user's idea.
+
+**Inline depth modifiers also work.** If `$ARGUMENTS` starts with (or contains alongside `/autodecide`) `/overdecide` or `/underdecide`, treat them as depth directives too:
+- `/overdecide` token present → surface 8-12 tenets instead of the usual 4-7 (be thorough; cover more tensions)
+- `/underdecide` token present → surface only 2-3 tenets (the highest-stakes tensions only)
+- Both `/overdecide` and `/underdecide` → use the FIRST one mentioned and ignore the second
+- Order doesn't matter: `/core-principles /autodecide /overdecide [idea]` and `/core-principles /overdecide /autodecide [idea]` are equivalent
+
+Strip all leading modifier tokens from `$ARGUMENTS` before treating the rest as the user's idea.
+
+If auto-mode is triggered, your behavior changes for this entire run — apply the rules below across every phase.
 
 **What changes:**
 

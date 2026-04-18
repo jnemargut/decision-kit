@@ -24,7 +24,14 @@ The user invokes `/visual-design [optional path to .html or .svg]`. Original is 
 
 ## AUTO-MODE OVERRIDE (applies if /autodecide was used)
 
-**Detection:** Check `$ARGUMENTS` for a directive that looks like `[Auto directive: ...]`. If present, your behavior changes for this entire run — apply the rules below across every phase.
+**Detection:** Auto-mode applies if EITHER:
+
+- `$ARGUMENTS` contains a `[Auto directive: ...]` block (injected by the `/autodecide` orchestrator), OR
+- `$ARGUMENTS` starts with `/autodecide` (direct invocation modifier — the user typed `/visual-design /autodecide [path]`)
+
+In the second case, strip `/autodecide` from the args before treating the rest as the path/argument for the skill. Note: visual-design has a fixed decision count per mode (5 for HTML, 3 for SVG), so depth modifiers (`/overdecide`, `/underdecide`) don't apply here — strip them if present and ignore.
+
+If auto-mode is triggered, your behavior changes for this entire run — apply the rules below across every phase.
 
 **What changes:**
 

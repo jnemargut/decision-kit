@@ -25,7 +25,22 @@ The user's situation is: **$ARGUMENTS**
 
 ## AUTO-MODE OVERRIDE (applies if /autodecide was used)
 
-**Detection:** Check `$ARGUMENTS` for a directive that looks like `[Auto directive: ...]`. If present, your behavior changes for this entire run — apply the rules below across every phase.
+**Detection:** Auto-mode applies if EITHER:
+
+- `$ARGUMENTS` contains a `[Auto directive: ...]` block (injected by the `/autodecide` orchestrator), OR
+- `$ARGUMENTS` starts with `/autodecide` (direct invocation modifier — the user typed `/strategize /autodecide [topic]`)
+
+In the second case, strip `/autodecide` from the args before treating the rest as the user's situation.
+
+**Inline depth modifiers also work.** If `$ARGUMENTS` starts with (or contains alongside `/autodecide`) `/overdecide` or `/underdecide`, treat them as depth directives too:
+- `/overdecide` token present → surface 8-12 decisions instead of the usual 4-7 (be thorough; cover edge cases)
+- `/underdecide` token present → surface only 2-3 decisions (highest-stakes only; skip secondary calls)
+- Both `/overdecide` and `/underdecide` → use the FIRST one mentioned and ignore the second
+- Order doesn't matter: `/strategize /autodecide /overdecide [topic]` and `/strategize /overdecide /autodecide [topic]` are equivalent
+
+Strip all leading modifier tokens from `$ARGUMENTS` before treating the rest as the user's situation.
+
+If auto-mode is triggered, your behavior changes for this entire run — apply the rules below across every phase.
 
 **What changes:**
 
