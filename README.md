@@ -291,6 +291,16 @@ Don't know which skill to use? Don't care. Just say what's on your mind. The orc
 /decide help me figure out this sleep app idea
 ```
 
+### `/decide` variants
+
+Three power-user siblings to `/decide`. They route the same way — only the directive passed to the downstream thinking skill changes:
+
+- **`/overdecide [topic]`** — surfaces 8-12 decisions instead of the usual 4-7. For when you want to be thorough.
+- **`/underdecide [topic]`** — surfaces only 2-3 decisions. For when you just want the highest-stakes calls made and the rest defaulted.
+- **`/autodecide [topic]`** — auto-picks the recommended option for every decision. Pauses once at the end with a batch-review page so you can override before the action skill runs. Same research, same options, same recommendations — just skip the per-decision pause.
+
+They chain with each other (`/overdecide /autodecide [topic]` = thorough + auto-pick) and also work as inline modifiers on any thinking skill (`/strategize /autodecide [topic]`).
+
 ### Thinking Skills
 
 These do the thinking for you. Context gathering, option generation, visual comparisons, tradeoff analysis. Then they stop and wait for your judgment.
