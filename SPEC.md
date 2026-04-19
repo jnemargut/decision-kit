@@ -43,6 +43,7 @@ Store every decision in a `.decisions/` directory using this convention:
 | `decisions.json` | Machine-readable state: all decisions, options, choices, status |
 | `decision-NNN-slug.html` | Visual decision page for each decision (self-contained HTML) |
 | `index.html` | Landing page showing all decisions and their status |
+| `auto-review.html` | (Auto-Mode only) Batch-review page listing all auto-picked decisions for confirm/override |
 | `strategy-brief.md` or `implementation-plan.md` | Summary brief of all choices made |
 
 Decisions must be **persistent** (survive across sessions), **browsable** (open any HTML file in a browser), and **contextual** (downstream skills can read and build on them).
@@ -125,6 +126,50 @@ These fields are optional. Existing thinking skills can write them when reasonin
 
 ---
 
+## Auto-Mode
+
+Auto-Mode is a variation of thinking skills for when the user wants the rigor without the per-decision interrogation. Regular thinking skills pause after every decision. Auto-Mode generates every decision in sequence (same research, options, and recommendation) but auto-picks the recommended option, then pauses once at the end with a batch-review page so the human can confirm or override before any action skill runs.
+
+### How it differs:
+
+| | Thinking Skills | Auto-Mode |
+|---|---|---|
+| Pause cadence | After every decision | Once, at the end |
+| Initial choice | Human picks each option | AI auto-picks the recommendation |
+| Status of choices | `chosen` | `auto-picked` until reviewed, then `chosen` |
+| Action skill gate | After all decisions made | After batch review confirms |
+
+### How it activates:
+
+A thinking skill enters Auto-Mode when **either** condition is true:
+
+1. `$ARGUMENTS` contains an `[Auto directive: ...]` block (injected by the `/autodecide` orchestrator)
+2. `$ARGUMENTS` starts with `/autodecide` (direct inline modifier, e.g. `/strategize /autodecide [topic]`)
+
+Otherwise the skill behaves exactly like a regular thinking skill.
+
+### Required behavior in Auto-Mode:
+
+1. **For each decision:** generate the full HTML page exactly as normal (research, options, recommendation, comparison), save it, record the decision in `decisions.json` with `status: "auto-picked"` and `chosen` set to the recommended option (capture recommendation reasoning in the `reasoning` field, prefixed with `"Auto-picked: "`). Do **not** open the file or pause.
+2. **After all decisions:** generate `.decisions/auto-review.html`, a single batch-review page listing every auto-pick with its chosen option, the alternatives it beat, and the recommendation reasoning. Open it.
+3. **Pause once** for confirmation or overrides.
+4. **On confirm** ("looks good", "approved", etc.): transition every `auto-picked` decision to `status: "chosen"`, then proceed to the strategy brief and the action-skill prompt as normal.
+5. **On override** ("For decision-N I want Y"): update that decision (set `chosen` to option Y, `status: "chosen"`, capture reasoning if given, add a `history` entry recording the change from auto-pick to user choice), regenerate `auto-review.html`, re-prompt for confirmation of the rest. Repeat until confirmed.
+
+### Critical invariant:
+
+The action-skill gate (the prompt after the strategy brief) **MUST NOT** fire until every decision has transitioned from `auto-picked` to `chosen`. The batch-review pause is the gate.
+
+### Composition with depth modifiers:
+
+Auto-Mode composes with the depth modifier orchestrators (`/overdecide`, `/underdecide`). When `$ARGUMENTS` contains both an auto directive and a depth directive (or a leading combination like `/strategize /overdecide /autodecide [topic]`), apply both: surface the requested decision count AND auto-pick all of them.
+
+### New status value (backward compatible):
+
+`"auto-picked"` is a third valid value for the `status` field, alongside `"pending"` and `"chosen"`. Action skills must treat only `"chosen"` as ready to consume; `"auto-picked"` means "needs review."
+
+---
+
 ## Configuration Skills
 
 A **configuration skill** captures user preferences that shape how thinking skills behave. Configuration skills are a special case of thinking skills — they may walk through decisions or conduct lightweight interviews, and they store their output in `.decisions/` so other skills can read it.
@@ -197,6 +242,37 @@ The default orchestrator uses structured skill profiles with "Does / Signals / N
 
 The user picks the *interpretation*, not the tool. Skill names are revealed only after the choice is made.
 
+### Modifier orchestrators
+
+Three sibling orchestrators wrap `/decide` with directives that change downstream behavior. They route identically to `/decide`; only the args injected into the downstream thinking skill differ.
+
+| Orchestrator | Directive injected | Effect on downstream thinking skill |
+|--------------|---------------------|-------------------------------------|
+| `/overdecide` | `[Depth directive: ... 8-12 decisions ...]` | Surface 8-12 decisions instead of the usual 4-7 |
+| `/underdecide` | `[Depth directive: ... 2-3 decisions ...]` | Surface only the 2-3 highest-stakes decisions |
+| `/autodecide` | `[Auto directive: ... auto-pick + batch review ...]` | Auto-pick every recommendation; batch-review once at the end (see Auto-Mode) |
+
+Modifier orchestrators only inject directives when the downstream target is a thinking skill that walks decisions. For other skills (action skills, journal, excavate, etc.) they route normally without injecting.
+
+### Chaining
+
+Modifier orchestrators may be chained. When one orchestrator's `$ARGUMENTS` begins with another orchestrator's slash command from this family, it strips that leading token and merges both directives when routing downstream:
+
+- `/overdecide /autodecide [topic]` → both depth-up AND auto-pick (8-12 decisions, all auto-picked)
+- `/autodecide /underdecide [topic]` → both auto-pick AND depth-down (2-3 decisions, all auto-picked)
+- Order is irrelevant: `/X /Y [topic]` ≡ `/Y /X [topic]`
+- `/overdecide` and `/underdecide` are mutually exclusive — if both are present, the FIRST mentioned wins
+
+### Inline modifier detection
+
+Thinking skills also detect modifier slash commands as leading tokens in their own `$ARGUMENTS`. This means modifiers work without going through an orchestrator:
+
+- `/strategize /autodecide [topic]` → strategize runs in Auto-Mode
+- `/product-design /overdecide [request]` → product-design surfaces 8-12 decisions
+- `/shape /autodecide /overdecide [project]` → shape surfaces 8-12 decisions, all auto-picked
+
+Each thinking skill strips leading modifier tokens from `$ARGUMENTS` before treating the rest as the user's situation.
+
 ---
 
 ## File Format: decisions.json
@@ -211,7 +287,7 @@ The user picks the *interpretation*, not the tool. Skill names are revealed only
       "id": "decision-001",
       "slug": "decision-slug",
       "title": "Human Readable Title",
-      "status": "pending | chosen",
+      "status": "pending | auto-picked | chosen",
       "chosenOption": "B",
       "chosenTitle": "Option Name",
       "reasoning": "Why this was chosen (nullable - not always provided)",
@@ -235,6 +311,8 @@ The user picks the *interpretation*, not the tool. Skill names are revealed only
 ```
 
 Note: `chosenOption` can be `"custom"` when the human brings their own answer instead of picking from AI-generated options.
+
+The `"auto-picked"` status is set by Auto-Mode and means the AI's recommendation was committed pending human review. Action skills must treat only `"chosen"` as ready to consume. See Auto-Mode for the full lifecycle.
 
 ## File Format: strategy-brief.md
 
