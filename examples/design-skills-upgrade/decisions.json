@@ -1,0 +1,119 @@
+{
+  "situation": "Improve the /visual-design and /design-system skills in decision-kit (github.com/jnemargut/decision-kit) — outputs look samey and not great — and contribute the improvements back to the repo.",
+  "created": "2026-06-12",
+  "decisions": [
+    {
+      "id": "decision-001",
+      "title": "Root cause priority",
+      "question": "Which root cause of 'samey, not great' do we attack first?",
+      "file": "decision-001-root-cause-priority.html",
+      "options": {
+        "A": "Token diversity + banned defaults first",
+        "B": "Unlock layout first",
+        "C": "Critique loop first",
+        "D": "Fix recommendation bias first"
+      },
+      "recommended": "A",
+      "status": "chosen",
+      "chosen": "A",
+      "reasoning": null
+    },
+    {
+      "id": "decision-002",
+      "title": "/visual-design upgrade approach",
+      "question": "How does /visual-design get distinctive?",
+      "file": "decision-002-visual-design-upgrade.html",
+      "options": {
+        "A": "Catalog overhaul in place",
+        "B": "Overhaul + composition signatures (CSS-only)",
+        "C": "Generative house blend",
+        "D": "Rebuild on the five dimensions"
+      },
+      "recommended": "B",
+      "status": "chosen",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-003",
+      "title": "/design-system upgrade approach",
+      "question": "How does /design-system stop converging?",
+      "file": "decision-003-design-system-upgrade.html",
+      "options": {
+        "A": "Widen the pools + ban defaults",
+        "B": "Make the signals bite (amplification rules)",
+        "C": "Art-direct the deliverable",
+        "D": "Live-trend curation engine"
+      },
+      "recommended": "B",
+      "status": "chosen",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-004",
+      "title": "Shared core vs per-skill fixes",
+      "question": "Where does the shared design DNA live?",
+      "file": "decision-004-shared-core.html",
+      "options": {
+        "A": "Duplicate into each skill",
+        "B": "Single source, synced at release",
+        "C": "Runtime shared directory",
+        "D": "Extract a third skill: /design-dna"
+      },
+      "recommended": "B",
+      "status": "chosen",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-005",
+      "title": "Quality validation",
+      "question": "How do we know the designs actually got better?",
+      "file": "decision-005-quality-validation.html",
+      "options": {
+        "A": "Runtime critique gate (give the skills eyes)",
+        "B": "Golden gallery regression suite",
+        "C": "LLM-judge eval harness",
+        "D": "Sameness metric"
+      },
+      "recommended": "A",
+      "status": "chosen",
+      "chosen": "A",
+      "reasoning": null
+    },
+    {
+      "id": "decision-006",
+      "title": "Contribution packaging",
+      "question": "How does this land in decision-kit?",
+      "file": "decision-006-contribution-packaging.html",
+      "options": {
+        "A": "One epic PR",
+        "B": "Phased PR train",
+        "C": "Versioned release",
+        "D": "Incubate, then merge"
+      },
+      "recommended": "B",
+      "status": "chosen",
+      "chosen": "A",
+      "reasoning": null,
+      "note": "User chose A (one epic PR) over the recommended B (phased PR train)."
+    },
+    {
+      "id": "decision-007",
+      "title": "Elevator pitch",
+      "question": "The 30-second version",
+      "file": "decision-007-elevator-pitch.html",
+      "options": {
+        "A": "Problem-first (the convergence story)",
+        "B": "Mechanism-first (the taste-engine story)",
+        "C": "Dogfood-first (the self-hosting story)",
+        "D": "Outcome-first (the proof story)"
+      },
+      "recommended": "A",
+      "status": "chosen",
+      "chosen": "A",
+      "reasoning": null
+    }
+  ]
+}

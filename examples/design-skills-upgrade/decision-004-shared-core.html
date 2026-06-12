@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 4 — Shared Core vs Per-Skill Fixes</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .tree { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; font-family:"SF Mono", Menlo, monospace; font-size:12px; line-height:1.7; color:var(--muted); white-space:pre; overflow-x:auto; }
+  .tree .hl { color:var(--green); }
+  .tree .warn { color:var(--yellow); }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 4 of 6 · Architecture</div>
+  <h1>Where does the shared design DNA live?</h1>
+  <p class="lede">Decisions 1–3 created shared assets: the banned-defaults list, the characterful font pool, palette principles, composition signatures, and amplification rules. Both skills need them. The architecture question: one source of truth, or self-contained copies?</p>
+  <div class="context"><b>Builds on Decisions 1–3:</b> ban list + font pool (D1), composition signatures (D2), and amplification rules (D3) are the assets whose home this decision picks.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Skills are designed to be self-contained directories.</b> The canonical structure is SKILL.md + scripts/ + references/ + assets/; cross-skill paths are not part of the model, and configuration "is not loaded from additional directories." A skill that reads a sibling folder breaks when installed alone. <span class="src">Claude Code skills docs, skill-development SKILL.md</span></li>
+      <li><b>SKILL.md should be ~1,500–2,000 words with detail pushed to references/.</b> Audit: your visual-design SKILL.md is ~1,800 <i>lines</i> (the entire 30-tradition library is inline). It needs the references/ refactor regardless of this decision — which makes "where does the library file live" the live question. <span class="src">Anthropic skill-building guide, leehanchung deep dive</span></li>
+      <li><b>Progressive disclosure is the documented pattern.</b> Frontmatter → SKILL.md → referenced files loaded only when needed. A traditions library as a references/ file is cheaper on context than inline, and only loads for the steps that need it. <span class="src">Claude Code docs</span></li>
+      <li><b>Plugins exist for exactly this bundling problem.</b> A .claude-plugin/plugin.json can ship multiple skills with shared assets under one install, namespaced. Decision-kit currently distributes skills as copy-in folders — a plugin packaging would change the constraint, but that's a distribution shift for the whole kit, not just these two skills. <span class="src">Claude Code plugin docs</span></li>
+      <li><b>Drift is the real cost of duplication.</b> The kit already shows it: visual-design and design-system each carry their own partial font opinions today, and they disagree. Two copies of a 30-tradition library will diverge within months of accepting outside PRs.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Duplicate into each skill</h3>
+      <p class="sub">Copy the ban list, font pool, and shared principles into each skill's references/ folder. Each skill fully self-contained, no tooling.</p>
+      <div class="tree">thinking/visual-design/
+├── SKILL.md
+└── references/
+    ├── <span class="warn">design-dna.md   (copy 1)</span>
+    └── traditions.md
+thinking/design-system/
+├── SKILL.md
+└── references/
+    └── <span class="warn">design-dna.md   (copy 2)</span></div>
+      <div class="pros-cons">
+        <p class="pro">Zero tooling, matches how skills install today</p>
+        <p class="pro">Contributors edit one skill without understanding the other</p>
+        <p class="con">Copies diverge — the kit's own history proves it</p>
+        <p class="con">Every DNA improvement is a two-file PR that reviewers must diff-match</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Single source, synced at release</h3>
+      <p class="sub">One canonical <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">shared/design-dna/</code> in the repo. A tiny sync script (or checklist step) copies it into each skill's references/ before release. Installed skills stay fully self-contained.</p>
+      <div class="tree">shared/design-dna/        <span class="hl">← edit here only</span>
+├── banned-defaults.md
+├── font-pool.md
+├── traditions.md
+└── composition-signatures.md
+thinking/visual-design/references/  <span class="hl">← generated</span>
+thinking/design-system/references/  <span class="hl">← generated</span>
+scripts/sync-dna.sh</div>
+      <div class="pros-cons">
+        <p class="pro">One source of truth; installed skills still self-contained</p>
+        <p class="pro">Forces the overdue SKILL.md → references/ refactor</p>
+        <p class="pro">Future skills (showcase art direction, others) adopt the DNA by adding one sync target</p>
+        <p class="con">A sync step contributors must know about (CI check mitigates)</p>
+        <p class="con">Generated files in-repo can confuse first-time PR authors</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Runtime shared directory</h3>
+      <p class="sub">Skills read <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">../design-dna/</code> at runtime. True single file at install too — but only if users install the whole kit in the expected layout.</p>
+      <div class="tree">~/.claude/skills/
+├── design-dna/        <span class="hl">← one copy ever</span>
+├── visual-design/
+│   └── SKILL.md  <span class="warn">reads ../design-dna/</span>
+└── design-system/
+    └── SKILL.md  <span class="warn">reads ../design-dna/</span></div>
+      <div class="pros-cons">
+        <p class="pro">No sync step, no duplication anywhere</p>
+        <p class="con">Breaks standalone installs — the unsupported pattern per docs</p>
+        <p class="con">Silent degradation: skill runs but without the DNA if path missing</p>
+        <p class="con">Couples every user's install layout to the repo's structure</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Extract a third skill: /design-dna</h3>
+      <p class="sub">The shared core becomes its own user-facing skill — browse traditions, view the ban list, manage project aesthetic memory — and the other two treat it as the library owner.</p>
+      <div class="tree">thinking/design-dna/   <span class="hl">← new skill</span>
+├── SKILL.md           (browse/curate)
+└── references/
+    └── (the library)
+visual-design ──reads──▶ design-dna
+design-system ──reads──▶ design-dna</div>
+      <div class="pros-cons">
+        <p class="pro">The library becomes a product surface, not just plumbing</p>
+        <p class="pro">Clean conceptual home for project aesthetic memory</p>
+        <p class="con">Inherits C's path coupling problem for the cross-reads</p>
+        <p class="con">Third skill to document, maintain, and explain — scope growth this project doesn't need yet</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Duplicate</th><th class="reccol">B · Synced source ★</th><th>C · Runtime shared</th><th>D · Third skill</th></tr>
+    <tr><td>Drift risk</td><td class="bad">High</td><td class="reccol good">None — one source</td><td class="good">None</td><td class="good">None</td></tr>
+    <tr><td>Standalone install works</td><td class="good">Yes</td><td class="reccol good">Yes</td><td class="bad">No — silent degradation</td><td class="bad">No</td></tr>
+    <tr><td>Tooling required</td><td class="good">None</td><td class="reccol mid">Tiny sync script + CI check</td><td class="good">None</td><td class="mid">Cross-read convention</td></tr>
+    <tr><td>Contributor experience</td><td class="bad">Two-file PRs, diff-matching</td><td class="reccol good">Edit one place</td><td class="good">Edit one place</td><td class="mid">Three skills to learn</td></tr>
+    <tr><td>Context-window efficiency</td><td class="mid">references/ either way</td><td class="reccol good">references/ + progressive disclosure</td><td class="good">Same</td><td class="mid">Extra skill overhead</td></tr>
+    <tr><td>Future skills adopt DNA</td><td class="bad">Another copy each</td><td class="reccol good">Add a sync target</td><td class="mid">Add a path read</td><td class="good">By design</td></tr>
+    <tr><td>Matches docs' skill model</td><td class="good">Yes</td><td class="reccol good">Yes</td><td class="bad">Unsupported pattern</td><td class="bad">Unsupported pattern</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. It's the only option that gets single-source maintenance AND keeps installed skills self-contained — and it forces the references/ refactor your 1,800-line SKILL.md needs anyway. D becomes attractive later if the library grows into a user-facing catalog; nothing in B blocks that evolution.
+  </div>
+</div>
+</body>
+</html>
