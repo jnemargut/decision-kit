@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 5 — Quality Validation</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .flow { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .step { display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:13.5px; color:var(--muted); }
+  .step .n { width:22px; height:22px; line-height:22px; text-align:center; border-radius:6px; background:#0e0e16; color:var(--accent); font-weight:700; font-size:11px; flex-shrink:0; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 5 of 6 · Verification</div>
+  <h1>How do we know the designs actually got better?</h1>
+  <p class="lede">"Looks better to me today" is how design skills quietly regress. This decision picks the verification mechanism — both for proving this upgrade worked and for keeping quality from sliding as the kit takes contributions.</p>
+  <div class="context"><b>Builds on Decisions 1–4:</b> the upgrades produce enforceable claims — ban-list compliance, one rule-breaking move per tension, signal traceability, composition variety. Those claims are checkable; the question is where and how.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Agents that look at their own output converge in 2–3 iterations instead of 10+.</b> The Playwright-screenshot feedback pattern ("Eyes" skill, Playwright MCP workflows) is the documented quality multiplier for AI-generated UI: render, inspect, fix what you can see. <span class="src">luca-becker.me, azukiazusa.dev, mcpmarket "Eyes"</span></li>
+      <li><b>Analytic, binary rubrics beat numeric scales for LLM judging.</b> "Binary or low-precision scoring produces more reliable results than high-precision numerical scales"; criterion-by-criterion rubrics "reveal why a system failed." Don't ask a judge for 7.5/10 aesthetics — ask "is any banned font present: yes/no," "would you mistake this for the previous output: yes/no." <span class="src">Adnan Masood (rubric evals), Evidently AI, Confident AI</span></li>
+      <li><b>Pairwise A/B judging is the standard for regression.</b> LLM-as-judge "works well even when scoring rubrics are subjective" and is most reliable comparing two outputs side-by-side — exactly the before/after shape of this upgrade. <span class="src">LangChain, Langfuse eval guides</span></li>
+      <li><b>Several of the new claims need no model judgment at all.</b> Ban-list compliance (grep the CSS for Inter/Roboto), font-overlap-across-traditions (count shared families), WCAG contrast (compute it) are deterministic script checks — free, instant, CI-able.</li>
+      <li><b>Constraint: screenshots need tooling the kit doesn't currently require.</b> Headless Chrome ships on most dev Macs (<code style="background:#1a1a26;padding:1px 6px;border-radius:4px">chrome --headless --screenshot</code>), and Claude Code reads images natively — but the kit is pure-prompt today. Any screenshot step needs a graceful no-tooling fallback (HTML/CSS self-review).</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">A</div>
+      <h3>Runtime critique gate — give the skills eyes</h3>
+      <p class="sub">Both skills end every run with: deterministic checks (ban list, contrast) → screenshot via headless Chrome if available → analytic binary self-critique (hierarchy, density, distinctiveness, signal traceability) → fix and re-check, max 2 loops. Falls back to CSS-level self-review when no browser tooling exists.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Generate styled output / showcase</div>
+        <div class="step"><span class="n">2</span>Script checks: bans, contrast, font overlap — fail fast</div>
+        <div class="step"><span class="n">3</span>Screenshot → binary rubric critique (or CSS review fallback)</div>
+        <div class="step"><span class="n">4</span>Fix findings, re-check once, then ship to user</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Improves every future run for every user — validation becomes a product feature</p>
+        <p class="pro">Completes the arc: D1 fixed the pool, this adds the eyes</p>
+        <p class="pro">Graceful degradation keeps the kit's no-dependency promise</p>
+        <p class="con">Adds ~30–60s per run; rubric needs tuning to avoid nitpick loops</p>
+        <p class="con">Validates runs, not the upgrade itself — needs a small before/after sample for the PR</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>Golden gallery regression suite</h3>
+      <p class="sub">A fixed test matrix — 5 artifact types × 6 traditions, 3 workshop profiles — regenerated before/after any change, rendered into a side-by-side gallery page. Human taste is the judge.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Freeze test inputs in examples/</div>
+        <div class="step"><span class="n">2</span>Regenerate matrix on each change</div>
+        <div class="step"><span class="n">3</span>Gallery HTML: old vs new, side by side</div>
+        <div class="step"><span class="n">4</span>You eyeball; PR links the gallery</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Human taste stays the arbiter — most trustworthy verdict</p>
+        <p class="pro">Gallery doubles as repo showcase/docs material</p>
+        <p class="con">Manual: regenerating a 30+ cell matrix per change costs real time/tokens</p>
+        <p class="con">Catches regressions only when you remember to run it</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>LLM-judge eval harness</h3>
+      <p class="sub">An offline eval: analytic binary rubric + pairwise old-vs-new judging across the test matrix, scores tracked per version. The kit gets a real evals story.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Define binary criteria per claim (D1–D3)</div>
+        <div class="step"><span class="n">2</span>Judge model scores matrix outputs pairwise</div>
+        <div class="step"><span class="n">3</span>Score deltas gate the release</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Quantified, repeatable, contributor-proof</p>
+        <p class="pro">Research-backed shape: binary + pairwise is where judges are reliable</p>
+        <p class="con">Real harness infra — new territory for a pure-prompt repo</p>
+        <p class="con">Judge shares the generator's biases; can bless samey-but-tidy output</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Sameness metric</h3>
+      <p class="sub">Measure convergence directly: generate N outputs from N different inputs, compute font/palette overlap, then a matching test — can a judge tell which input produced which output? Upgrade passes only if distinguishability jumps.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>N diverse inputs → N outputs</div>
+        <div class="step"><span class="n">2</span>Overlap stats: fonts, palettes, layout</div>
+        <div class="step"><span class="n">3</span>Judge matching test (input ↔ output)</div>
+        <div class="step"><span class="n">4</span>Distinguishability score per version</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Measures the exact complaint — sameness — not proxies</p>
+        <p class="pro">The matching test is clever evidence for the PR story</p>
+        <p class="con">Measures variety, not quality — N distinct ugly outputs pass</p>
+        <p class="con">Most build effort for the narrowest signal</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th class="reccol">A · Runtime gate ★</th><th>B · Golden gallery</th><th>C · Judge harness</th><th>D · Sameness metric</th></tr>
+    <tr><td>Catches "not great"</td><td class="reccol good">Yes — per run, fixes it live</td><td class="good">Yes — human eye</td><td class="mid">Partially — judge bias</td><td class="bad">No</td></tr>
+    <tr><td>Catches "samey"</td><td class="reccol mid">Per-project memory only</td><td class="good">Yes — side by side</td><td class="mid">If criteria target it</td><td class="good">Directly — it's the metric</td></tr>
+    <tr><td>Benefits end users</td><td class="reccol good">Every run, forever</td><td class="bad">Maintainers only</td><td class="bad">Maintainers only</td><td class="bad">Maintainers only</td></tr>
+    <tr><td>Human effort per change</td><td class="reccol good">None</td><td class="bad">High — regenerate + review</td><td class="mid">Low after setup</td><td class="mid">Low after setup</td></tr>
+    <tr><td>New tooling</td><td class="reccol mid">Headless Chrome (graceful fallback)</td><td class="good">None</td><td class="bad">Eval infra</td><td class="bad">Scripts + judge</td></tr>
+    <tr><td>Build effort</td><td class="reccol mid">~1 week</td><td class="good">~2 days</td><td class="bad">1–2 weeks</td><td class="bad">1–2 weeks</td></tr>
+    <tr><td>Proves THIS upgrade worked</td><td class="reccol mid">Indirectly</td><td class="good">Best evidence</td><td class="good">Quantified</td><td class="good">Quantified for sameness</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">A</b>, with a slim slice of B riding along: the runtime gate is the only option that makes every user's output better instead of just auditing yours — and a small before/after gallery (one artifact × 4 traditions, 1 workshop profile) is cheap to produce as the PR's evidence. Full C/D harnesses can come later if the kit grows contributors.
+  </div>
+</div>
+</body>
+</html>

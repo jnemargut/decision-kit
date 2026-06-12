@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 1 — Root Cause Priority</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .bars { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .bar-row { display:grid; grid-template-columns:150px 1fr 36px; align-items:center; gap:10px; margin:7px 0; font-size:12.5px; color:var(--muted); }
+  .bar-track { background:#0e0e16; border-radius:99px; height:8px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:99px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 1 of 6 · Diagnosis</div>
+  <h1>Which root cause of "samey, not great" do we attack first?</h1>
+  <p class="lede">The audit of both skills found four distinct causes of sameness. They compound, and you'll likely fix several eventually — but the first one you attack shapes the architecture of everything after it. Pick the foundation.</p>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>The sameness has a name: distributional convergence.</b> LLMs sample from the high-probability center of training data — Inter, purple-on-white gradients, three-column hero layouts — unless explicitly forced off it. <span class="src">Shuffle.dev, 925studios, Vandelay Design</span></li>
+      <li><b>Anthropic's own frontend-design skill bans defaults by name</b>: "overused font families (Inter, Roboto, Arial, system fonts)" and "purple gradients on white backgrounds" — and guides five dimensions individually: typography, color, motion, spatial composition, backgrounds. Naming the banned defaults is the documented fix. <span class="src">anthropics/claude-code frontend-design SKILL.md</span></li>
+      <li><b>Audit finding: your tradition library converges on the banned font.</b> Swiss Modern, Warm Minimal, Technical Documentary, and Glassmorphic all ship Inter as the body face. A user picking "different" traditions still gets the same typographic voice.</li>
+      <li><b>Audit finding: /visual-design never touches layout.</b> The skill explicitly preserves structure ("only aesthetic properties change") — so every artifact keeps identical bones. Spatial composition is the dimension Anthropic's skill calls out hardest: "Asymmetry. Overlap. Diagonal flow. Grid-breaking elements."</li>
+      <li><b>Visual feedback loops are the quality multiplier.</b> Practitioners report UI iteration dropping from 10+ blind rounds to 2–3 when the agent screenshots and inspects its own rendered output (Playwright MCP / "Eyes" skill pattern). Neither of your skills ever looks at what it produced. <span class="src">luca-becker.me, egghead.io, mcpmarket "Eyes"</span></li>
+      <li><b>Audit finding: recommendation bias narrows the funnel.</b> The ★ recommendation plus affinity tables steer most runs toward the same few safe traditions per artifact type (briefs → Editorial Print, dashboards → Swiss Modern). Defaults dominate outcomes.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">A</div>
+      <h3>Token diversity + banned defaults first</h3>
+      <p class="sub">Purge convergent fonts/palettes from the tradition library, give every tradition a genuinely distinct typographic voice, and add an explicit "never do" list (Inter-everywhere, purple gradients, timid evenly-spread palettes) that both skills enforce.</p>
+      <div class="bars">
+        <div class="bar-row"><span>Fixes "samey"</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--green)"></div></div><span>85</span></div>
+        <div class="bar-row"><span>Fixes "not great"</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--yellow)"></div></div><span>55</span></div>
+        <div class="bar-row"><span>Effort</span><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--green)"></div></div><span>Low</span></div>
+        <div class="bar-row"><span>Risk</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--green)"></div></div><span>Low</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Pure prompt/data edit — no new tooling, ships in days</p>
+        <p class="pro">Directly mirrors Anthropic's documented fix (ban by name)</p>
+        <p class="pro">Foundation: every later fix builds on better tokens</p>
+        <p class="con">Doesn't fix identical layout bones or absent quality check</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>Unlock layout first</h3>
+      <p class="sub">Let /visual-design change spatial composition — asymmetry, overlap, grid-breaking, density — instead of only rewriting the style block. Add a layout dimension to traditions.</p>
+      <div class="bars">
+        <div class="bar-row"><span>Fixes "samey"</span><div class="bar-track"><div class="bar-fill" style="width:75%;background:var(--green)"></div></div><span>75</span></div>
+        <div class="bar-row"><span>Fixes "not great"</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--yellow)"></div></div><span>60</span></div>
+        <div class="bar-row"><span>Effort</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--red)"></div></div><span>High</span></div>
+        <div class="bar-row"><span>Risk</span><div class="bar-track"><div class="bar-fill" style="width:65%;background:var(--red)"></div></div><span>High</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Attacks the most invisible sameness — identical bones</p>
+        <p class="pro">Spatial composition is the dimension experts weight most</p>
+        <p class="con">Restructuring DOM risks breaking artifacts (the current "style-only" rule exists for safety)</p>
+        <p class="con">Hard to do well without a critique loop watching the result</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Critique loop first</h3>
+      <p class="sub">Add a render → screenshot → self-critique → iterate pass to both skills before they declare done. The skill looks at its own output the way a designer would.</p>
+      <div class="bars">
+        <div class="bar-row"><span>Fixes "samey"</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--yellow)"></div></div><span>40</span></div>
+        <div class="bar-row"><span>Fixes "not great"</span><div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--green)"></div></div><span>90</span></div>
+        <div class="bar-row"><span>Effort</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--yellow)"></div></div><span>Med</span></div>
+        <div class="bar-row"><span>Risk</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--yellow)"></div></div><span>Med</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Biggest lever on "not that great" — 10+ blind rounds → 2–3 seen rounds</p>
+        <p class="pro">Quality multiplier for every other improvement</p>
+        <p class="con">Needs a screenshot dependency (Playwright/headless Chrome) — first external tooling in a pure-prompt kit</p>
+        <p class="con">A critique loop over samey tokens still converges — polish on sameness</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Fix recommendation bias first</h3>
+      <p class="sub">Rework the ★ scoring so the skills stop funneling everyone to the same safe picks: wildcard slots, rotation, novelty bonus, project-history awareness.</p>
+      <div class="bars">
+        <div class="bar-row"><span>Fixes "samey"</span><div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--yellow)"></div></div><span>50</span></div>
+        <div class="bar-row"><span>Fixes "not great"</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--red)"></div></div><span>20</span></div>
+        <div class="bar-row"><span>Effort</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--green)"></div></div><span>Low</span></div>
+        <div class="bar-row"><span>Risk</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--green)"></div></div><span>Low</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Cheapest change — a few scoring rules</p>
+        <p class="pro">Increases variety across runs and projects</p>
+        <p class="con">Rotating between mediocre options doesn't make any of them good</p>
+        <p class="con">Treats the symptom: the picks converge because the pool converges</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th class="reccol">A · Token diversity ★</th><th>B · Unlock layout</th><th>C · Critique loop</th><th>D · Rec bias</th></tr>
+    <tr><td>Impact on sameness</td><td class="reccol good">High — hits the visible signature</td><td class="good">High — hits the bones</td><td class="mid">Indirect</td><td class="mid">Moderate</td></tr>
+    <tr><td>Impact on quality</td><td class="reccol mid">Moderate</td><td class="mid">Moderate</td><td class="good">Highest</td><td class="bad">Low</td></tr>
+    <tr><td>Effort</td><td class="reccol good">Low — data/prompt edits</td><td class="bad">High — structural rewriting</td><td class="mid">Medium — new tooling</td><td class="good">Lowest</td></tr>
+    <tr><td>New dependencies</td><td class="reccol good">None</td><td class="good">None</td><td class="bad">Screenshot tooling</td><td class="good">None</td></tr>
+    <tr><td>Risk to existing flows</td><td class="reccol good">Low</td><td class="bad">High — can break artifacts</td><td class="mid">Medium</td><td class="good">Low</td></tr>
+    <tr><td>Time to visible win</td><td class="reccol good">Days</td><td class="bad">Weeks</td><td class="mid">~1 week</td><td class="good">Days</td></tr>
+    <tr><td>Sets up later fixes</td><td class="reccol good">Yes — everything builds on tokens</td><td class="mid">Partially</td><td class="good">Yes — validates them</td><td class="bad">No</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or <code>Option A because…</code> to capture your reasoning, <code>Option A but…</code> to modify it, <code>more options</code> for four more, or describe your own approach.<br><br>
+    Note: this decision sets the <i>first</i> attack and the architecture it implies — the others can follow as later phases. The recommendation is A first, with C (critique loop) as the natural second phase: fix the pool, then add the eyes.
+  </div>
+</div>
+</body>
+</html>

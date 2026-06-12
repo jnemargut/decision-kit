@@ -1,6 +1,6 @@
 ---
 name: visual-design
-description: Re-skin any existing HTML artifact OR SVG asset with a chosen aesthetic. Post-step aesthetic thinking. For HTML: walks through 5 decisions (tradition, color, type, mood, signature flourish) and rewrites the style block. For SVG icons/illustrations: walks through 3 decisions (tradition, stroke weight, color) and rewrites the stroke/fill attributes. Produces a side-by-side styled file + tokens.json sidecar. Use AFTER producing an artifact that looks visually generic — output from another thinking skill (strategize, game-plan, better-proposal, launch-playbook, product-design), an existing HTML page, or a raw SVG icon.
+description: Re-skin any existing HTML artifact OR SVG asset with a chosen aesthetic. Post-step aesthetic thinking. For HTML: walks through 6 decisions (tradition, composition, color, type, mood, signature flourish) and rewrites the style block — including CSS-only layout art direction. For SVG icons/illustrations: walks through 3 decisions (tradition, stroke weight, color) and rewrites the stroke/fill attributes. Enforces a banned-defaults list and ends with a render-and-critique gate. Produces a side-by-side styled file + tokens.json sidecar. Use AFTER producing an artifact that looks visually generic — output from another thinking skill (strategize, game-plan, better-proposal, launch-playbook, product-design), an existing HTML page, or a raw SVG icon.
 ---
 
 # Visual Design
@@ -8,8 +8,15 @@ description: Re-skin any existing HTML artifact OR SVG asset with a chosen aesth
 You are helping the user re-skin an existing artifact with a distinct aesthetic. This is a post-step skill: something else produced the artifact; your job is to make it feel like *something*, not a generic template.
 
 The skill supports two modes based on the input file:
-- **HTML mode** (`.html` input) — 5-step flow: **Tradition → Color → Type → Mood → Signature Flourish**. Rewrites the `<style>` block.
+- **HTML mode** (`.html` input) — 6-step flow: **Tradition → Composition → Color → Type → Mood → Signature Flourish**. Rewrites the `<style>` block, including CSS-only layout art direction.
 - **SVG mode** (`.svg` input) — 3-step flow: **Tradition → Stroke → Color**. Rewrites stroke/fill attributes on paths. For icons, logos, and illustrations.
+
+The skill ships with shared design DNA in `references/` (synced from the repo's `shared/design-dna/` — edit there, not here):
+- `references/banned-defaults.md` — the "never do" list every output must pass
+- `references/font-pool.md` — the characterful font supply and uniqueness rules
+- `references/composition-signatures.md` — eight CSS-only layout signatures
+- `references/critique-gate.md` — the render-and-critique gate run before any output ships
+- `references/traditions.md` + `references/flourishes.md` — the libraries (formerly inline)
 
 The user invokes `/visual-design [optional path to .html or .svg]`. Original is preserved; a new `<name>.styled.html` or `<name>.styled.svg` is written alongside, and `.visual-design/tokens.json` captures the decisions for reuse in the project.
 
@@ -18,7 +25,8 @@ The user invokes `/visual-design [optional path to .html or .svg]`. Original is 
 - Each decision presents exactly 4 options *except* Tradition (top 3 matched + 20+ catalog) and Flourish (top 3 curated + library) — those use name-based picking.
 - Always include a recommendation.
 - Show, don't just tell — every option renders a preview using the actual tradition's tokens.
-- The skill's job ends when the styled file and `tokens.json` are on disk and opened for the user.
+- Nothing banned ships. Every output passes the checks in `references/banned-defaults.md` and the critique gate in `references/critique-gate.md` before the user sees it.
+- The skill's job ends when the styled file and `tokens.json` are on disk, the critique gate has passed, and the result is opened for the user.
 
 ---
 
@@ -29,13 +37,13 @@ The user invokes `/visual-design [optional path to .html or .svg]`. Original is 
 - `$ARGUMENTS` contains a `[Auto directive: ...]` block (injected by the `/autodecide` orchestrator), OR
 - `$ARGUMENTS` starts with `/autodecide` (direct invocation modifier — the user typed `/visual-design /autodecide [path]`)
 
-In the second case, strip `/autodecide` from the args before treating the rest as the path/argument for the skill. Note: visual-design has a fixed decision count per mode (5 for HTML, 3 for SVG), so depth modifiers (`/overdecide`, `/underdecide`) don't apply here — strip them if present and ignore.
+In the second case, strip `/autodecide` from the args before treating the rest as the path/argument for the skill. Note: visual-design has a fixed decision count per mode (6 for HTML, 3 for SVG), so depth modifiers (`/overdecide`, `/underdecide`) don't apply here — strip them if present and ignore.
 
 If auto-mode is triggered, your behavior changes for this entire run — apply the rules below across every phase.
 
 **What changes:**
 
-1. **Per-decision pauses are skipped.** For each aesthetic decision in your flow (HTML mode: Tradition → Color → Type → Mood → Flourish; SVG mode: Tradition → Stroke → Color): generate the full HTML decision page exactly as normal — option previews using the actual tradition's tokens, recommendation, comparison. Save it. Record the decision in `.decisions/decisions.json` (or your equivalent decision log) with `status: "auto-picked"` and `chosen` set to the recommended option (capture the recommendation reasoning in the `reasoning` field, prefixed with "Auto-picked: "). Do NOT `open` the file. Do NOT pause. Immediately proceed to the next decision.
+1. **Per-decision pauses are skipped.** For each aesthetic decision in your flow (HTML mode: Tradition → Composition → Color → Type → Mood → Flourish; SVG mode: Tradition → Stroke → Color): generate the full HTML decision page exactly as normal — option previews using the actual tradition's tokens, recommendation, comparison. Save it. Record the decision in `.decisions/decisions.json` (or your equivalent decision log) with `status: "auto-picked"` and `chosen` set to the recommended option (capture the recommendation reasoning in the `reasoning` field, prefixed with "Auto-picked: "). Do NOT `open` the file. Do NOT pause. Immediately proceed to the next decision.
 
 2. **Generate `.decisions/auto-review.html` after all aesthetic decisions are picked.** This is the ONE pause point in auto mode. A single page listing every auto-picked aesthetic decision in a scannable layout. For each row, show: decision number, decision title (e.g. "Tradition", "Color"), the chosen option (label + summary or token preview), the other options as one-line summaries, and the AI's reasoning. Use the same dark-theme styling as per-decision pages (background `#0a0a0f`, accent `#6c63ff` purple, `#fbbf24` yellow for "auto-picked", `#4ade80` green for "confirmed"). Footer must surface the override syntax: `For decision-N I want Y` and an "Approve all" path. Open it with `open .decisions/auto-review.html`.
 
@@ -52,7 +60,7 @@ If auto-mode is triggered, your behavior changes for this entire run — apply t
 
 **Note on Tradition and Flourish:** these decisions don't follow the strict 4-option pattern (they use top-3-matched + catalog/library). In auto mode, auto-pick the **top match** (the highest-ranked recommendation) for each. The user can still override to any catalog item via the standard syntax.
 
-**Note on depth directives:** visual-design has a fixed decision count per mode (5 for HTML, 3 for SVG), so any `[Depth directive: ...]` from `/overdecide` or `/underdecide` does not apply here — auto-mode runs the standard count.
+**Note on depth directives:** visual-design has a fixed decision count per mode (6 for HTML, 3 for SVG), so any `[Depth directive: ...]` from `/overdecide` or `/underdecide` does not apply here — auto-mode runs the standard count.
 
 **Schema:** `auto-picked` is a third valid value for the `status` field, alongside `pending` and `chosen`. The styled file must not be written until every aesthetic decision has transitioned from `auto-picked` to `chosen`.
 
@@ -105,10 +113,11 @@ Create `.decisions/visual-design/` at the project root. Per-step decision pages 
 
 **HTML mode output:**
 - `01-tradition.html`
-- `02-color.html`
-- `03-type.html`
-- `04-mood.html`
-- `05-flourish.html`
+- `02-composition.html`
+- `03-color.html`
+- `04-type.html`
+- `05-mood.html`
+- `06-flourish.html`
 - `index.html` (run summary)
 
 **SVG mode output:**
@@ -282,19 +291,36 @@ Don't let this step add more than ~5 seconds of latency. One search, extract, mo
 ## PHASE 4 — Remaining Steps
 
 The flow branches on `MODE`:
-- **HTML mode** → 4 remaining steps (Color, Type, Mood, Signature Flourish), all A/B/C/D
+- **HTML mode** → 5 remaining steps (Composition, Color, Type, Mood, Signature Flourish), all A/B/C/D
 - **SVG mode** → 2 remaining steps (Stroke, Color), all A/B/C/D
 
 ---
 
-## PHASE 4 (HTML mode) — Steps 2-5
+## PHASE 4 (HTML mode) — Steps 2-6
 
-All four of these steps use the **A/B/C/D pattern** (standard thinking-skill convention). Each step:
+All five of these steps use the **A/B/C/D pattern** (standard thinking-skill convention). Each step:
 1. Generates a decision HTML page with 4 options
 2. Opens it in the browser
 3. Waits for a letter-based response
 
-### Step 2 — Color
+### Step 2 — Composition
+
+The bones decision — load `references/composition-signatures.md`. Sameness in layout survives any re-paint; this step is where the artifact stops being the default centered column. Everything here is **CSS-only**: grid-template-areas, spans, offsets on the artifact's *existing* semantic regions. Never restructure the DOM.
+
+Given `TRADITION` and the artifact analysis from Phase 2, offer 4 options:
+
+- **Option A: Tradition signature** — the tradition's default signature from the library table (recommended).
+- **Option B: Monolith** — the deliberate single column: oversized display headline, extreme vertical rhythm. For when content should dominate.
+- **Option C: Contrast pick** — the signature that most opposes A, for users who want friction.
+- **Option D: Density shift** — A's signature with density inverted (gutters, measure, rhythm one step tighter or looser).
+
+Render each option as a miniature wireframe — gray blocks in the actual grid proportions of that signature, using the tradition's bg/ink — so the user sees the bones before any paint.
+
+**Fitness guard:** if the artifact has fewer than 3 distinct semantic regions, or is dominated by wide tables (`dashboard`/`doc` with heavy tables), grey out signatures the library marks as unfit and note why. If nothing but monolith fits, say so and pre-pick B.
+
+Write `.decisions/visual-design/02-composition.html`. Open. Wait.
+
+### Step 3 — Color
 
 Given `TRADITION` (and optionally `CALIBRATION` from Step 3d), offer 4 color variants:
 
@@ -303,9 +329,9 @@ Given `TRADITION` (and optionally `CALIBRATION` from Step 3d), offer 4 color var
 - **Option C: Cooler** — shift accents toward cooler hues (navy, forest, slate). Always available.
 - **Option D: Higher contrast** — pump the contrast between text and background one step. Always available.
 
-Render each option as a mini-frame with the tradition's structure (browser chrome, header, hero headline, CTA button) using the shifted palette. Write `.decisions/visual-design/02-color.html`. Open. Wait.
+Render each option as a mini-frame with the tradition's structure (browser chrome, header, hero headline, CTA button) using the shifted palette. Write `.decisions/visual-design/03-color.html`. Open. Wait.
 
-### Step 3 — Type
+### Step 4 — Type
 
 Given `TRADITION` + `COLOR` (and optionally `CALIBRATION`), offer 4 type treatments:
 
@@ -314,9 +340,11 @@ Given `TRADITION` + `COLOR` (and optionally `CALIBRATION`), offer 4 type treatme
 - **Option C: Alternate pair** — the tradition's alternate typeface suggestion (e.g., for Editorial, swap Fraunces display for Source Serif display).
 - **Option D: Mono everything** — replace body with a monospace stack (good for technical feel).
 
-Each preview shows a styled headline + two lines of body text at realistic sizes. Write, open, wait.
+All four options must clear `references/banned-defaults.md` — no banned face may be offered, including in Option D's mono stack (use the tradition's own mono from `references/font-pool.md`).
 
-### Step 4 — Mood
+Each preview shows a styled headline + two lines of body text at realistic sizes. Write `.decisions/visual-design/04-type.html`, open, wait.
+
+### Step 5 — Mood
 
 Given prior choices, offer 4 mood combos (shape × shadow bundled):
 
@@ -327,9 +355,9 @@ Given prior choices, offer 4 mood combos (shape × shadow bundled):
 
 Each preview shows a CTA button + a card + a divider to demonstrate the combo. The values come from the tradition's tokens; this step picks which combination dominates the artifact.
 
-### Step 5 — Signature Flourish
+### Step 6 — Signature Flourish
 
-Given prior choices, load the flourish candidates from the tradition's entry in the SIGNATURE FLOURISH LIBRARY.
+Given prior choices, load the flourish candidates from the tradition's picks in `references/flourishes.md`.
 
 - **Top 3 curated** — the 3 flourishes that fit this tradition best (per the table in the flourish library). Surface with the label "✦ fits [tradition] best."
 - **Full library below** — all 8-10 flourishes available. Browse flat.
@@ -341,7 +369,7 @@ This is the novel step — the anti-generic move. Use name-based picking like Tr
 
 Each flourish preview renders the flourish rendered inside a small paragraph using the chosen tradition.
 
-Write `.decisions/visual-design/05-flourish.html`. Open. Wait.
+Write `.decisions/visual-design/06-flourish.html`. Open. Wait.
 
 ---
 
@@ -398,9 +426,10 @@ Branches on `MODE`.
 
 ### Phase 5 (HTML mode)
 
-Once all 5 decisions are locked, you have:
+Once all 6 decisions are locked, you have:
 
 - `TRADITION` — tokens + aesthetic rules
+- `COMPOSITION` — the layout signature + density variant
 - `COLOR` — palette shift applied to ramp
 - `TYPE` — headline + body pair + scale
 - `MOOD` — shape + shadow combo
@@ -414,6 +443,7 @@ Combine everything into a single tokens object:
 {
   "tradition": "Editorial Print",
   "variant": {
+    "composition": "editorial-spread",
     "color": "faithful",
     "type": "tradition-default",
     "mood": "sharp-flat",
@@ -460,9 +490,11 @@ Using the artifact's selectors (from Phase 2) and the resolved tokens, compose a
 3. For each selector in the artifact, write rules that:
    - Apply tradition's aesthetic rules (e.g., offset-solid shadows for Neo-Brutalist, italic kickers for Editorial)
    - Use the resolved tokens for color, spacing, radius, type
-   - Preserve layout structure (grid/flex patterns, widths, etc.) — only aesthetic properties change
-4. Append the flourish CSS
-5. Responsive breakpoints mirror the original (preserve the artifact's mobile behavior)
+   - Preserve the DOM and its semantics — composition changes come from CSS, never restructuring
+4. Apply the chosen composition signature's CSS (from `references/composition-signatures.md`) to the artifact's semantic regions — grid-template-areas, spans, offsets — including its under-720px single-column collapse
+5. Append the flourish CSS
+6. Responsive breakpoints mirror the original where the signature doesn't supersede them (never lose the artifact's mobile usability)
+7. Run the self-check from `references/banned-defaults.md` against the stylesheet before writing it — banned faces and hexes must not survive into the output
 
 ### Step 5c — Write output files
 
@@ -481,7 +513,11 @@ If `.gitignore` exists and doesn't include `.visual-design/`, append a line:
 .visual-design/
 ```
 
-### Step 5e — Open + report
+### Step 5e — Run the critique gate
+
+Before the user sees anything, run the gate in `references/critique-gate.md` against the styled file: deterministic checks (ban scan, contrast, composition proof, font delivery), then render via headless Chrome (or available browser tooling) and answer the binary rubric against the screenshot — falling back to the CSS self-review variant if no renderer exists. Fix failures, maximum two loops. Keep what the gate found for the report.
+
+### Step 5f — Open + report
 
 Open both files side by side (so user can compare):
 ```bash
@@ -492,13 +528,15 @@ open <original-basename>.styled.html
 Report:
 > "Re-skinned! **[basename].styled.html** is open alongside the original.
 >
-> Applied **[Tradition]** with **[Flourish]**. Decisions saved to `.visual-design/tokens.json` — next run in this project will surface this aesthetic as suggestion #1.
+> Applied **[Tradition]** with **[Composition]** and **[Flourish]**. Decisions saved to `.visual-design/tokens.json` — next run in this project will surface this aesthetic as suggestion #1.
+>
+> [One short paragraph: what the critique gate checked, caught, and fixed — one sentence if everything passed.]
 >
 > Reply:
 > - `love it` → nothing to do, done
 > - `redo` → rerun the flow from scratch
-> - `change [tradition|color|type|mood|flourish]` → rerun just that step
-> - `different flourish` → return to step 5
+> - `change [tradition|composition|color|type|mood|flourish]` → rerun just that step
+> - `different flourish` → return to step 6
 > - `more contrast` / `warmer` / etc → I'll interpret and adjust"
 
 ---
@@ -592,9 +630,9 @@ The strategy: **hoist common attributes to the root `<svg>` element**, then **re
 3. Write run metadata to `.visual-design/run.json` (target, mode, decisions, timestamp).
 4. Add `.visual-design/` to `.gitignore` if missing.
 
-### Step 5s-d — Open + report
+### Step 5s-d — Critique gate + open + report
 
-Open both files side by side (browsers render SVGs directly):
+Run the lightweight SVG variant of `references/critique-gate.md` first: ban scan on any embedded style, then render the styled SVG (headless Chrome screenshots SVG files directly) and check — strokes legible at 24px? duotone layers distinct? filter (if any) visible without blowing out shapes? Fix and re-check once, then open both files side by side (browsers render SVGs directly):
 ```bash
 open <original>
 open <original-basename>.styled.svg
@@ -618,13 +656,13 @@ Report:
 
 ## RESPONSE PARSING — How Users Pick
 
-The five steps don't all have 4 options, so input parsing varies per step:
+The six steps don't all have 4 options, so input parsing varies per step:
 
-### Steps 2, 3, 4 (Color, Type, Mood) — standard A/B/C/D
+### Steps 2, 3, 4, 5 (Composition, Color, Type, Mood) — standard A/B/C/D
 - Exactly 4 options each. Respond like any thinking skill.
 - Accept: `Option A`, `A`, `the first one`, `Option B because [reason]`, `Option A but [modification]`, `more options`.
 
-### Steps 1 and 5 (Tradition, Flourish) — name-based picking
+### Steps 1 and 6 (Tradition, Flourish) — name-based picking
 - 10-30+ options, letters don't scale. Pick by name.
 - **Primary:** `Editorial`, `Warm Minimal`, `Neo-Brutalist`, `Drop Cap`, `Rule Line`, etc.
 - **Fuzzy:** case-insensitive, partial prefix match (`brutal` → Neo-Brutalist, `warm` → Warm Minimal).
@@ -636,1022 +674,24 @@ The five steps don't all have 4 options, so input parsing varies per step:
 - `more` / `more options` — expand visible set.
 - `surprise me` / `skill's pick` — take the highest-scored option, move on.
 - `back` / `previous` — step back without rerunning.
-- `skip` — at step 5, valid meaning "no flourish." At other steps, use recommended.
+- `skip` — at step 6, valid meaning "no flourish." At other steps, use recommended.
 
-Match input against (a) letter regex `^([A-Za-z])\b` at steps 2-4, (b) shortcut keywords, (c) fuzzy name match at steps 1 and 5. Show numbered candidates when ambiguous.
+Match input against (a) letter regex `^([A-Za-z])\b` at steps 2-5, (b) shortcut keywords, (c) fuzzy name match at steps 1 and 6. Show numbered candidates when ambiguous.
 
 ---
 
 ## AESTHETIC TRADITIONS LIBRARY
 
-30 starter traditions, grouped by feel. Each entry provides the tokens and aesthetic rules needed to render previews AND to generate the final rewrite.
+The 30-tradition library lives in **`references/traditions.md`** — load it when you reach Phase 3 (Tradition selection) and again at Phase 5 (rewrite). Each entry provides tokens (color ramp, type stack, spacing, radius, shadow, motion), aesthetic rules, flourish picks, and a default **composition signature**.
 
-**Feel groups** (used only for internal organization — all traditions render in the flat grid):
-- **Structural:** Swiss Modern, Technical Documentary, Monochrome, Newsprint, Academic, Bauhaus Grid, Dashboard Operator
-- **Warm:** Editorial Print, Warm Minimal, Warm Handmade, Kraft Paper, Japandi
-- **Expressive:** Neo-Brutalist, Playful Maximalist, Y2K Maximalist, Memphis Revival, Anti-Design
-- **Quiet:** Soft Premium, Neo-Classical, Botanical Herbarium, Midnight Marine
-- **Raw:** Neon Terminal, Zine, Sketchbook
-- **Kinetic / Premium:** Kinetic Modern, Glassmorphic, Luxury Serif, Art Deco, Retro Futurism, Cyberpunk Neon
+Two library-wide guarantees (do not violate when adding or editing traditions):
+- **No two traditions share a display face.** Body and mono faces may repeat at most twice across the catalog.
+- **Nothing in the library uses a banned default** — see `references/banned-defaults.md`.
 
-Below are the 30 seed traditions. Add more over time by appending new entries in the same format.
-
----
-
-### 1. Swiss Modern
-
-**Feel:** Clean, confident, functional. Zero decoration. Information dense but never cramped. Typography does the heavy lifting.
-
-**Color ramp:** `#fafafa` · `#f4f4f5` · `#e4e4e7` · `#d4d4d8` · `#a1a1aa` · `#71717a` · `#52525b` · `#3f3f46` · `#27272a` · `#0f172a`
-**Accents:** primary `#6366f1` · pressed `#4f46e5` · success `#22c55e` · danger `#ef4444`
-
-**Type:**
-- Headline: `"Inter Tight"` 700, letter-spacing -0.02em
-- Body: `Inter` 400, line-height 1.55
-- Mono: `"JetBrains Mono"` 400
-- Scale: 12 · 14 · 16 · 20 · 28 · 40
-- Google Fonts: `Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 4 · 6 · 10 · 16
-**Shadow:** L1 `0 1px 2px rgba(15,23,42,.06)` · L2 `0 2px 8px rgba(15,23,42,.08)` · L3 `0 8px 24px rgba(15,23,42,.10)` · L4 `0 16px 40px rgba(15,23,42,.12)`
-**Motion:** `cubic-bezier(.16,1,.3,1)` · 120 / 200 / 320ms
-
-**Rules:**
-- No gradients. Solid color + whitespace.
-- Shadows only on elevated surfaces.
-- Headlines tight (-0.02 to -0.03em); body neutral.
-- No rounded corners above 16px.
-- Icons: 1.5px stroke, match body color.
-
-**Flourish picks:** Kicker · Rule Line · Small-Caps Label
-
----
-
-### 2. Editorial Print
-
-**Feel:** Warm, literary, intentional. Print publication translated to screen. Rewards reading. Restrained color — when it shows up, it means something.
-
-**Color ramp:** `#fdf6e3` · `#f5ecd0` · `#e7d7b8` · `#d4af7a` · `#b07a4a` · `#9a3412` · `#7c2d12` · `#44342a` · `#2a1f18` · `#1f1611`
-**Accents:** brick `#9a3412` · success `#357266` · danger `#b91c1c`
-
-**Type:**
-- Headline: `Fraunces` 600 with `opsz` 96-144, letter-spacing -0.02em
-- Body: `"Source Serif 4"` 400, line-height 1.7
-- Mono: `"JetBrains Mono"` 400
-- Scale: 12 · 14 · 18 · 22 · 32 · 52
-- Google Fonts: `Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 72 · 104
-**Radius:** 2 · 4 · 6 · 10
-**Shadow:** L1 `0 1px 2px rgba(31,22,17,.08)` · L2 `0 2px 6px rgba(31,22,17,.10)` · L3 `0 4px 12px rgba(31,22,17,.12)` · L4 `0 8px 20px rgba(31,22,17,.15)`
-**Motion:** `cubic-bezier(.2,.8,.2,1)` · 140 / 240 / 400ms
-
-**Rules:**
-- Always use Fraunces `opsz` axis — bigger opsz for bigger sizes.
-- Italics are expressive tools, especially for kickers and captions.
-- No gradients. Solid warm paper + ink.
-- Dividers hairline or dotted, never thick.
-- Use pull-quotes with generous margins when space allows.
-- Drop caps welcome on long-form.
-
-**Flourish picks:** Drop Cap · Kicker · Pull Quote
-
----
-
-### 3. Neo-Brutalist
-
-**Feel:** Hard-edged, honest, direct. No softening. High-contrast, chunky, almost aggressive in its indifference to trend.
-
-**Color ramp:** `#ffffff` · `#f5f5f5` · `#d4d4d4` · `#a3a3a3` · `#737373` · `#404040` · `#262626` · `#171717` · `#0a0a0a` · `#000000`
-**Accents:** yellow `#facc15` · red `#ef4444` · blue `#2563eb`
-
-**Type:**
-- Headline: `"Archivo Black"` 400, letter-spacing -0.01em, UPPERCASE acceptable
-- Body: `Inter` 500, line-height 1.5
-- Mono: `"Space Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 34 · 56
-- Google Fonts: `Archivo+Black&family=Inter:wght@400;500;700&family=Space+Mono:wght@400;700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 40 · 56 · 80
-**Radius:** 0 · 0 · 2 · 4 (mostly angular)
-**Shadow:** offset-solid, not blurred. L1 `3px 3px 0 #000` · L2 `5px 5px 0 #000` · L3 `8px 8px 0 #000` · L4 `12px 12px 0 #000`
-**Motion:** `linear` · 80 / 150 / 300ms (abrupt)
-
-**Rules:**
-- Solid offset drop shadows (never soft-blurred) are a signature.
-- Uppercase headings welcome. Monospace kickers welcome.
-- Borders are 2-3px and black.
-- One accent color used aggressively (yellow or red) — restraint is the enemy.
-- Zero gradients. Zero corners above 4px. Zero smooth easing.
-- Underlines on active nav items — skeuomorphic web.
-
-**Flourish picks:** Offset Box Shadow · Uppercase Kicker · Thick Rule
-
----
-
-### 4. Warm Minimal
-
-**Feel:** Muted earth tones, generous whitespace, serif revival. Calm, upscale, nothing loud.
-
-**Color ramp:** `#fafaf9` · `#f5f5f4` · `#e7e5e4` · `#d6d3d1` · `#a8a29e` · `#78716c` · `#57534e` · `#44403c` · `#292524` · `#1c1917`
-**Accents:** mint-gray `#5b8c7a` · caramel `#d4a373` · muted blue `#5b7b9a`
-
-**Type:**
-- Headline: `"Inter Tight"` 600, letter-spacing -0.015em
-- Body: `Inter` 400, line-height 1.6
-- Mono: `"JetBrains Mono"` 400
-- Scale: 12 · 14 · 15 · 19 · 26 · 38
-- Google Fonts: `Inter+Tight:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400`
-
-**Spacing:** 4 · 8 · 12 · 20 · 28 · 40 · 56 · 80 · 112 (generous)
-**Radius:** 8 · 12 · 18 · 28
-**Shadow:** soft, large spread. L1 `0 1px 3px rgba(28,25,23,.04)` · L2 `0 4px 16px rgba(28,25,23,.05)` · L3 `0 12px 32px rgba(28,25,23,.06)` · L4 `0 24px 56px rgba(28,25,23,.08)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 200 / 350 / 500ms
-
-**Rules:**
-- Desaturated palette only.
-- Generous whitespace — minimum 24px padding on containers.
-- Soft shadows with large spread, low opacity.
-- Off-black text (#1c1917), never pure black.
-- One muted accent color per view.
-
-**Flourish picks:** Kicker · Rule Line · Small-Caps Label
-
----
-
-### 5. Technical Documentary
-
-**Feel:** Dense, authoritative, information-first. Feels like serious reference material. Heavy on tables, lists, code.
-
-**Color ramp:** `#f8fafc` · `#f1f5f9` · `#e2e8f0` · `#cbd5e1` · `#94a3b8` · `#64748b` · `#475569` · `#334155` · `#1e293b` · `#0f172a`
-**Accents:** link `#0284c7` · success `#059669` · warning `#d97706` · danger `#dc2626`
-
-**Type:**
-- Headline: `Inter` 700, letter-spacing -0.015em
-- Body: `Inter` 400, line-height 1.55
-- Mono: `"IBM Plex Mono"` 400 — code is first-class
-- Scale: 12 · 14 · 16 · 20 · 26 · 36
-- Google Fonts: `Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 2 · 4 · 6 · 8
-**Shadow:** rarely used — prefer borders + spacing. L1 `0 1px 0 rgba(15,23,42,.05)` · L2 `0 1px 2px rgba(15,23,42,.06)` · L3 `0 2px 4px rgba(15,23,42,.08)` · L4 `0 4px 8px rgba(15,23,42,.10)`
-**Motion:** `ease` · 80 / 140 / 220ms
-
-**Rules:**
-- Inline code, tables, and definition lists are native.
-- Accent color used ONLY for links and semantic indicators.
-- High information density is a feature, not a bug.
-- Code blocks are UI, not afterthoughts.
-- Tables have zebra stripes; headers are bolded not uppercased.
-
-**Flourish picks:** Inline Code · Rule Line · Small-Caps Label
-
----
-
-### 6. Monochrome
-
-**Feel:** Pure black and white. Uncompromising. Type is everything.
-
-**Color ramp:** `#ffffff` · `#fafafa` · `#e5e5e5` · `#d4d4d4` · `#a3a3a3` · `#737373` · `#404040` · `#262626` · `#171717` · `#000000`
-**Accents:** none — mono stays mono. Optional single accent at user request.
-
-**Type:**
-- Headline: `"SF Mono"`/`"JetBrains Mono"` 500, letter-spacing 0
-- Body: `"SF Mono"`/`"JetBrains Mono"` 400, line-height 1.55
-- Mono: same
-- Scale: 12 · 14 · 16 · 20 · 28 · 40
-- Google Fonts: `JetBrains+Mono:wght@400;500;700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 0 · 0 · 2 · 4
-**Shadow:** L1 `0 1px 0 rgba(0,0,0,.1)` · L2 `0 2px 0 rgba(0,0,0,.15)` · L3 `0 4px 0 rgba(0,0,0,.2)` · L4 `0 8px 0 rgba(0,0,0,.25)`
-**Motion:** `linear` · 100 / 200 / 400ms
-
-**Rules:**
-- Pure mono — no color accents.
-- All text in a monospace family.
-- Borders are 1px solid #000 or #e5e5e5.
-- Headings differentiated by weight, not color.
-- Use `_` or `-` as visual separators in labels.
-
-**Flourish picks:** ASCII Divider · Small-Caps Label · Inline Code
-
----
-
-### 7. Glassmorphic
-
-**Feel:** Translucent, depth-rich, atmospheric. Depth via layered translucency.
-
-**Color ramp:** `#fafafa` · `rgba(255,255,255,.6)` · `rgba(255,255,255,.4)` · `#e5e7eb` · `#9ca3af` · `#6b7280` · `#4b5563` · `#374151` · `#1f2937` · `#0f1419`
-**Accents:** coral `#ff8a65` · sky `#60a5fa` · lilac `#c4b5fd` (all at .5 alpha)
-
-**Type:**
-- Headline: `Inter` 600, letter-spacing -0.015em
-- Body: `Inter` 400, line-height 1.5
-- Mono: `"SF Mono"` fallback to `Menlo` 400
-- Scale: 12 · 14 · 16 · 20 · 28 · 44
-- Google Fonts: `Inter:wght@400;500;600;700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 72 · 112
-**Radius:** 10 · 16 · 24 · 36 (soft, bubble-like)
-**Shadow:** L1 `0 2px 8px rgba(0,0,0,.04)` · L2 `0 4px 16px rgba(0,0,0,.06)` · L3 `0 8px 32px rgba(0,0,0,.08)` · L4 `0 16px 48px rgba(0,0,0,.10)` — paired with `backdrop-filter: blur(...)`
-**Motion:** smooth-springy · 180 / 300 / 500ms
-
-**Rules:**
-- Surfaces use `backdrop-filter: blur(20-40px)` with translucent bg.
-- Behind every glass panel: a colorful gradient or vibrant content.
-- Borders are `rgba(255,255,255,.3)` — glass rim.
-- Text solid colors — never translucent text.
-- One glass layer per view — stacking destroys the effect.
-
-**Flourish picks:** Gradient Backdrop · Glass Rim · Soft Glow
-
----
-
-### 8. Neo-Classical
-
-**Feel:** Serif-heavy, restrained, editorial-adjacent. Prestige-media feel. Warm neutrals, grand vertical rhythm.
-
-**Color ramp:** `#faf9f7` · `#f2ece0` · `#e4d9c5` · `#c4b195` · `#96825c` · `#6b5a38` · `#4c3f24` · `#332a18` · `#1f1a10` · `#0f0c08`
-**Accents:** jewel red `#8c1c13` · forest `#2d4a2a` · deep blue `#1e3a5f`
-
-**Type:**
-- Headline: `"Playfair Display"` 700, italic variants welcome
-- Body: `Lora` 400, line-height 1.65
-- Display alt: `Spectral` 400 for lead-ins
-- Scale: 13 · 15 · 18 · 24 · 34 · 52
-- Google Fonts: `Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Spectral:wght@400;500`
-
-**Spacing:** 4 · 8 · 12 · 18 · 28 · 44 · 68 · 100 · 144 (grand)
-**Radius:** 0 · 2 · 4 · 6 (nearly angular)
-**Shadow:** barely used. L1 `0 1px 1px rgba(15,12,8,.04)` · L2 `0 2px 4px rgba(15,12,8,.06)` · L3 `0 4px 12px rgba(15,12,8,.08)` · L4 `0 10px 24px rgba(15,12,8,.10)`
-**Motion:** slow · 200 / 400 / 600ms (deliberate)
-
-**Rules:**
-- Display italics on headlines are a signature.
-- Small caps for navigation and labels.
-- Horizontal rules (hairline, sometimes doubled) as dividers.
-- Drop caps welcome for long-form.
-- Generous vertical rhythm; section spacing is grand.
-- Minimal color — serif typography carries voice.
-
-**Flourish picks:** Drop Cap · Small-Caps Label · Doubled Rule
-
----
-
-### 9. Warm Handmade
-
-**Feel:** Crafted, personal, small-batch. Made by one person who cared. Slightly imperfect by design.
-
-**Color ramp:** `#f7f4ed` · `#eee7d8` · `#dcc9a5` · `#c4a574` · `#9c7f4f` · `#6b5538` · `#4a3b28` · `#33281b` · `#211a12` · `#13100a`
-**Accents:** berry `#7c2d12` · sage `#5f7c3e` · dusty blue `#4a6978`
-
-**Type:**
-- Headline: `Fraunces` 600 (opsz friendly)
-- Body: `Spectral` 400, line-height 1.65
-- Mono: `"Cascadia Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 30 · 46
-- Google Fonts: `Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spectral:wght@400;500;600`
-
-**Spacing:** 4 · 8 · 12 · 18 · 26 · 38 · 56 · 84 · 120 (organic)
-**Radius:** 4 · 8 · 14 · 22 (friendly, not bubbly)
-**Shadow:** warm-tinted. L1 `0 1px 3px rgba(107,85,56,.08)` · L2 `0 3px 10px rgba(107,85,56,.10)` · L3 `0 8px 20px rgba(107,85,56,.12)` · L4 `0 14px 32px rgba(107,85,56,.14)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 160 / 280 / 440ms
-
-**Rules:**
-- Off-center, slightly asymmetric layouts welcome.
-- Warm earth palette only — no cool colors.
-- A single hand-drawn flourish per view (squiggle underline, arrow).
-- Line-heights generous (1.6-1.7).
-- Section dividers hairline or dotted, never bold.
-
-**Flourish picks:** Grain Texture · Squiggle Underline · Pull Quote
-
----
-
-### 10. Kinetic Modern
-
-**Feel:** Motion-forward, vivid, alive. Crisp geometry with energy underneath. Feels recent, capable, deliberate.
-
-**Color ramp:** `#fafbff` · `#f0f3ff` · `#d6dcff` · `#b0bcff` · `#7f92ff` · `#4f6bff` · `#3b4dcc` · `#29368f` · `#161d4a` · `#0a0e24`
-**Accents:** lime `#a3e635` · coral `#fb7185` · cyan `#22d3ee`
-
-**Type:**
-- Headline: `"Space Grotesk"` 700, letter-spacing -0.02em
-- Body: `Inter` 400, line-height 1.55
-- Mono: `"JetBrains Mono"` 500
-- Scale: 12 · 14 · 16 · 22 · 32 · 48
-- Google Fonts: `Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 6 · 10 · 14 · 20
-**Shadow:** colored, subtle. L1 `0 2px 6px rgba(79,107,255,.10)` · L2 `0 4px 12px rgba(79,107,255,.14)` · L3 `0 8px 24px rgba(79,107,255,.20)` · L4 `0 16px 40px rgba(79,107,255,.28)`
-**Motion:** `cubic-bezier(.5,1.5,.5,1)` (springy) · 140 / 240 / 380ms
-
-**Rules:**
-- Hover / focus states include visible motion.
-- Accent colors as spot highlights — never main body color.
-- Geometric shapes (circles, pills, diagonal stripes) as decorative accents.
-- High contrast; dark background variant default-ready.
-
-**Flourish picks:** Animated Underline · Geometric Accent · Colored Glow
-
----
-
-### 11. Academic
-
-**Feel:** Old-textbook, scholarly. Classic serif, disciplined layout, functional decoration.
-
-**Color ramp:** `#fbfaf6` · `#f2ede0` · `#e2d9c2` · `#bfa981` · `#8a7547` · `#5a4a2a` · `#3f331c` · `#2a2114` · `#1a140c` · `#0d0a07`
-**Accents:** ink blue `#1e3a5f` · burgundy `#7c1d2e` · forest `#2d4a2a`
-
-**Type:**
-- Headline: `Georgia`/`"Iowan Old Style"` serif 700
-- Body: `Georgia` 400, line-height 1.7
-- Mono: `"Courier New"` 400
-- Scale: 12 · 14 · 16 · 20 · 26 · 38
-- Google Fonts: (uses system serifs, optionally load `Lora`)
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 36 · 56 · 84 · 120
-**Radius:** 0 · 2 · 4 · 4
-**Shadow:** not used.
-**Motion:** slow · 200 / 400 / 600ms
-
-**Rules:**
-- Traditional page layout — centered columns, wide margins.
-- Small caps for section labels.
-- Footnote-style indicators (superscript numbers).
-- No gradients, no shadows, no rounded corners above 4px.
-- Hairline rules between sections.
-
-**Flourish picks:** Drop Cap · Footnote Marker · Small-Caps Label
-
----
-
-### 12. Luxury Serif
-
-**Feel:** Dark, upscale, gold-accented. Fashion-editorial. High-contrast, serif display.
-
-**Color ramp:** `#1a1a1a` · `#232323` · `#2e2e2e` · `#3f3f3f` · `#5e5e5e` · `#8a8a8a` · `#b4b4b4` · `#d6d6d6` · `#ededed` · `#ffffff`
-**Accents:** gold `#d4af37` · champagne `#e8c87a` · deep red `#8b1a1a`
-
-**Type:**
-- Headline: `"Bodoni Moda"`/`"Playfair Display"` 700, letter-spacing -0.01em, ALL CAPS welcome
-- Body: `"Cormorant Garamond"` 400, line-height 1.65
-- Scale: 12 · 14 · 16 · 22 · 34 · 60
-- Google Fonts: `Bodoni+Moda:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400`
-
-**Spacing:** 4 · 8 · 12 · 20 · 32 · 48 · 72 · 108 · 160 (grand)
-**Radius:** 0 · 0 · 0 · 2 (angular)
-**Shadow:** gold-tinted. L1 `0 1px 2px rgba(212,175,55,.08)` · L2 `0 2px 8px rgba(0,0,0,.25)` · L3 `0 4px 16px rgba(0,0,0,.35)` · L4 `0 8px 32px rgba(0,0,0,.45)`
-**Motion:** slow elegant · 240 / 480 / 720ms
-
-**Rules:**
-- Dark background; gold accent used sparingly.
-- All-caps display headlines with wide tracking.
-- High-contrast serifs (Bodoni) for drama.
-- Minimal chrome — let type + gold do the work.
-- Hairline gold rules as dividers.
-
-**Flourish picks:** Gold Hairline · Ornament Divider · All-Caps Kicker
-
----
-
-### 13. Playful Maximalist
-
-**Feel:** Expressive, energetic, friendly. More is more, but composed. Vivid color, rounded everything, bounce in motion.
-
-**Color ramp:** `#fffbf5` · `#fef3c7` · `#fde68a` · `#fbbf24` · `#f97316` · `#ec4899` · `#8b5cf6` · `#6366f1` · `#1e1b4b` · `#0f0f1a`
-**Accents:** bounce green `#10b981` · highlighter `#fde047`
-
-**Type:**
-- Headline: `Fraunces` 800, italic optional, opsz 144
-- Body: `Inter` 500, line-height 1.55
-- Display alt: `Caveat` 700 for hand-drawn emphasis
-- Scale: 13 · 15 · 17 · 22 · 32 · 48
-- Google Fonts: `Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,800&family=Inter:wght@400;500;600;700&family=Caveat:wght@700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 8 · 14 · 20 · 28 (round, friendly)
-**Shadow:** accent-tinted. L1 `0 2px 4px rgba(139,92,246,.12)` · L2 `0 4px 12px rgba(139,92,246,.18)` · L3 `0 8px 24px rgba(236,72,153,.22)` · L4 `0 16px 40px rgba(139,92,246,.30)`
-**Motion:** `cubic-bezier(.34,1.56,.64,1)` (bouncy overshoot) · 180 / 320 / 500ms
-
-**Rules:**
-- Gradients encouraged — pink-to-purple is the signature.
-- Rounded corners aggressive — pills for buttons, 20px+ for cards.
-- One handwritten accent (Caveat) per view, rotated slightly.
-- Bounce easing default — everything overshoots.
-- Shadows tinted with accent, never neutral gray.
-
-**Flourish picks:** Hand-Drawn Squiggle · Pill Button · Tinted Shadow
-
----
-
-### 14. Soft Premium
-
-**Feel:** Calm, reassuring, upscale. Desaturated, low-contrast but confident. Nothing to prove.
-
-**Color ramp:** `#fafaf9` · `#f5f5f4` · `#e7e5e4` · `#d6d3d1` · `#a8a29e` · `#78716c` · `#57534e` · `#44403c` · `#292524` · `#1c1917`
-**Accents:** mint-gray `#5b8c7a` · caramel `#d4a373` · muted blue `#5b7b9a`
-
-**Type:**
-- Headline: `"Inter Tight"` 600, letter-spacing -0.015em
-- Body: `Inter` 400, line-height 1.6
-- Mono: `"JetBrains Mono"` 400
-- Scale: 12 · 14 · 15 · 19 · 26 · 38 (compressed)
-- Google Fonts: `Inter+Tight:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400`
-
-**Spacing:** 4 · 8 · 12 · 20 · 28 · 40 · 56 · 80 · 112 (generous)
-**Radius:** 8 · 12 · 18 · 28
-**Shadow:** soft, large spread. L1 `0 1px 3px rgba(28,25,23,.04)` · L2 `0 4px 16px rgba(28,25,23,.05)` · L3 `0 12px 32px rgba(28,25,23,.06)` · L4 `0 24px 56px rgba(28,25,23,.08)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 200 / 350 / 500ms
-
-**Rules:**
-- Desaturated palette only — no bright hues.
-- Generous whitespace, minimum 24px padding.
-- Shadows always soft with large spread, low opacity.
-- Off-black text (#1c1917), never pure black.
-- One muted accent per view.
-- Nothing competes for attention.
-
-**Flourish picks:** Hairline Rule · Small-Caps Label · Soft Shadow
-
----
-
-### 15. Newsprint
-
-**Feel:** Newspaper condensed sans on cream paper. Black ink + red accent splash. Dense columns, thick rules.
-
-**Color ramp:** `#faf7f0` · `#f2ece0` · `#e5dcc8` · `#c9beaa` · `#8a7f6a` · `#52483a` · `#332a1e` · `#1f1912` · `#14100a` · `#0a0805`
-**Accents:** red splash `#c1272d` · ink black `#0f0f0f`
-
-**Type:**
-- Headline: `Oswald` 700 condensed, ALL CAPS welcome
-- Body: `Merriweather` 400, line-height 1.55
-- Mono: `"IBM Plex Mono"` 400
-- Scale: 11 · 13 · 15 · 20 · 30 · 48
-- Google Fonts: `Oswald:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400`
-
-**Spacing:** 4 · 6 · 10 · 14 · 20 · 28 · 40 · 56 · 80 (dense)
-**Radius:** 0 · 2 · 4 · 4 (mostly angular)
-**Shadow:** rarely. L1 `0 1px 0 rgba(0,0,0,.1)` · L2 `0 2px 4px rgba(0,0,0,.08)` · L3 `0 4px 8px rgba(0,0,0,.1)` · L4 `0 8px 16px rgba(0,0,0,.12)`
-**Motion:** `ease` · 100 / 180 / 300ms
-
-**Rules:**
-- Condensed sans for headlines; serif body.
-- Red reserved for kickers, dates, alerts.
-- Thick black rules (3-4px) between sections.
-- Multi-column body layout if space allows.
-- Datelines and bylines in italics, small caps.
-
-**Flourish picks:** Thick Rule · Red Kicker · Byline Italic
-
----
-
-### 16. Y2K Maximalist
-
-**Feel:** Chrome gradients, bubble text, holographic accents. Early 2000s web aesthetic revived and refined.
-
-**Color ramp:** `#f5f3ff` · `#e9e5ff` · `#c4bbff` · `#918aff` · `#6b65ff` · `#4f4af0` · `#3d38c8` · `#2b2798` · `#1a186e` · `#0a094a`
-**Accents:** magenta `#ec4899` · cyan `#22d3ee` · lime `#a3e635` · chrome silver gradient
-
-**Type:**
-- Headline: `Poppins` 800, rounded geometric
-- Body: `Nunito` 500, line-height 1.55
-- Mono: `"Space Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 32 · 52
-- Google Fonts: `Poppins:wght@400;600;700;800&family=Nunito:wght@400;500;700&family=Space+Mono:wght@400;700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 16 · 24 · 32 · 999 (pills everywhere)
-**Shadow:** colored + holographic. L1 `0 2px 8px rgba(139,92,246,.3)` · L2 `0 4px 16px rgba(236,72,153,.3)` · L3 `0 8px 32px rgba(34,211,238,.3)` · L4 `0 16px 48px rgba(163,230,53,.3)`
-**Motion:** `cubic-bezier(.25,.1,.25,1)` · 200 / 320 / 500ms
-
-**Rules:**
-- Gradients everywhere — magenta-cyan, chrome silver.
-- Bubble pill buttons (999px radius).
-- Holographic accents on CTAs (multi-color gradient).
-- Rounded geometric sans for everything.
-- Subtle glossy overlays on cards (top-to-transparent white gradient).
-
-**Flourish picks:** Chrome Gradient · Pill Button · Holographic Accent
-
----
-
-### 17. Zine / Photocopied
-
-**Feel:** Cut-and-paste, punk, xerox aesthetic. Deliberately crooked, noisy, hand-made.
-
-**Color ramp:** `#fffefb` · `#f5f1e6` · `#d8cfbb` · `#b0a384` · `#7a6f55` · `#4a4131` · `#2e2817` · `#1a1508` · `#0f0b04` · `#000000`
-**Accents:** toner black `#0a0a0a` · photocopy red `#c1272d`
-
-**Type:**
-- Headline: `Anton` condensed, UPPERCASE
-- Body: `"Courier Prime"` 400, line-height 1.5
-- Display alt: `"Permanent Marker"` for hand-scrawled
-- Scale: 12 · 14 · 16 · 22 · 36 · 64
-- Google Fonts: `Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Permanent+Marker`
-
-**Spacing:** 3 · 6 · 10 · 14 · 20 · 28 · 40 · 56 · 80 (tight, uneven feel)
-**Radius:** 0 · 0 · 2 · 2 (mostly none)
-**Shadow:** solid offset + xerox smudge. L1 `2px 2px 0 #000` · L2 `4px 4px 0 #000` · L3 `6px 6px 0 #000` · L4 `0 0 8px rgba(0,0,0,.4)` (smudge)
-**Motion:** `linear` · 80 / 150 / 300ms (abrupt)
-
-**Rules:**
-- Elements rotated 0.5-2deg for paste-up feel.
-- Grain/noise overlay on backgrounds.
-- Mix UPPERCASE condensed sans + typewriter + marker.
-- Black borders 2-3px, occasional taped-down edges.
-- High-contrast only — no gradients, no subtle colors.
-- Photocopy smudge shadows.
-
-**Flourish picks:** Paste-Up Rotation · Grain Overlay · Marker Scrawl
-
----
-
-### 18. Neon Terminal
-
-**Feel:** CRT terminal, phosphor glow, hacker aesthetic. Green on black. Monospace everything.
-
-**Color ramp:** `#000000` · `#0a0a0a` · `#111111` · `#1a1a1a` · `#2a2a2a` · `#4a4a4a` · `#6a6a6a` · `#8a8a8a` · `#b0b0b0` · `#d0d0d0`
-**Accents:** phosphor green `#00ff66` · amber `#ffb000` · cyan `#00ffff` · danger red `#ff0040`
-
-**Type:**
-- Headline: `"VT323"` 400, pixelated monospace
-- Body: `"IBM Plex Mono"` 400, line-height 1.5
-- Display alt: `"Major Mono Display"` for headers
-- Scale: 13 · 15 · 17 · 20 · 28 · 40
-- Google Fonts: `VT323&family=IBM+Plex+Mono:wght@400;500;700&family=Major+Mono+Display`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 0 · 0 · 0 · 2 (sharp)
-**Shadow:** phosphor glow. L1 `0 0 4px rgba(0,255,102,.4)` · L2 `0 0 8px rgba(0,255,102,.5)` · L3 `0 0 16px rgba(0,255,102,.6)` · L4 `0 0 24px rgba(0,255,102,.7)`
-**Motion:** `steps(4)` · 80 / 160 / 320ms (stepped)
-
-**Rules:**
-- Monospace everywhere; no proportional fonts.
-- Green phosphor glow on interactive elements.
-- Scanline overlay (`repeating-linear-gradient`, 2-4px).
-- Terminal prompts (`$ `, `> `) as visual anchors.
-- Blinking cursor on active inputs.
-- Zero color outside the accent palette.
-
-**Flourish picks:** Phosphor Glow · Scanline Overlay · Terminal Prompt
-
----
-
-### 19. Japandi
-
-**Feel:** Japanese minimalism + Scandinavian warmth. Generous negative space, thin strokes, mixed serif + sans.
-
-**Color ramp:** `#faf8f3` · `#f0ebe0` · `#e0d8c5` · `#c4b8a0` · `#9a8e75` · `#6d634e` · `#483f2f` · `#2f2918` · `#1c1810` · `#0a0805`
-**Accents:** tea green `#7a8f6c` · sumi ink `#1c1810` · persimmon `#c96e3e`
-
-**Type:**
-- Headline: `"Shippori Mincho"` 700 or `"Noto Serif"` 600
-- Body: `Inter` 400, line-height 1.75
-- Display alt: `"Noto Serif JP"` 400 italic
-- Scale: 12 · 14 · 16 · 20 · 28 · 42
-- Google Fonts: `Shippori+Mincho:wght@400;500;700&family=Noto+Serif:wght@400;500;600&family=Inter:wght@400;500;600`
-
-**Spacing:** 4 · 8 · 16 · 24 · 40 · 64 · 96 · 144 · 200 (very generous)
-**Radius:** 0 · 2 · 4 · 6 (restrained)
-**Shadow:** barely. L1 `0 1px 1px rgba(0,0,0,.03)` · L2 `0 1px 3px rgba(0,0,0,.04)` · L3 `0 2px 6px rgba(0,0,0,.05)` · L4 `0 4px 12px rgba(0,0,0,.06)`
-**Motion:** slow · 280 / 500 / 800ms (meditative)
-
-**Rules:**
-- Negative space is the primary design element.
-- Thin 1px hairlines for dividers; no thick rules.
-- Mix mincho serif for headings + geometric sans body.
-- Single accent per view (tea green or persimmon).
-- Asymmetric layouts with intentional empty quadrants.
-- No gradients, no shadows deeper than L2.
-
-**Flourish picks:** Negative Space · Hairline Rule · Vertical Text
-
----
-
-### 20. Bauhaus Grid
-
-**Feel:** Primary colors, geometric shapes, Futura-style sans. Strict grid. Form follows function.
-
-**Color ramp:** `#ffffff` · `#f5f5f5` · `#e0e0e0` · `#b0b0b0` · `#707070` · `#404040` · `#202020` · `#101010` · `#080808` · `#000000`
-**Accents:** red `#e63946` · blue `#1d4ed8` · yellow `#fbbf24`
-
-**Type:**
-- Headline: `"Josefin Sans"` 700, geometric
-- Body: `Inter` 400, line-height 1.55
-- Mono: `"Space Mono"` 400
-- Scale: 12 · 14 · 16 · 20 · 28 · 44
-- Google Fonts: `Josefin+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono`
-
-**Spacing:** 4 · 8 · 16 · 24 · 32 · 48 · 64 · 96 · 128 (grid-aligned)
-**Radius:** 0 · 0 · 0 · 0 (zero — angular only)
-**Shadow:** not used.
-**Motion:** `linear` · 100 / 200 / 400ms
-
-**Rules:**
-- Strict modular grid; elements align to 8px multiples.
-- Primary colors only — no tints, no gradients.
-- Geometric primitives (circles, squares, triangles) as decoration.
-- Sans-serif everything, zero serifs.
-- No rounded corners anywhere.
-- Hairline black rules as dividers.
-
-**Flourish picks:** Primary Color Block · Geometric Primitive · Hairline Rule
-
----
-
-### 21. Memphis Revival
-
-**Feel:** 80s geometric, zigzags, terrazzo. Playful clashing pastels + primaries + black outlines.
-
-**Color ramp:** `#fff8f3` · `#ffd9e8` · `#ffb9d1` · `#ff7bac` · `#f43e8a` · `#d61e6a` · `#9b1650` · `#5f0e38` · `#330620` · `#1a0310`
-**Accents:** teal `#14b8a6` · mustard `#eab308` · black `#000000`
-
-**Type:**
-- Headline: `Fraunces` 800, italic welcome
-- Body: `"Space Grotesk"` 500, line-height 1.55
-- Mono: `"Space Mono"` 400
-- Scale: 14 · 16 · 18 · 24 · 36 · 56
-- Google Fonts: `Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;1,9..144,700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 72 · 104
-**Radius:** 4 · 12 · 24 · 999 (mix sharp + round)
-**Shadow:** solid offset in contrast color. L1 `3px 3px 0 #000` · L2 `5px 5px 0 #14b8a6` · L3 `8px 8px 0 #eab308` · L4 `12px 12px 0 #000`
-**Motion:** `cubic-bezier(.34,1.56,.64,1)` · 160 / 280 / 440ms
-
-**Rules:**
-- Clashing pastel + primary accents.
-- Black outlines on cards and buttons (2-3px).
-- Terrazzo / zigzag / squiggle decorative patterns.
-- Mix rounded corners and sharp corners on same view.
-- Solid colored drop shadows (not blurred).
-
-**Flourish picks:** Terrazzo Pattern · Squiggle Underline · Colored Offset Shadow
-
----
-
-### 22. Sketchbook
-
-**Feel:** Hand-drawn, pencil, loose. Feels like a designer's notebook page.
-
-**Color ramp:** `#fdfbf6` · `#f5f0e3` · `#e4dcc6` · `#c4b89a` · `#9a8b65` · `#6b5f42` · `#44392a` · `#2b2317` · `#18130c` · `#0c0906`
-**Accents:** pencil graphite `#2b2317` · sepia `#8a5a2b` · dusty blue `#4a6978`
-
-**Type:**
-- Headline: `"Caveat"` 700 or `"Architects Daughter"` 400
-- Body: `Nunito` 400, line-height 1.6
-- Mono: `"Cascadia Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 32 · 48
-- Google Fonts: `Caveat:wght@400;600;700&family=Architects+Daughter&family=Nunito:wght@300;400;600`
-
-**Spacing:** 4 · 8 · 12 · 18 · 26 · 40 · 56 · 84 · 112 (organic)
-**Radius:** 4 · 8 · 14 · 22
-**Shadow:** pencil-smudge soft. L1 `0 1px 2px rgba(43,35,23,.08)` · L2 `0 2px 6px rgba(43,35,23,.10)` · L3 `0 4px 12px rgba(43,35,23,.12)` · L4 `0 8px 20px rgba(43,35,23,.15)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 180 / 320 / 500ms
-
-**Rules:**
-- Hand-drawn fonts for headlines + display.
-- Slight element rotation (0.5-1.5deg) for sketchy feel.
-- Dashed or dotted borders (hand-drawn effect).
-- Paper-texture backgrounds welcome.
-- Sketchy arrows and squiggle dividers.
-
-**Flourish picks:** Squiggle Underline · Hand-Drawn Arrow · Pencil Margin Note
-
----
-
-### 23. Retro Futurism
-
-**Feel:** 70s sci-fi, chrome edges, wide stretched type, burnt orange + teal. Bladerunner-meets-Apollo.
-
-**Color ramp:** `#fef6e8` · `#fde4b8` · `#f9c878` · `#ec9a3f` · `#c9691e` · `#8a3a12` · `#5a2810` · `#3b1a0b` · `#231007` · `#120803`
-**Accents:** teal `#0891b2` · mustard `#eab308` · cream `#fef6e8` · chrome silver gradient
-
-**Type:**
-- Headline: `"Righteous"` 400 or `"Bungee"` 400 wide display
-- Body: `Inter` 500, line-height 1.5
-- Mono: `"Space Mono"` 500
-- Scale: 14 · 16 · 18 · 24 · 38 · 60
-- Google Fonts: `Righteous&family=Bungee&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 72 · 112
-**Radius:** 0 · 2 · 4 · 16 (mix sharp + occasional curve)
-**Shadow:** chrome-tinted. L1 `0 1px 0 rgba(255,255,255,.3), 0 2px 4px rgba(0,0,0,.15)` · L2 same + blur 4 · L3 same + blur 8 · L4 same + blur 16
-**Motion:** `cubic-bezier(.25,.46,.45,.94)` · 200 / 400 / 640ms
-
-**Rules:**
-- Wide-set type for headlines (letter-spacing 0.05-0.1em).
-- Burnt orange + teal is the signature combo.
-- Chrome gradient (silver) on buttons and CTA borders.
-- Sunburst / starburst motifs as decorative accents.
-- Dark-mode variant natural.
-
-**Flourish picks:** Chrome Border · Sunburst Motif · Wide Letterspacing
-
----
-
-### 24. Cyberpunk Neon
-
-**Feel:** Dark + neon magenta/cyan/purple. Glitch effects, hard angles, deliberately oppressive.
-
-**Color ramp:** `#030014` · `#0a0a1e` · `#14142b` · `#1e1e40` · `#2e2e60` · `#4a4a8a` · `#8080bf` · `#b3b3d9` · `#d6d6ed` · `#f5f5ff`
-**Accents:** neon magenta `#ff006e` · cyan `#00f5ff` · purple `#8338ec` · yellow-warning `#ffbe0b`
-
-**Type:**
-- Headline: `"Rajdhani"` 700 or `"Orbitron"` 800 geometric
-- Body: `Inter` 500, line-height 1.5
-- Mono: `"Share Tech Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 32 · 52
-- Google Fonts: `Rajdhani:wght@400;500;600;700&family=Orbitron:wght@500;700;800;900&family=Inter:wght@400;500;600&family=Share+Tech+Mono`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
-**Radius:** 0 · 0 · 2 · 4 (sharp)
-**Shadow:** neon glow. L1 `0 0 4px rgba(255,0,110,.5)` · L2 `0 0 12px rgba(255,0,110,.4), 0 0 24px rgba(131,56,236,.3)` · L3 `0 0 20px rgba(0,245,255,.5)` · L4 `0 0 40px rgba(0,245,255,.6)`
-**Motion:** `cubic-bezier(.7,0,.3,1)` · 120 / 240 / 400ms (glitchy)
-
-**Rules:**
-- Dark background, neon foreground.
-- Hard angles, zero curves on primary elements.
-- Neon glow on interactive states.
-- Occasional glitch offset (::after translated 2px).
-- Uppercase headings with wide letter-spacing.
-- Never use neutral color accents — always neon.
-
-**Flourish picks:** Neon Glow · Glitch Offset · Chromatic Split
-
----
-
-### 25. Art Deco
-
-**Feel:** 1920s luxury, gold accents, fan shapes, vertical symmetry, Gatsby-era.
-
-**Color ramp:** `#fef9f0` · `#f2e4c2` · `#d9c08a` · `#b89a5a` · `#8a6f3a` · `#5a4520` · `#3d2f16` · `#241d0e` · `#141008` · `#0a0704`
-**Accents:** gold `#d4af37` · deep navy `#1e3a5f` · burgundy `#7c1d2e`
-
-**Type:**
-- Headline: `"Limelight"` 400 display or `"Poiret One"` 400 thin elegant
-- Body: `"Cormorant Garamond"` 400, line-height 1.65
-- Scale: 12 · 14 · 16 · 22 · 36 · 64
-- Google Fonts: `Limelight&family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400`
-
-**Spacing:** 4 · 8 · 14 · 22 · 36 · 56 · 88 · 136 · 200 (grand)
-**Radius:** 0 · 0 · 0 · 2 (angular)
-**Shadow:** rarely — use geometric ornament instead.
-**Motion:** slow elegant · 240 / 480 / 720ms
-
-**Rules:**
-- Gold hairlines as dividers (1px).
-- Vertical symmetry on hero sections.
-- Fan-shape and sunburst motifs as ornament.
-- Tall thin typography with extreme letter-spacing.
-- Deep navy + cream + gold is the signature palette.
-- No rounded corners, no gradients except gold foil effect.
-
-**Flourish picks:** Gold Hairline · Fan Ornament · Vertical Symmetry
-
----
-
-### 26. Botanical Herbarium
-
-**Feel:** Muted greens + warm cream. Italic display, botanical illustration adjacency, herbarium-specimen feel.
-
-**Color ramp:** `#fbf9f3` · `#f0ece0` · `#dfd8c2` · `#c2b89a` · `#9a9276` · `#6b6a4c` · `#48472f` · `#2a2b1b` · `#18180f` · `#0b0b06`
-**Accents:** sage `#7a8b5c` · moss `#556b3a` · ink brown `#48472f` · burnt sienna `#9a3e1c`
-
-**Type:**
-- Headline: `"Cormorant Garamond"` 600 italic display
-- Body: `"Source Serif 4"` 400, line-height 1.7
-- Mono: `"IBM Plex Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 32 · 48
-- Google Fonts: `Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400`
-
-**Spacing:** 4 · 8 · 12 · 18 · 28 · 44 · 68 · 100 · 144
-**Radius:** 2 · 4 · 8 · 12
-**Shadow:** soft earth-tinted. L1 `0 1px 2px rgba(72,71,47,.08)` · L2 `0 2px 6px rgba(72,71,47,.10)` · L3 `0 4px 12px rgba(72,71,47,.12)` · L4 `0 8px 20px rgba(72,71,47,.14)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 200 / 360 / 520ms
-
-**Rules:**
-- Italic display type for headlines.
-- Sage + moss + ink brown palette.
-- Hairline botanical-style borders.
-- Latin-style small caps for labels.
-- No bright accents — all earth tones.
-- Line engravings / botanical illustrations welcome.
-
-**Flourish picks:** Botanical Border · Italic Kicker · Small-Caps Label
-
----
-
-### 27. Kraft Paper
-
-**Feel:** Brown paper bag texture, rubber stamps, ink-on-cardboard. Hand-made small-batch feel.
-
-**Color ramp:** `#f4ead6` · `#e8d9b3` · `#d4bf8e` · `#b89e68` · `#8e7445` · `#634e2a` · `#3d2e17` · `#241a0d` · `#140d06` · `#0a0603`
-**Accents:** rubber-stamp red `#a3281c` · charcoal `#2a2218` · muted teal `#4a6c63`
-
-**Type:**
-- Headline: `"Courier Prime"` 700, stenciled feel
-- Body: `"Anonymous Pro"` 400, line-height 1.55
-- Display alt: `"Special Elite"` for hand-stamped
-- Scale: 12 · 14 · 16 · 20 · 28 · 44
-- Google Fonts: `Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Anonymous+Pro:ital,wght@0,400;0,700;1,400&family=Special+Elite`
-
-**Spacing:** 4 · 8 · 12 · 16 · 24 · 32 · 48 · 72 · 104
-**Radius:** 0 · 2 · 4 · 6
-**Shadow:** ink-blot soft. L1 `0 1px 2px rgba(99,78,42,.15)` · L2 `0 2px 6px rgba(99,78,42,.18)` · L3 `0 4px 12px rgba(99,78,42,.22)` · L4 `0 8px 20px rgba(99,78,42,.26)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 180 / 320 / 500ms
-
-**Rules:**
-- Warm brown/kraft backgrounds on cards.
-- Rubber-stamp red for emphasis (sparingly).
-- Typewriter / stencil typography.
-- Slight ink-bleed effect on borders (inset box-shadow).
-- Hand-rough uneven edges (no perfect alignment).
-
-**Flourish picks:** Rubber Stamp · Paper Grain · Hand-Rough Border
-
----
-
-### 28. Dashboard Operator
-
-**Feel:** Data-dense, telemetry-style, serious operator UI. Mono + compact sans, alert colors, table-first.
-
-**Color ramp:** `#0b0f19` · `#111827` · `#1f2937` · `#374151` · `#4b5563` · `#6b7280` · `#9ca3af` · `#d1d5db` · `#e5e7eb` · `#f9fafb`
-**Accents:** acid green `#10b981` (OK) · alert red `#ef4444` · amber warning `#f59e0b` · info cyan `#06b6d4`
-
-**Type:**
-- Headline: `"JetBrains Mono"` 700 or `Inter` 700
-- Body: `Inter` 400, line-height 1.45 (compact)
-- Mono: `"JetBrains Mono"` 500
-- Scale: 11 · 13 · 14 · 16 · 20 · 28
-- Google Fonts: `JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700`
-
-**Spacing:** 2 · 4 · 6 · 8 · 12 · 16 · 24 · 32 · 48 (tight)
-**Radius:** 2 · 4 · 6 · 6
-**Shadow:** none (borders do the work).
-**Motion:** `linear` · 60 / 120 / 200ms (snappy)
-
-**Rules:**
-- Dark background default; everything high contrast.
-- Monospace numerals in all tables/metrics.
-- Status colors used ONLY for semantic state (OK / warn / error / info).
-- Tables with zebra stripes, 1px hairline borders.
-- Small-caps labels for sections.
-- Information density > breathing room.
-
-**Flourish picks:** Status Dot · Mono Table · Small-Caps Section Label
-
----
-
-### 29. Anti-Design
-
-**Feel:** Intentionally ugly. Clashing fonts, broken grid, provocative. Subverts expectations. Used sparingly for effect.
-
-**Color ramp:** `#ffffff` · `#f0f0f0` · `#cccccc` · `#888888` · `#555555` · `#000000` · `#ff00ff` · `#00ff00` · `#ffff00` · `#ff0000`
-**Accents:** hot pink `#ff00aa` · lime `#aaff00` · electric yellow `#ffee00`
-
-**Type:**
-- Headline: `"Times New Roman"` serif (system, no import)
-- Body: `"Comic Sans MS"` or `"Papyrus"` (intentionally)
-- Display alt: `"Wingdings"` for chaos
-- Scale: 11 · 14 · 19 · 23 · 38 · 70 (deliberately uneven)
-- Google Fonts: none (system fonts intentionally)
-
-**Spacing:** 3 · 7 · 11 · 17 · 23 · 31 · 43 · 59 · 89 (primes)
-**Radius:** 0 · 30 · 3 · 40 (mix wildly)
-**Shadow:** clashing. L1 `7px 7px 0 #ff00aa` · L2 `-4px 4px 0 #aaff00` · L3 `0 10px 0 #ffee00` · L4 `3px -3px 0 #000`
-**Motion:** `steps(3)` · 90 / 220 / 370ms
-
-**Rules:**
-- Clashing fonts are the point — mix serif + Comic Sans + system.
-- Broken grid — elements aligned to nothing.
-- Clashing color combos (hot pink on lime).
-- Mixed radii — some elements pill-round, others sharp.
-- Intentionally misaligned shadows and borders.
-- Use only for artifacts meant to provoke.
-
-**Flourish picks:** Clashing Font Pair · Broken Grid · Mismatched Radii
-
----
-
-### 30. Midnight Marine
-
-**Feel:** Deep navy + aqua + pale gold + cream. Modern nautical. Calm, upscale, considered.
-
-**Color ramp:** `#f5f3ed` · `#e4e0d0` · `#c9c3a8` · `#8a9ba5` · `#4a6b7a` · `#2a4a5f` · `#1a2f40` · `#0f1e2b` · `#08121a` · `#04090d`
-**Accents:** aqua `#6ec1c9` · pale gold `#c9a867` · cream `#f5f3ed` · signal red `#c13f3f`
-
-**Type:**
-- Headline: `"Cormorant Garamond"` 600, italic welcome
-- Body: `Inter` 400, line-height 1.65
-- Mono: `"IBM Plex Mono"` 400
-- Scale: 13 · 15 · 17 · 22 · 32 · 52
-- Google Fonts: `Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400`
-
-**Spacing:** 4 · 8 · 12 · 18 · 28 · 44 · 68 · 100 · 144 (grand)
-**Radius:** 0 · 2 · 4 · 6 (restrained)
-**Shadow:** deep, quiet. L1 `0 1px 3px rgba(8,18,26,.15)` · L2 `0 2px 8px rgba(8,18,26,.20)` · L3 `0 4px 16px rgba(8,18,26,.25)` · L4 `0 8px 32px rgba(8,18,26,.30)`
-**Motion:** `cubic-bezier(.4,0,.2,1)` · 240 / 420 / 640ms (deliberate)
-
-**Rules:**
-- Dark navy backgrounds with cream text preferred.
-- Pale gold for accents only — never dominant.
-- Hairline gold rules (1px) as dividers.
-- Italic display type for editorial feel.
-- Compass-rose or nautical ornament sparingly.
-- Aqua used for interactive states only.
-
-**Flourish picks:** Gold Hairline · Italic Display · Compass Ornament
-
----
 
 ## SIGNATURE FLOURISH LIBRARY
 
-Ten flourish types. Each has: default CSS + per-tradition variant if needed + HTML insertion hook.
-
-### Drop Cap
-```css
-.vd-dropcap { float: left; font-family: var(--headline); font-size: 3.5em; line-height: 0.85; padding: 0.12em 0.15em 0 0; color: var(--accent); }
-```
-**Insertion:** wrap first letter of the first `<p>` after each `<h1>` in `<span class="vd-dropcap">`.
-**Fits:** Editorial, Neo-Classical, Warm Handmade, Academic, Luxury Serif.
-
-### Kicker
-```css
-.vd-kicker { font-family: var(--body); font-size: .75em; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .4em; }
-/* Editorial variant: italic instead of uppercase */
-.vd-kicker--editorial { font-style: italic; font-weight: 600; text-transform: none; }
-```
-**Insertion:** prepend `<span class="vd-kicker">[section number or label]</span>` to each h2.
-**Fits:** everything. Default flourish.
-
-### Rule Line
-```css
-.vd-rule { border: none; border-top: 1px solid var(--ink-3); margin: 1.5em 0; }
-/* Doubled (Neo-Classical): */
-.vd-rule--double { border-top: 1px solid var(--ink-3); border-bottom: 1px solid var(--ink-3); height: 3px; background: transparent; }
-/* Thick (Neo-Brutalist): */
-.vd-rule--thick { border-top: 3px solid var(--ink-900); }
-```
-**Insertion:** add `<hr class="vd-rule">` between major sections.
-**Fits:** Swiss, Technical, Academic, Neo-Classical, Neo-Brutalist.
-
-### Grain Texture
-```css
-.vd-grain { background-image: radial-gradient(rgba(0,0,0,.12) 0.5px, transparent 0.5px); background-size: 3px 3px; }
-```
-**Insertion:** apply `.vd-grain` to the body or main container as an overlay.
-**Fits:** Warm Handmade, Editorial, Warm Minimal.
-
-### Pull Quote
-```css
-.vd-pullquote { border-left: 4px solid var(--accent); padding: .5em 1em; font-family: var(--headline); font-style: italic; font-size: 1.2em; color: var(--ink-2); margin: 1.5em 0; }
-```
-**Insertion:** wrap selected long `<p>` in `<blockquote class="vd-pullquote">`.
-**Fits:** Editorial, Neo-Classical, Warm Handmade, Luxury Serif.
-
-### Ornament Divider
-```css
-.vd-ornament { text-align: center; color: var(--accent); letter-spacing: .3em; font-size: 1.2em; margin: 2em 0; }
-.vd-ornament::before { content: "✦  ❋  ✦"; }
-/* Luxury variant: */
-.vd-ornament--luxury::before { content: "◆  ◆  ◆"; color: var(--accent-gold); }
-```
-**Insertion:** replace `<hr>` or insert between major sections.
-**Fits:** Warm Handmade, Luxury Serif, Neo-Classical, Editorial.
-
-### Small-Caps Label
-```css
-.vd-smcp { font-variant: small-caps; letter-spacing: .1em; font-weight: 700; color: var(--accent); }
-```
-**Insertion:** wrap nav items, metadata, bylines in `<span class="vd-smcp">`.
-**Fits:** Swiss, Technical, Academic, Neo-Classical, Luxury Serif, Warm Minimal.
-
-### Offset Box Shadow
-```css
-.vd-offset { box-shadow: 5px 5px 0 var(--ink-900); border: 2px solid var(--ink-900); }
-```
-**Insertion:** apply to cards, buttons, callout blocks.
-**Fits:** Neo-Brutalist exclusively — signature of that tradition.
-
-### ASCII Divider
-```css
-.vd-ascii { font-family: var(--mono); color: var(--ink-3); white-space: pre; text-align: center; margin: 1.5em 0; }
-.vd-ascii::before { content: "- - - - - - - - - -"; }
-```
-**Insertion:** between sections, replacing `<hr>`.
-**Fits:** Monochrome, Technical, Neon Terminal.
-
-### Inline Code Accent
-```css
-code { font-family: var(--mono); background: var(--ramp-100); padding: .15em .4em; border-radius: 3px; font-size: .9em; color: var(--accent); }
-```
-**Insertion:** style any existing `<code>` tags — no DOM insertion needed.
-**Fits:** Technical, Monochrome, Neo-Brutalist.
+The ten flourish types (CSS + insertion hooks + tradition fit) live in **`references/flourishes.md`** — load it at Step 6 (Flourish) and at Phase 5 when applying the chosen flourish.
 
 ---
 
@@ -1659,7 +699,7 @@ code { font-family: var(--mono); background: var(--ramp-100); padding: .15em .4e
 
 Each step generates a decision HTML file. Use a consistent shell with per-step variations.
 
-### Shell skeleton (applies to all 5 step pages)
+### Shell skeleton (applies to all 6 step pages)
 
 ```html
 <!DOCTYPE html>
@@ -1688,7 +728,7 @@ Each step generates a decision HTML file. Use a consistent shell with per-step v
 </head>
 <body>
 <div class="page">
-  <div class="eyebrow">Step [N] of 5 · [StepName]</div>
+  <div class="eyebrow">Step [N] of 6 · [StepName]</div>
   <h1>[Decision question]</h1>
   <p class="deck">[Plain-English framing — 1 sentence]</p>
   [STEP-SPECIFIC CONTENT]
@@ -1704,7 +744,7 @@ Each step generates a decision HTML file. Use a consistent shell with per-step v
 - Section B: "Browse all" — flat grid, 5 columns × N rows of small tiles (56-64px). Each tile = name in the tradition's type-forward thumbnail style.
 - Footer: "Reply with a tradition name (e.g., `Editorial`) or `A`/`B`/`C` for one of the top 3 matches."
 
-### Step 2/3/4 (Color/Type/Mood) — structure
+### Steps 2/3/4/5 (Composition/Color/Type/Mood) — structure
 
 - 4 option cards, 2×2 grid. Each card has:
   - Letter badge (A/B/C/D)
@@ -1714,7 +754,7 @@ Each step generates a decision HTML file. Use a consistent shell with per-step v
 - Recommended badge on one card (usually A or the tradition-default).
 - Footer: "Reply with `Option A`, `A`, or `Option A but [modification]`."
 
-### Step 5 (Flourish) — structure
+### Step 6 (Flourish) — structure
 
 - Section A: "✦ Fits [Tradition] best" — 3 curated flourish tiles. Each tile renders the flourish *applied to the tradition*, with the flourish name labeled.
 - Section B: "Full library" — all ~10 flourishes as smaller tiles, flat grid.
@@ -1724,7 +764,7 @@ Each step generates a decision HTML file. Use a consistent shell with per-step v
 ### Run summary page (`index.html`)
 
 Mirror the decision-hub style used elsewhere in the decision-kit (serif display, mono kickers, warm paper bg). Shows:
-- The 5 locked choices
+- The 6 locked choices
 - The final resolved aesthetic summary
 - Links to each decision page
 - Links to the original + styled artifact
@@ -1769,7 +809,9 @@ Mirror the decision-hub style used elsewhere in the decision-kit (serif display,
 4. **Preserve the original.** Never overwrite the target. Always write `.styled.html` alongside.
 5. **Plain English.** Option descriptions talk about feel and audience, not tokens. Save the JSON for the tokens file.
 6. **Tokens.json is sacred.** It's what makes the skill compound across artifacts. Write it every run. Respect existing ones as suggestion #1.
-7. **Flourish is the hero step.** Step 5 is what separates generic from characterful. Don't treat it as a throwaway.
+7. **Flourish is the hero step.** Step 6 is what separates generic from characterful. Don't treat it as a throwaway.
 8. **Fuzzy match is friendly.** Accept typos, partial names, abbreviations (`brutal` → Neo-Brutalist). If truly ambiguous, show numbered candidates.
 9. **Respect existing aesthetic.** If the target artifact already uses a well-known tradition (detect by font family hints), suggest that tradition as match #1.
 10. **Add to `.gitignore`.** First time `.visual-design/` is created in a project, append a line to `.gitignore` (create if missing).
+11. **Nothing banned ships.** Run the `references/banned-defaults.md` self-check on every stylesheet you write. Banned faces and hexes surviving into output is a bug, not a style choice.
+12. **The gate is not optional.** Every run ends with the `references/critique-gate.md` pass — render, critique, fix — before the user sees the result. If no renderer exists, the CSS self-review fallback still runs. Never fix a gate failure by deleting the distinctive move.

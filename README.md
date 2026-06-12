@@ -303,7 +303,8 @@ These do the thinking for you. Context gathering, option generation, visual comp
 | `/shape` | Design and implementation planning | You know *what*, now figure out *how* |
 | `/product-strategy` | Product "what and why" - problem, users, positioning, business model | You're about to build a product |
 | `/product-design` | Product "how" - framework, database, visual direction, UX flows | You know what to build, now make the tech and design calls |
-| `/visual-design` | Aesthetic polish for any HTML or SVG. Pick a tradition, tune color/type/mood/flourish | You have an existing artifact that looks generic and you want it to feel like *something* |
+| `/visual-design` | Aesthetic polish for any HTML or SVG. Pick a tradition, tune composition/color/type/mood/flourish | You have an existing artifact that looks generic and you want it to feel like *something* |
+| `/design-system` | Generate a unique design system through a four-step designer workshop - archetype, sliders, references, tension | You want a full system (palette, type pairing, icons, showcase) that doesn't look like another shadcn default |
 | `/ticket-breakdown` | Ticket to implementation plan - scope, approach, testing, PR plan | You have a ticket and want to think before coding |
 | `/self-code-review` | Review your own code before the PR | You've written code and want to catch issues before a teammate sees it |
 | `/excavate` | Surface decisions hidden in an existing codebase | You inherited a project or want to audit what's already decided |
@@ -400,13 +401,22 @@ Post-step aesthetic thinking. You already have an artifact (a brief from `/strat
 ```
 
 **What it does:**
-- Picks from **30 aesthetic traditions** (Editorial, Swiss, Neo-Brutalist, Warm Minimal, Cyberpunk Neon, Neon Terminal, Kraft Paper, Art Deco, 22 more)
-- **HTML mode (5 steps):** tradition → color → type → mood → signature flourish
+- Picks from **30 aesthetic traditions** (Editorial, Swiss, Neo-Brutalist, Warm Minimal, Cyberpunk Neon, Neon Terminal, Kraft Paper, Art Deco, 22 more) — every tradition has a unique typographic voice, enforced by the shared design DNA
+- **HTML mode (6 steps):** tradition → composition (CSS-only layout art direction) → color → type → mood → signature flourish
 - **SVG mode (3 steps):** tradition → stroke weight → color treatment (faithful / mono / accent / duotone)
+- Enforces the **banned-defaults list** (no Inter-everywhere, no indigo gradients, no timid palettes) and ends every run with a **render-and-critique gate** — the skill screenshots its own output and fixes what it sees before showing you
 - Writes `<name>.styled.html` or `<name>.styled.svg` alongside the original (non-destructive)
 - Saves `.visual-design/tokens.json` at the project root. Next run in the same project surfaces your saved aesthetic as suggestion #1
 
 The difference between this and `/product-design`: `/product-design` picks *which* direction at a system level. `/visual-design` goes deep on *how* for a specific artifact. Which vs. how.
+
+#### `/design-system` - Generate a unique design system
+
+A four-step designer workshop — archetype cards, adjective sliders, reference triage, signature tension — that generates a complete system: semantic palette, curated Google Fonts pairing, ~20 novel SVG icons, and an applied showcase, bundled framework-agnostic in `design/` for any downstream generator.
+
+**Amplification rules keep it honest:** every generated choice must trace to a workshop signal, the tension must produce one visible rule-breaking move, and slider extremes override the archetype's comfortable defaults. Outputs pass the same banned-defaults list and critique gate as `/visual-design`.
+
+Both design skills read their shared rules from `shared/design-dna/` — the banned-defaults list, characterful font pool, composition signatures, and critique gate live there once and sync into each skill's `references/` via `scripts/sync-dna.sh` (CI-checkable with `--check`).
 
 ---
 

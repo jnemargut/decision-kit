@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 2 — /visual-design Upgrade Approach</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .flow { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .step { display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:13.5px; color:var(--muted); }
+  .step .n { width:22px; height:22px; line-height:22px; text-align:center; border-radius:6px; background:#0e0e16; color:var(--accent); font-weight:700; font-size:11px; flex-shrink:0; }
+  .step .new { color:var(--green); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--green); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .step .chg { color:var(--yellow); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--yellow); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 2 of 6 · /visual-design</div>
+  <h1>How does /visual-design get distinctive?</h1>
+  <p class="lede">The re-skin skill's catalog of 30 traditions is its identity — name-based picking, type-forward thumbnails, signature flourishes. The question is how far to go: clean the catalog, extend it into composition, or change the generation model itself.</p>
+  <div class="context"><b>Builds on Decision 1 (Option A):</b> token diversity + banned defaults is the first attack. These options differ in how much further past tokens they reach.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>The characterful-font supply is deep — no two traditions need to share a face.</b> 2026's distinctive picks: Bricolage Grotesque ("the trending typeface of 2025–26"), Space Grotesk, Plus Jakarta Sans, Fraunces (variable, "wonky" optical features), General Sans/Satoshi via Fontshare. Pairing one ubiquitous body with a distinctive display is "the secret weapon of modern product design." <span class="src">Typewolf, Precode, MaxiBestOf</span></li>
+      <li><b>Anthropic's fix is dimension guidance + named bans, not just better defaults.</b> "Overused font families (Inter, Roboto, Arial, system fonts)" and "purple gradients on white" are banned verbatim; typography, color, motion, spatial composition, and backgrounds get individual direction. "The key is intentionality, not intensity." <span class="src">frontend-design SKILL.md</span></li>
+      <li><b>Composition can change without touching the DOM.</b> CSS Grid `grid-template-areas` lets you art-direct entirely from the stylesheet — re-area existing semantic regions into magazine spreads, asymmetric heroes, broken grids via column spans and vertical offsets. Print-level art direction, same HTML. <span class="src">Smashing Magazine "Art Directing For The Web", HubSpot broken-grid guide</span></li>
+      <li><b>Audit: the catalog's convergence is concentrated, not uniform.</b> Inter/Inter Tight appears in at least 5 of 30 traditions' stacks, and JetBrains Mono is the default mono nearly everywhere. The expressive traditions (Neo-Brutalist, Editorial Print) are already distinct — the "safe" half of the catalog is where sameness lives, and the affinity tables route most artifact types to exactly that half.</li>
+      <li><b>Audit: the skill already has a calibration hook.</b> Step 3d fires web searches for current examples of the chosen tradition. It currently only nudges accent hue and font weight — it's an underused seam for injecting freshness without architectural change.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Catalog overhaul in place</h3>
+      <p class="sub">Rewrite the 30 traditions so no two share a typographic voice, draw from the characterful-font pool, add a BANNED DEFAULTS section the rewrite step must obey. Flow untouched.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Tradition <span class="chg">retuned</span></div>
+        <div class="step"><span class="n">2</span>Color → Type → Mood <span class="chg">new tokens</span></div>
+        <div class="step"><span class="n">3</span>Flourish</div>
+        <div class="step"><span class="n">4</span>Rewrite style block <span class="chg">ban-list enforced</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Smallest diff, fully backward compatible, ships fastest</p>
+        <p class="pro">Pure data/prompt change — exactly what Decision 1 scoped</p>
+        <p class="con">Bones still identical — a Zine brief and a Swiss brief share a skeleton</p>
+        <p class="con">30 traditions is still a finite pool; heavy users will see repeats</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Overhaul + composition signatures (CSS-only)</h3>
+      <p class="sub">Everything in A, plus each tradition gets a composition signature — grid-template-areas remixes, asymmetric heroes, broken-grid offsets, density profiles — applied purely in CSS. A new "Composition" step joins the flow.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Tradition <span class="chg">retuned</span></div>
+        <div class="step"><span class="n">2</span>Composition — bones remix via grid-template-areas <span class="new">new step</span></div>
+        <div class="step"><span class="n">3</span>Color → Type → Mood <span class="chg">new tokens</span></div>
+        <div class="step"><span class="n">4</span>Flourish</div>
+        <div class="step"><span class="n">5</span>Rewrite style block <span class="chg">ban-list + layout CSS</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Attacks both top causes — tokens AND bones — in one coherent upgrade</p>
+        <p class="pro">CSS-only: DOM untouched, so artifact safety guarantee survives</p>
+        <p class="pro">Composition is the dimension Anthropic's skill weights hardest</p>
+        <p class="con">~2× the effort of A; needs careful per-artifact-type testing</p>
+        <p class="con">Some artifacts (dense tables/dashboards) can't take much remixing</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Generative house blend</h3>
+      <p class="sub">Keep the catalog as a grammar, add a "blend" path: the skill composes a never-before-seen tradition per project from primitives (font pool, palette logic, flourishes), seeded by the existing calibration web search.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Catalog pick <em>or</em> "blend for me" <span class="new">new path</span></div>
+        <div class="step"><span class="n">2</span>Web calibration seeds primitives <span class="chg">expanded</span></div>
+        <div class="step"><span class="n">3</span>Compose bespoke tradition <span class="new">new</span></div>
+        <div class="step"><span class="n">4</span>Standard flow on the blend</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Infinite variety — cross-project uniqueness guaranteed</p>
+        <p class="pro">Reuses the calibration hook that already exists</p>
+        <p class="con">Quality variance is real: composed aesthetics misfire without a critique loop (Decision 5 territory)</p>
+        <p class="con">Blends are unpicked/unproven — undermines the catalog's "curated grammar" promise</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Rebuild on the five dimensions</h3>
+      <p class="sub">Replace the tradition catalog with Anthropic's dimension model: the skill derives a bespoke direction per artifact across typography, color, motion, spatial composition, backgrounds — catalog becomes optional inspiration.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Artifact analysis → concept direction <span class="new">new</span></div>
+        <div class="step"><span class="n">2</span>Five-dimension derivation <span class="new">new</span></div>
+        <div class="step"><span class="n">3</span>User reviews direction, not catalog picks <span class="chg">changed</span></div>
+        <div class="step"><span class="n">4</span>Rewrite + apply</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Closest to documented best practice; highest ceiling</p>
+        <p class="con">Throws away the kit's differentiator — pickable, previewable, named traditions</p>
+        <p class="con">Biggest rewrite, breaks project memory (tokens.json continuity)</p>
+        <p class="con">Decision pages get abstract — "direction" is harder to choose between than rendered traditions</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Overhaul only</th><th class="reccol">B · + Composition ★</th><th>C · House blend</th><th>D · Five dimensions</th></tr>
+    <tr><td>Sameness reduction</td><td class="mid">Good — voice varies, bones don't</td><td class="reccol good">Strong — voice + bones</td><td class="good">Strongest across projects</td><td class="good">Strong per artifact</td></tr>
+    <tr><td>Quality consistency</td><td class="good">High — curated</td><td class="reccol good">High — curated</td><td class="bad">Variable without critique loop</td><td class="mid">Depends on model mood</td></tr>
+    <tr><td>Effort</td><td class="good">~1 week</td><td class="reccol mid">~2 weeks</td><td class="mid">~2 weeks</td><td class="bad">3+ weeks</td></tr>
+    <tr><td>Risk to artifacts</td><td class="good">None</td><td class="reccol mid">Low — CSS-only, needs testing</td><td class="mid">Medium</td><td class="bad">High — full rewrite</td></tr>
+    <tr><td>Preserves catalog identity</td><td class="good">Fully</td><td class="reccol good">Fully — extends it</td><td class="mid">Partially</td><td class="bad">No</td></tr>
+    <tr><td>Variety for heavy users</td><td class="bad">Finite pool</td><td class="reccol mid">Pool × compositions</td><td class="good">Infinite</td><td class="good">High</td></tr>
+    <tr><td>PR reviewability</td><td class="good">Clean data diff</td><td class="reccol good">Clean, two clear commits</td><td class="mid">New subsystem</td><td class="bad">Rewrite-sized</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. It executes Decision 1 fully and takes the one slice of the layout problem that's safe to take now (CSS-only, DOM untouched). C's blend path layers on cleanly later — after Decision 5 gives the skill eyes.
+  </div>
+</div>
+</body>
+</html>

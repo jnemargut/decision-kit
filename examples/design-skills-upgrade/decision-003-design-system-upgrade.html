@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 3 — /design-system Upgrade Approach</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .flow { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .step { display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:13.5px; color:var(--muted); }
+  .step .n { width:22px; height:22px; line-height:22px; text-align:center; border-radius:6px; background:#0e0e16; color:var(--accent); font-weight:700; font-size:11px; flex-shrink:0; }
+  .step .new { color:var(--green); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--green); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .step .chg { color:var(--yellow); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--yellow); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 3 of 6 · /design-system</div>
+  <h1>How does /design-system stop converging?</h1>
+  <p class="lede">The workshop skill collects four rich signals — archetype, adjective sliders, reference DNA, signature tension — then launders them through a static archetype→font lookup table and a fixed showcase skeleton. The result: different inputs, weirdly similar outputs. Where does the upgrade's center of gravity go?</p>
+  <div class="context"><b>Builds on Decisions 1–2:</b> banned defaults are now kit policy, and /visual-design is getting unique voices per tradition + CSS-only composition signatures. This decision is about the workshop skill's distinct failure mode.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>The "shadcn default" effect is the named problem for design systems specifically.</b> AI tools treat the most statistically likely system (shadcn/Tailwind defaults, indigo gradients, rounded corners) as the answer; "AI tools that skipped the customization step made apps ugly." The customization step is exactly what this skill sells. <span class="src">Bhuwan Garbuja, AXE-WEB, Built In</span></li>
+      <li><b>Traceability is the test of a real identity system.</b> Brand-design practice: "if a brand can't connect its visual decisions back to its archetype, the archetype isn't real." Every generated choice should be traceable to a workshop signal — that's an enforceable rule, not just a value. <span class="src">Marlo Studios, brand archetype guides</span></li>
+      <li><b>"Dominant colors with sharp accents outperform timid, evenly-distributed palettes."</b> The current palette formula distributes semantic colors evenly — the timid pattern Anthropic's guidance warns against by name. <span class="src">Claude frontend-aesthetics cookbook</span></li>
+      <li><b>Audit: the archetype table converges on the banned font.</b> Inter appears in the type tendencies of Creator, Sage, Ruler, and Everyman — 4 of 12 archetypes share a body voice, and Fraunces/Playfair dominate display. The pool from Decision 2's research (Bricolage Grotesque, Space Grotesk, Plus Jakarta, Fontshare faces) barely appears.</li>
+      <li><b>Audit: the deliverable itself is a template.</b> Phase 6's showcase uses a "Fixed Skeleton" by design — every run produces the same tabs, same hero-card-form-nav Applied sections. A Jester system and a Ruler system ship in identical wrappers.</li>
+      <li><b>Audit: the signals are collected but under-spent.</b> Sliders only nudge saturation/scale; tension only moves "pop locations"; reference DNA falls back to recall when fetch fails. The skill's four discovery steps are its moat — and they currently buy very little variance.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Widen the pools + ban defaults</h3>
+      <p class="sub">Expand each archetype's type tendencies from ~4 to 12+ pairings drawn from the 2026 characterful pool, rewrite palette logic to "dominant + sharp accent," forbid Inter/Roboto/system as display or default body.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Workshop (unchanged)</div>
+        <div class="step"><span class="n">2</span>Archetype font table ×3 deeper <span class="chg">expanded</span></div>
+        <div class="step"><span class="n">3</span>Palette: dominant + sharp accent <span class="chg">rewritten</span></div>
+        <div class="step"><span class="n">4</span>Generation obeys ban list <span class="new">new</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Direct analog of Decision 1 — cheap, safe, clean diff</p>
+        <p class="pro">Kills the worst offenders (Inter ×4 archetypes) immediately</p>
+        <p class="con">A wider table the model still samples familiarly from — convergence happens at selection time, not just pool size</p>
+        <p class="con">Showcase template sameness untouched</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Make the signals bite (amplification rules)</h3>
+      <p class="sub">Keep the workshop, change what it buys: every output choice must trace to a named signal; slider extremes force non-obvious picks; the tension must produce at least one visible rule-breaking move; reference DNA can override the archetype table. Ban list + pool widening folded in as supporting data.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Workshop (unchanged UX)</div>
+        <div class="step"><span class="n">2</span>Signal→choice traceability required <span class="new">new rule</span></div>
+        <div class="step"><span class="n">3</span>Tension ⇒ one rule-breaking move <span class="new">new rule</span></div>
+        <div class="step"><span class="n">4</span>Wider pools + ban list <span class="chg">folded in</span></div>
+        <div class="step"><span class="n">5</span>Rationale printed per choice in showcase <span class="new">new</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Attacks this skill's actual failure mode — signal compression to the generic middle</p>
+        <p class="pro">Subsumes A: bans + wider pools become the data layer under the rules</p>
+        <p class="pro">Traceability makes outputs defensible ("Outlaw + 'warm but feral' → this palette")</p>
+        <p class="con">Rule-writing is subtle — over-constrain and outputs get gimmicky</p>
+        <p class="con">Showcase wrapper still fixed unless C is layered on</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Art-direct the deliverable</h3>
+      <p class="sub">Vary the showcase itself: per-archetype layout, copy voice, and motion for the showcase and Applied tab, reusing Decision 2's composition-signature machinery. The wrapper finally matches the system inside it.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Workshop + generation (unchanged)</div>
+        <div class="step"><span class="n">2</span>Showcase skeleton per archetype <span class="chg">12 variants</span></div>
+        <div class="step"><span class="n">3</span>Applied tab gets composition guidance <span class="new">new</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Biggest visible wow — the artifact users actually share stops being a template</p>
+        <p class="pro">Reuses /visual-design composition work — good sequencing economics</p>
+        <p class="con">Cosmetic if tokens underneath still converge — paint on the same fonts</p>
+        <p class="con">12 skeleton variants is real maintenance surface</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Live-trend curation engine</h3>
+      <p class="sub">Replace the static lookup entirely: each run fires web research for current font/palette movements matching the archetype + tension, and curates from live data — the calibration pattern promoted to the core mechanism.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Workshop (unchanged)</div>
+        <div class="step"><span class="n">2</span>Web research per run <span class="new">new core</span></div>
+        <div class="step"><span class="n">3</span>Curate from live trend data <span class="new">new</span></div>
+        <div class="step"><span class="n">4</span>Static table kept as offline fallback <span class="chg">demoted</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Never ages; maximum cross-run variety</p>
+        <p class="pro">Strong story for the repo ("library that never goes stale")</p>
+        <p class="con">Run quality hostage to search quality; slower, flakier</p>
+        <p class="con">Offline/headless runs degrade to the old behavior</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Wider pools</th><th class="reccol">B · Signals bite ★</th><th>C · Art-direct deliverable</th><th>D · Live curation</th></tr>
+    <tr><td>Sameness reduction</td><td class="mid">Moderate — selection still converges</td><td class="reccol good">Strong — inputs drive variance</td><td class="mid">Visible but surface-level</td><td class="good">Strong</td></tr>
+    <tr><td>Makes workshop inputs matter</td><td class="bad">No change</td><td class="reccol good">Core purpose</td><td class="mid">Archetype only</td><td class="mid">Indirect</td></tr>
+    <tr><td>Effort</td><td class="good">~3 days</td><td class="reccol mid">~1.5 weeks</td><td class="mid">~1.5 weeks</td><td class="bad">2+ weeks</td></tr>
+    <tr><td>Risk of gimmicky output</td><td class="good">Low</td><td class="reccol mid">Medium — rules need tuning</td><td class="good">Low</td><td class="bad">Higher — trend-chasing</td></tr>
+    <tr><td>Deliverable distinctiveness</td><td class="bad">Unchanged wrapper</td><td class="reccol mid">Rationale-rich, same wrapper</td><td class="good">Highest</td><td class="mid">Varies</td></tr>
+    <tr><td>Works offline / headless</td><td class="good">Yes</td><td class="reccol good">Yes</td><td class="good">Yes</td><td class="bad">Degrades</td></tr>
+    <tr><td>Reuses Decision 2 work</td><td class="mid">Ban list only</td><td class="reccol good">Ban list + font pool</td><td class="good">Composition machinery</td><td class="mid">Calibration pattern</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. This skill's moat is the workshop — four discovery signals that currently buy almost no variance. Amplification rules fix that, and A's pool widening + bans fold in as the data layer underneath. C is the natural fast-follow once /visual-design's composition machinery exists to borrow.
+  </div>
+</div>
+</body>
+</html>
