@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 6 — Contribution Packaging</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .flow { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .step { display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:13.5px; color:var(--muted); }
+  .step .n { width:22px; height:22px; line-height:22px; text-align:center; border-radius:6px; background:#0e0e16; color:var(--accent); font-weight:700; font-size:11px; flex-shrink:0; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 6 of 6 · Shipping</div>
+  <h1>How does this land in decision-kit?</h1>
+  <p class="lede">It's your repo — but it has a public CONTRIBUTING.md, a spec, and the ambition to take outside contributors. How this work lands sets the precedent for every future contribution. Four shapes for the same payload.</p>
+  <div class="context"><b>The payload (Decisions 1–5):</b> shared/design-dna + sync script, /visual-design overhaul + composition signatures, /design-system amplification rules, runtime critique gate, before/after gallery evidence.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Your own CONTRIBUTING.md already votes.</b> It asks for "one PR focused on a single change," an issue first for anything non-trivial, end-to-end testing on real examples — and that significant proposals include the resulting <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">.decisions/</code> folders in the PR. This strategy run is itself that artifact. <span class="src">decision-kit CONTRIBUTING.md</span></li>
+      <li><b>Review effectiveness collapses past ~400 lines.</b> The Cisco study: defect detection drops sharply beyond 400 LOC per review. The full payload here is thousands of lines across 6+ files — un-reviewable as one unit, even by you-plus-ultrareview. <span class="src">Knack engineering, awesomecodereviews.com</span></li>
+      <li><b>Stacked/sequential PRs keep the author unblocked.</b> Each phase merges as it's ready while the next is in flight; "teams naturally break work into 5–10 smaller PRs" and get faster review and higher quality on both sides. <span class="src">Ben Congdon, Axolo</span></li>
+      <li><b>The repo discourages variant forks and rewards composition.</b> "Propose tweaks to existing skills" over new near-duplicates — which supports upgrading the two skills in place rather than shipping a v2 fork beside them. <span class="src">decision-kit CONTRIBUTING.md</span></li>
+      <li><b>Dependency order is real.</b> D4's shared/design-dna must exist before either skill can reference it; the critique gate (D5) touches both skills and lands cleanest last. The payload has a natural 4-phase topology.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>One epic PR</h3>
+      <p class="sub">Everything on a <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">design-skills-v2</code> branch, one merge, one announcement.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Build everything on one branch</div>
+        <div class="step"><span class="n">2</span>One mega-review</div>
+        <div class="step"><span class="n">3</span>Merge + announce</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">One coherent story, zero coordination overhead</p>
+        <p class="pro">No intermediate half-upgraded states on main</p>
+        <p class="con">Thousands of lines — defect detection collapses past ~400</p>
+        <p class="con">Contradicts your own CONTRIBUTING.md ("one focused change")</p>
+        <p class="con">One bad piece blocks all the good pieces</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Phased PR train</h3>
+      <p class="sub">Four sequenced PRs matching the dependency topology, each independently shippable and reviewed (ultrareview each). An umbrella issue tracks the arc; this strategy's .decisions/ folder ships in PR 1 per your own convention.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>PR 1 — shared/design-dna + sync script + references/ refactor</div>
+        <div class="step"><span class="n">2</span>PR 2 — /visual-design: voice overhaul + composition signatures</div>
+        <div class="step"><span class="n">3</span>PR 3 — /design-system: amplification rules + wider pools</div>
+        <div class="step"><span class="n">4</span>PR 4 — critique gate (both skills) + before/after gallery</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Each PR reviewable, bisectable, revertable on its own</p>
+        <p class="pro">Matches CONTRIBUTING.md exactly — sets the contributor precedent</p>
+        <p class="pro">Value ships early: PR 2 alone fixes the worst sameness</p>
+        <p class="con">Four review cycles; brief half-upgraded states between merges</p>
+        <p class="con">The big "before → after" reveal spreads across weeks</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Versioned release</h3>
+      <p class="sub">Build on a release branch, land as decision-kit v0.x with changelog, SPEC.md updates, migration notes, refreshed examples — a release event, not a PR.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>release/v0.x branch, internal commits</div>
+        <div class="step"><span class="n">2</span>Changelog + SPEC + migration notes</div>
+        <div class="step"><span class="n">3</span>Tagged release + announcement</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Strongest marketing moment for the repo</p>
+        <p class="pro">Versioning + migration notes are genuinely overdue for the kit</p>
+        <p class="con">Same un-reviewable megadiff as A, with extra ceremony</p>
+        <p class="con">Release infra (tags, changelog discipline) for a 1-star repo is premature</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Incubate, then merge</h3>
+      <p class="sub">Build in a <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">lab/</code> branch or experimental fork, dogfood on your own EdTech-tool artifacts for a few weeks, merge only what proves itself.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Experimental branch, loose commits</div>
+        <div class="step"><span class="n">2</span>Dogfood on real projects</div>
+        <div class="step"><span class="n">3</span>Cherry-pick the proven parts → PRs</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Only battle-tested changes reach main</p>
+        <p class="pro">Real-project dogfooding is the best rubric tuner for the critique gate</p>
+        <p class="con">Slowest path; lab branches rot notoriously</p>
+        <p class="con">Delays the sameness fix users (and you) feel today</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Epic PR</th><th class="reccol">B · PR train ★</th><th>C · Release</th><th>D · Incubate</th></tr>
+    <tr><td>Reviewability</td><td class="bad">Collapses past 400 LOC</td><td class="reccol good">Each PR focused</td><td class="bad">Same as A</td><td class="mid">Good, eventually</td></tr>
+    <tr><td>Matches CONTRIBUTING.md</td><td class="bad">No</td><td class="reccol good">Exactly</td><td class="mid">Partially</td><td class="mid">Eventually</td></tr>
+    <tr><td>Time to first shipped value</td><td class="mid">All at once, late</td><td class="reccol good">PR 1–2 within days of ready</td><td class="bad">Latest</td><td class="bad">Weeks</td></tr>
+    <tr><td>Risk isolation</td><td class="bad">All-or-nothing</td><td class="reccol good">Per-phase revert</td><td class="bad">All-or-nothing</td><td class="good">Highest</td></tr>
+    <tr><td>Narrative / repo story</td><td class="mid">One big moment</td><td class="reccol good">Umbrella issue + arc</td><td class="good">Strongest single moment</td><td class="bad">Quiet</td></tr>
+    <tr><td>Sets contributor precedent</td><td class="bad">Bad precedent</td><td class="reccol good">The model to copy</td><td class="mid">Maintainer-only pattern</td><td class="mid">Unclear</td></tr>
+    <tr><td>Overhead</td><td class="good">Lowest</td><td class="reccol mid">4 review cycles</td><td class="bad">Release ceremony</td><td class="bad">Longest calendar</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. The dependency topology already is four phases; your own CONTRIBUTING.md asks for exactly this shape; and PR 1 carrying this strategy's <code>.decisions/</code> folder makes the kit demonstrably self-hosting — the best possible advertisement for it. Steal C's one good idea (a CHANGELOG entry per merged phase) without the release ceremony.
+  </div>
+</div>
+</body>
+</html>

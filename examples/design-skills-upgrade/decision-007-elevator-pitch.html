@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 7 — Elevator Pitch</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:18px; margin-bottom:14px; }
+  .pitch { background:var(--card2); border-left:3px solid var(--accent); border-radius:8px; padding:18px 20px; font-size:15.5px; font-style:italic; color:var(--ink); margin-bottom:16px; }
+  .why { font-size:13.5px; color:var(--muted); }
+  .why b { color:var(--ink); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Final Decision · Positioning</div>
+  <h1>The 30-second version</h1>
+  <p class="lede">How you describe this upgrade — in the PR description, the README, a LinkedIn post, or to another builder. Same plan, four angles.</p>
+
+  <div class="options">
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">A</div>
+      <h3>Problem-first (the convergence story)</h3>
+      <div class="pitch">"Every AI-generated site looks the same — same font, same purple gradient, same three cards. It's not laziness, it's statistics: models sample the high-probability center of their training data. I rebuilt decision-kit's design skills to force the model off that center: banned defaults by name, a tradition library where no two aesthetics share a voice, layout that actually changes, and a critique gate where the skill screenshots its own output and fixes what it sees before showing you."</div>
+      <p class="why"><b>Why this angle:</b> opens with a problem every AI builder has personally felt, names the real cause (credibility), then lands the four fixes as the payoff. Works for PR description and public post alike.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>Mechanism-first (the taste-engine story)</h3>
+      <div class="pitch">"Decision-kit's design skills now run on a shared design DNA: one source of truth for what's banned, what's distinctive, and how composition varies. Every visual choice must trace back to a signal you gave — your archetype, your tension, your references — and the skill critiques its own rendered output before you ever see it. Taste, made enforceable."</div>
+      <p class="why"><b>Why this angle:</b> leads with architecture — strongest for technical readers who want to know how, not why. Weaker hook for anyone who hasn't felt the problem.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Dogfood-first (the self-hosting story)</h3>
+      <div class="pitch">"Decision-kit just used itself to redesign itself. Six researched decisions — root cause, both skill upgrades, architecture, validation, packaging — each with four options and real web research, all recorded in the repo. The result: design skills that ban AI-slop defaults, vary composition, and screenshot their own work. The .decisions/ folder in the PR is the receipt."</div>
+      <p class="why"><b>Why this angle:</b> the most distinctive story — no other repo can tell it — and great marketing for the kit itself. But it sells the process more than the design improvement.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Outcome-first (the proof story)</h3>
+      <div class="pitch">"Style two projects with decision-kit and you won't find the same font twice. Thirty aesthetic traditions, each with its own typographic voice and its own layout signature — and a built-in design critic that looks at the rendered page and fixes what's weak before you see it. Generic is now a choice, not a default."</div>
+      <p class="why"><b>Why this angle:</b> leads with the verifiable promise ("won't find the same font twice") — punchy for a README tagline. Risk: it's a claim you must actually keep.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or blend them (<code>A but end with D's last line</code>), or write your own.<br><br>
+    Recommendation: <b style="color:var(--ink)">A</b> — the convergence story gives the problem, the cause, and the fix in one breath, and it's the angle that makes both the PR and any public post about it land with people who've felt the sameness themselves.
+  </div>
+</div>
+</body>
+</html>
