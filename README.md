@@ -4,6 +4,8 @@
 
 You bring a situation. Decision Kit figures out the 5-7 decisions hiding inside it, stack-ranked from most critical to least. For each one, it does the work *around* the decision: gathers the research, builds the options, renders visual previews, lays out the tradeoffs as a side-by-side comparison. Then it stops and waits for you to make the call. Every decision becomes a real artifact you can open in a browser and compare. You pick. It remembers. On to the next one, which builds on what you just chose.
 
+Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
+
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
 ```
