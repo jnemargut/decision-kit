@@ -13,6 +13,7 @@ SRC="shared/design-dna"
 TARGETS=(
   "thinking/visual-design/references"
   "thinking/design-system/references"
+  "thinking/x-visual-design/references"
 )
 
 MODE="${1:-sync}"
