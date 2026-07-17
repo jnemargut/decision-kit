@@ -26,7 +26,7 @@ Open an issue. There are templates to help.
 
 ## What we're not looking for
 
-- **Forks of existing skills with minor variations.** If `/strategize` doesn't quite fit your use case, propose a tweak to the existing skill or build something genuinely different. Don't fragment the ecosystem with near-duplicates.
+- **Forks of existing skills with minor variations.** If `/strategize` doesn't quite fit your use case, propose a tweak to the existing skill or build something genuinely different. Don't fragment the ecosystem with near-duplicates. (The `x-` skills are not this — they're the kit's own maintained "turned up" tier of the core skills, one per original, documented in the README. Improvements to an X skill go into that X skill; don't add a third tier.)
 - **Skills that bypass the decision gate.** Thinking skills must wait for human judgment. Action skills must read prior decisions, not invent new ones. Anything that shortcuts this isn't a good fit.
 - **Tools that try to "automate the judgment."** Decision Kit's whole point is that judgment is the part you don't outsource. Suggestions that lean toward AI-makes-the-call are off-mission.
 - **Major architectural changes** without an issue first. The spec is intentionally small. Talk to us before refactoring it.

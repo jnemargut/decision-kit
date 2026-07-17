@@ -36,6 +36,7 @@ When you're done thinking, you can hand the whole stack of decisions to an AI co
 - [What you can use this for](#what-you-can-use-this-for)
 - [How this compares](#how-this-compares)
 - [Skills](#skills)
+- [The X tier](#the-x-tier--xtra-thinking-xtra-usage)
 - [Hooks](#hooks)
 - [Build your own thinking skill](#build-your-own-thinking-skill)
 - [Try it](#try-it-tell-us-what-happened)
@@ -78,6 +79,8 @@ Or go direct if you already know what you need:
 ```
 /strategize thinking about opening a coffee shop downtown
 ```
+
+The install commands above also give you the **X tier** — `x-` prefixed versions of the core skills that think harder and cost more usage. See [The X tier](#the-x-tier--xtra-thinking-xtra-usage) below.
 
 A decision page pops open in your browser. Pick an option. Watch the next decision build on yours. Tell the AI its recommendation is wrong. Bring your own answer. Change your mind later. It's all part of the process.
 
@@ -334,6 +337,30 @@ These shape how thinking skills behave. Run them first.
 | `/whoiam` | Tell the system who you are so decisions are framed in your language |
 | `/research-sources` | Configure which sources you trust for context gathering |
 | `/hook-init` | Connect decisions to an external service for sync and privacy controls |
+
+---
+
+## The X tier — xtra thinking, xtra usage
+
+Nine core skills have an `x-` version. Same soul, same flow, same `.decisions/` format — the dial is just turned up. X skills research in parallel with subagents (including a mandatory pass on *failure stories*), put an honest confidence level on every recommendation (`STRONG PICK` / `LEAN` / `TOSS-UP` — a toss-up gets called a toss-up), argue **against** their own pick on every page, tag every decision as a one-way or two-way door, and record assumptions with tripwires so `/x-challenge` can later check them against reality.
+
+The `x` means **xtra**: better output, noticeably more token usage. Pick per run — `/strategize` when you want the quick pass, `/x-strategize` when the decision deserves the spend.
+
+| X skill | Everything in the original, plus |
+|---------|----------------------------------|
+| `/x-decide` | Routes to the X tier where it exists, originals otherwise. Passes `/autodecide`, `/overdecide`, `/underdecide`, and `3 takes` through |
+| `/x-strategize` | Parallel adversarial research, confidence levels, case-against-my-pick, tripwires + pre-mortem in the brief |
+| `/x-shape` | Constraints ledger with a **running cost/time tally** across decisions — flags a busted budget *before* you lock the choice, offers trade-backs |
+| `/x-product-strategy` | Multi-angle sweep (competitors / numbers / user complaints / graveyard), **permission to say "don't build this"**, riskiest-assumption + cheapest-test + kill criteria in the brief |
+| `/x-product-design` | A **Living Preview** — one composite mockup of your product that absorbs every choice as you make it — plus `tokens.css`/`tokens.json` export |
+| `/x-product-plan` | Launch post-mortem research, the riskiest-assumption test as literal Task #1, go/pivot/kill gates between phases |
+| `/x-game-plan` | Failure-story research with ⚠ trap warnings on tasks, a day-by-day Week One, dependency tags, checkpoint gates, strategy tripwires → recurring check-in tasks |
+| `/x-visual-design` | Previews built from *your* artifact's real content, **Three Takes mode** (`3 takes` → three complete styled variants in parallel, pick one), eyes-on screenshot critique, side-by-side compare page |
+| `/x-challenge` | Understands the X metadata: patrols your tripwires against current reality (with fresh web research), re-tests toss-ups, revisits your overrides honestly in both directions, and red-teams its own challenges before showing them |
+
+The tiers compound: an `/x-strategize` brief carries assumptions and tripwires that `/x-game-plan` turns into recurring check-in tasks and `/x-challenge` later verifies against the real world. X skills read `/whoiam` and `/research-sources` config, and support all `/decide` variant modifiers inline.
+
+Shared templates for the X tier live in `shared/x-templates/` and are synced into each skill with `scripts/sync-x-templates.sh` (same convention as `shared/design-dna`): skills ship self-contained, so edit the shared file, then sync.
 
 ---
 
