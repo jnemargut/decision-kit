@@ -2,15 +2,7 @@
 
 **AI does the busywork around your decisions. You make the calls.**
 
-You bring a situation. Decision Kit figures out the 5-7 decisions hiding inside it, stack-ranked from most critical to least. For each one, it does the work *around* the decision: gathers the research, builds the options, renders visual previews, lays out the tradeoffs as a side-by-side comparison. Then it stops and waits for you to make the call. Every decision becomes a real artifact you can open in a browser and compare. You pick. It remembers. On to the next one, which builds on what you just chose.
-
-**This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
-
-Every skill is a folder of plain markdown, so this runs on whatever agentic
-coding tool you already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI,
-your own. Nothing to install, no API key, no account.
-
-Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
+Decision Kit is the planning layer that runs before the building starts. Here's what that looks like.
 
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
@@ -25,6 +17,18 @@ You didn't ask for this. You didn't design it. You didn't even know this was a d
 That keeps happening. Decision after decision, each one building on what you chose before. You came in with an idea and Decision Kit pulled out every decision hiding inside it, ordered them by what matters most, and walked you through each one with options you can actually see and compare. Not too many that you get decision fatigue, not too few that you're left wondering "wait, what are we actually building?"
 
 You pick. It remembers. On to the next one. Go ahead, argue with the AI's recommendation. It's more fun that way.
+
+---
+
+## So what is it doing?
+
+It reads your situation and finds the 5 to 7 decisions hiding inside it, ranked from most critical to least. For each one it does the work *around* the decision and then gets out of the way: gathers the research, builds four real options, renders visual previews, and lays the tradeoffs out side by side. Then it stops and waits for you. Every decision becomes an artifact you can open in a browser, compare, and still understand six months from now.
+
+**This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
+
+Every skill is a folder of plain markdown, so this runs on whatever agentic coding tool you already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI, your own. Nothing to install, no API key, no account.
+
+Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
 
 When you're done thinking, you can hand the whole stack of decisions to an AI coding tool and tell it to build. The decisions become the spec. Every choice you made, every reason you gave, every tradeoff you weighed... it's all there, structured, ready to inform the code. You're not starting from a blank prompt. You're starting from a decision record. Want to skip the build? Feel free. Decision Kit is happy being just a thinking tool. But if you want the thinking to turn into code, the path is right there.
 
