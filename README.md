@@ -34,8 +34,41 @@ When you're done thinking, you can hand the whole stack of decisions to an AI co
 
 ---
 
+## The same thing, for code
+
+The example above is a product question. Here is what it looks like when the thing
+you are building is software, and the options are technical.
+
+**Architecture, drawn out per option:**
+
+<p align="center"><img src="assets/example-architecture.png" alt="Decision page asking How Should This Thing Be Built, comparing Next.js on Vercel, a static SPA with Supabase, and Expo with Firebase, each with its own stack diagram showing browser, server, and database layers" width="700"></p>
+
+**Data model, as the actual tables:**
+
+<p align="center"><img src="assets/example-data-model.png" alt="Decision page asking How Do We Store A Run, comparing runs-as-facts, a denormalized standings table, and a materialized view, each showing the real column names and types" width="700"></p>
+
+**Auth, as the code each choice makes you write:**
+
+<p align="center"><img src="assets/example-auth-code.png" alt="Decision page asking How Do People Get In, comparing magic link, sign in with Strava, and a shared club code, each showing the actual implementation snippet" width="700"></p>
+
+**And the UI, rendered, not described:**
+
+<p align="center"><img src="assets/example-leaderboard-ui.png" alt="Decision page asking What Does The Leaderboard Look Like, showing three working leaderboard mockups built from the same data: a dense standings table, a podium, and an activity feed" width="700"></p>
+
+That last one is the part people do not expect. You are not reading a description of
+three layouts, you are looking at three layouts. Same runs, same data, three different
+feelings, and you pick the one you actually want before anybody writes the component.
+
+Four decisions later the folder is a spec. Hand it to Claude Code, Cursor, Codex, or
+whatever you use, and the stack, the schema, the auth model, and the shape of the main
+screen are already settled. The whole run is in
+[examples/running-club-app](examples/running-club-app/).
+
+---
+
 ## Contents
 
+- [The same thing, for code](#the-same-thing-for-code)
 - [The separation that matters](#the-separation-that-matters)
 - [Start here in 2 minutes](#start-here-in-2-minutes)
 - [How it works](#how-it-works)
@@ -297,7 +330,7 @@ These are just a handful of examples. Anywhere you need to make thoughtful decis
 - **Write a difficult email** - Run `/strategize` on "I need to push back on a client's timeline." It surfaces the decisions you need to make about framing, tone, what to include, what to leave out. The email you write afterward is deliberate, not reactive.
 - **Plan an event** - Conference, workshop series, team offsite. Run `/shape` and walk through format, schedule, venue, content structure, guest experience. Each decision builds on the last.
 
-The examples in this repo include a [food truck launch](examples/food-truck/), a [neighborhood tool library](examples/community-app/), and [wedding planning](examples/wedding-planning/).
+The examples in this repo include [planning an app before building it](examples/running-club-app/), [Decision Kit redesigning its own design skills](examples/design-skills-upgrade/), a [neighborhood tool library](examples/community-app/), a [food truck launch](examples/food-truck/), and [wedding planning](examples/wedding-planning/).
 
 ---
 

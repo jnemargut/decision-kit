@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Do People Get In?</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .decision-badge {
+    display: inline-block;
+    background: rgba(224, 124, 62, 0.15);
+    border: 1px solid rgba(224, 124, 62, 0.3);
+    color: #e07c3e;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e0e0e8, #8888a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p { color: #8888a0; font-size: 16px; max-width: 600px; margin: 0 auto; }
+
+  /* Grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Cards */
+  .option-card {
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .option-card.not-chosen { opacity: 0.55; }
+  .option-card.recommended { border-color: #e07c3e; box-shadow: 0 0 24px rgba(224, 124, 62, 0.1); }
+  .option-card.chosen { border-color: #4ade80; box-shadow: 0 0 24px rgba(74, 222, 128, 0.1); }
+  .option-card.chosen.recommended { border-color: #4ade80; }
+
+  .badge {
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 0 0 10px 10px;
+    color: #fff;
+  }
+  .badge.recommended-badge { background: #e07c3e; }
+  .badge.chosen-badge { background: #4ade80; color: #0a0a0f; }
+
+  .option-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .option-label.a { color: #60a5fa; }
+  .option-label.b { color: #e07c3e; }
+  .option-label.c { color: #fbbf24; }
+  .option-label.d { color: #a78bfa; }
+
+  .option-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .option-subtitle {
+    color: #8888a0;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* Visual Preview — Flow Steps */
+  .visual-preview {
+    background: #1a1a25;
+    border-radius: 12px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+  }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    position: relative;
+  }
+  .step-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 32px;
+  }
+  .step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .option-card:nth-child(1) .step-number { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+  .option-card:nth-child(2) .step-number { background: rgba(224, 124, 62, 0.2); color: #e07c3e; }
+  .option-card:nth-child(3) .step-number { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+  .option-card:nth-child(4) .step-number { background: rgba(167, 139, 250, 0.2); color: #a78bfa; }
+
+  .step-line {
+    width: 2px;
+    height: 20px;
+    background: #2a2a3a;
+  }
+  .chosen .step-line { background: rgba(74, 222, 128, 0.25); }
+  .recommended .step-line { background: rgba(224, 124, 62, 0.25); }
+
+  .step-content {
+    padding-bottom: 12px;
+  }
+  .step-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e8;
+    margin-bottom: 2px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: #8888a0;
+    line-height: 1.4;
+  }
+
+  /* Pros / Cons */
+  .pros-cons { display: flex; flex-direction: column; gap: 8px; }
+  .pro, .con {
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .pro .icon { color: #4ade80; flex-shrink: 0; font-weight: 700; }
+  .con .icon { color: #f87171; flex-shrink: 0; font-weight: 700; }
+
+  /* Comparison Table */
+  .comparison-section { margin-bottom: 48px; }
+  .comparison-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e0e0e8;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #12121a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2a2a3a;
+  }
+  .comparison-table th, .comparison-table td {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid #1a1a25;
+  }
+  .comparison-table th {
+    background: #1a1a25;
+    color: #8888a0;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .comparison-table td { color: #e0e0e8; }
+  .comparison-table .highlight {
+    background: rgba(224, 124, 62, 0.08);
+    border-left: 2px solid #e07c3e;
+  }
+  .comparison-table .chosen-col {
+    background: rgba(74, 222, 128, 0.06);
+    border-left: 2px solid #4ade80;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid #2a2a3a;
+    color: #8888a0;
+    font-size: 13px;
+  }
+  .footer strong { color: #e0e0e8; }
+
+  /* ---- technical artifact styles ---- */
+  .arch { display:flex; flex-direction:column; gap:7px; }
+  .arch-box { background:#0e0e16; border:1px solid #2a2a3a; border-radius:10px; padding:9px 12px; }
+  .arch-box .t { font-size:12.5px; font-weight:700; color:#e8e8f0; }
+  .arch-box .s { font-size:11px; color:#8b8b9e; margin-top:2px; line-height:1.45; }
+  .arch-box.hi { border-color:#60a5fa; background:#101526; }
+  .arch-split { display:flex; gap:7px; }
+  .arch-split > * { flex:1; }
+  .arch-arrow { text-align:center; color:#4a4a5e; font-size:13px; line-height:1; letter-spacing:2px; }
+  .tbl { border:1px solid #2a2a3a; border-radius:10px; overflow:hidden; margin-bottom:8px; }
+  .tbl-name { background:#1a1a26; padding:6px 12px; font-size:10.5px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:#60a5fa; }
+  .tbl-row { display:flex; justify-content:space-between; gap:12px; padding:5px 12px; font-size:12px; border-top:1px solid #22222e; }
+  .tbl-row .col { color:#d5d5e0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .tbl-row .typ { color:#7a7a90; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; white-space:nowrap; }
+  .tbl-note { font-size:11px; color:#8b8b9e; padding:4px 2px 8px; line-height:1.5; }
+  .code { background:#0b0b12; border:1px solid #22222e; border-radius:10px; padding:12px 14px;
+          font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11.5px; line-height:1.75;
+          color:#c8c8d8; white-space:pre; overflow-x:auto; }
+  .code .k { color:#c084fc; } .code .st { color:#86efac; } .code .cm { color:#5a5a70; } .code .fn { color:#60a5fa; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="decision-badge">Decision 3 of 4</div>
+    <h1>How Do People Get In?</h1>
+    <p>Twelve people who already know each other in real life. This decides how much friction sits between finishing a run and logging it.</p>
+  </div>
+  <div class="options-grid">
+    <div class="option-card chosen">
+      <div class="badge chosen-badge">Chosen</div>
+      <div class="option-label a">Option A</div>
+      <div class="option-title">Magic link</div>
+      <div class="option-subtitle">Type your email, click the link, you are in</div>
+      <div class="visual-preview"><div class="code"><span class="cm">// one table, one email, no password to leak</span>
+<span class="k">export async function</span> <span class="fn">signIn</span>(email) {
+  <span class="k">const</span> token = crypto.<span class="fn">randomUUID</span>()
+  <span class="k">await</span> db.<span class="fn">insert</span>(loginTokens).<span class="fn">values</span>({
+    email, token, expiresAt: <span class="fn">minutesFromNow</span>(15)
+  })
+  <span class="k">await</span> <span class="fn">sendEmail</span>(email, <span class="st">`/auth/${token}`</span>)
+}</div></div>
+      <div class="pros-cons"><div class="pro"><span class="icon">+</span>No passwords to store, reset, or leak</div><div class="pro"><span class="icon">+</span>Works with a thumb and no memory</div><div class="con"><span class="icon">&minus;</span>Depends on an email provider actually delivering</div><div class="con"><span class="icon">&minus;</span>Link-in-email is slow when you are standing outside sweating</div></div>
+    </div>
+    <div class="option-card not-chosen">
+      
+      <div class="option-label b">Option B</div>
+      <div class="option-title">Sign in with Strava</div>
+      <div class="option-subtitle">Borrow the identity they already use for running</div>
+      <div class="visual-preview"><div class="code"><span class="cm">// Strava already knows their runs</span>
+<span class="k">const</span> handler = <span class="fn">NextAuth</span>({
+  providers: [
+    <span class="fn">Strava</span>({
+      clientId: env.STRAVA_ID,
+      clientSecret: env.STRAVA_SECRET,
+      authorization: { params: { scope: <span class="st">"activity:read"</span> } }
+    })
+  ]
+})</div></div>
+      <div class="pros-cons"><div class="pro"><span class="icon">+</span>One tap, and it is the account they already associate with running</div><div class="pro"><span class="icon">+</span>Opens the door to importing runs automatically later</div><div class="con"><span class="icon">&minus;</span>Anyone without Strava is locked out of a twelve person club</div><div class="con"><span class="icon">&minus;</span>You inherit their rate limits and their outages</div></div>
+    </div>
+    <div class="option-card not-chosen">
+      
+      <div class="option-label c">Option C</div>
+      <div class="option-title">One shared club code</div>
+      <div class="option-subtitle">No accounts at all. Know the code, log a run.</div>
+      <div class="visual-preview"><div class="code"><span class="cm">// the entire auth system</span>
+<span class="k">export function</span> <span class="fn">checkClubCode</span>(input) {
+  <span class="k">return</span> <span class="fn">timingSafeEqual</span>(input, env.CLUB_CODE)
+}
+
+<span class="cm">// the runner picks a name and we believe them.</span>
+<span class="cm">// it is a running club, not a bank.</span></div></div>
+      <div class="pros-cons"><div class="pro"><span class="icon">+</span>Nothing to build, reset, or breach</div><div class="pro"><span class="icon">+</span>Zero friction, which is most of the point</div><div class="con"><span class="icon">&minus;</span>Anyone with the code can log a run as anyone</div><div class="con"><span class="icon">&minus;</span>Removing one person means changing it for everyone</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <p><strong>Decision 3 of 4</strong> &mdash; Auth</p>
+    <p>Respond with <strong>A</strong>, <strong>B</strong>, or <strong>C</strong> to choose a direction, or ask questions about any option.</p>
+  </div>
+</div>
+</body>
+</html>
