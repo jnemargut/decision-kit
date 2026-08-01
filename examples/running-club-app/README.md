@@ -2,14 +2,14 @@
 
 The `.decisions/` record from running `/product-design` on: *"I want to build an app where my running club can log runs and see a leaderboard."*
 
-Four decisions, each with real options and a rendered artifact you can compare:
+Four decisions, each with four real options and a rendered artifact you can compare:
 
 | | Decision | What the options show |
 |---|---|---|
 | 1 | [Architecture](decision-001-architecture.html) | Stack diagrams for each approach |
 | 2 | [Data model](decision-002-data-model.html) | The actual table shapes |
 | 3 | [Auth](decision-003-auth.html) | The code each choice makes you write |
-| 4 | [Leaderboard UI](decision-004-leaderboard-ui.html) | Three rendered leaderboards, same data |
+| 4 | [Leaderboard UI](decision-004-leaderboard-ui.html) | Four rendered leaderboards, same data |
 
 Nothing here was hand-designed. Every diagram, schema, snippet, and mockup was generated as part of surfacing the decision, so you can see the difference instead of imagining it.
 

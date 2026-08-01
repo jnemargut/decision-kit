@@ -39,7 +39,7 @@ When you're done thinking, you can hand the whole stack of decisions to an AI co
 The example above is a product question. Here is the same thing when what you are
 building is software, and the options are technical.
 
-<p align="center"><img src="assets/example-app-decisions.gif" alt="Four decision pages cycling: architecture with a stack diagram per option, the data model as real database tables, auth as the code each choice makes you write, and the leaderboard as three rendered mockups" width="620"></p>
+<p align="center"><img src="assets/example-app-decisions.gif" alt="Four decision pages cycling: architecture with a stack diagram per option, the data model as real database tables, auth as the code each choice makes you write, and the leaderboard as four rendered mockups" width="680"></p>
 
 One sentence in (*"an app where my running club can log runs and see a leaderboard"*),
 four decisions out. Architecture drawn as a stack diagram per option. The data model as
@@ -47,9 +47,9 @@ the actual tables, with real column names. Auth as the code each choice makes yo
 
 And then the part people do not expect:
 
-<p align="center"><img src="assets/example-leaderboard-ui.png" alt="Decision page asking What Does The Leaderboard Look Like, showing three working leaderboard mockups built from the same data: a dense standings table, a podium, and an activity feed, each with honest tradeoffs" width="700"></p>
+<p align="center"><img src="assets/example-leaderboard-ui.png" alt="Decision page asking What Does The Leaderboard Look Like, showing four working leaderboard mockups built from the same data: a dense standings table, a podium, an activity feed, and a personal progress view, each with honest tradeoffs" width="760"></p>
 
-You are not reading a description of three layouts. You are looking at three layouts,
+You are not reading a description of four layouts. You are looking at four layouts,
 built from the same data, with the tradeoffs spelled out (*"nine of twelve people are
 literally below the fold"*). You pick the one you actually want before anyone writes
 the component.

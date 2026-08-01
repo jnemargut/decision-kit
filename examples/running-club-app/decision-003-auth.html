@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How Do People Get In?</title>
-<style>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Do People Get In?</title><style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: #0a0a0f;
@@ -227,14 +223,12 @@
   }
   .footer strong { color: #e0e0e8; }
 
-  /* ---- technical artifact styles ---- */
   .arch { display:flex; flex-direction:column; gap:7px; }
   .arch-box { background:#0e0e16; border:1px solid #2a2a3a; border-radius:10px; padding:9px 12px; }
   .arch-box .t { font-size:12.5px; font-weight:700; color:#e8e8f0; }
   .arch-box .s { font-size:11px; color:#8b8b9e; margin-top:2px; line-height:1.45; }
   .arch-box.hi { border-color:#60a5fa; background:#101526; }
-  .arch-split { display:flex; gap:7px; }
-  .arch-split > * { flex:1; }
+  .arch-split { display:flex; gap:7px; } .arch-split > * { flex:1; }
   .arch-arrow { text-align:center; color:#4a4a5e; font-size:13px; line-height:1; letter-spacing:2px; }
   .tbl { border:1px solid #2a2a3a; border-radius:10px; overflow:hidden; margin-bottom:8px; }
   .tbl-name { background:#1a1a26; padding:6px 12px; font-size:10.5px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:#60a5fa; }
@@ -246,18 +240,45 @@
           font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11.5px; line-height:1.75;
           color:#c8c8d8; white-space:pre; overflow-x:auto; }
   .code .k { color:#c084fc; } .code .st { color:#86efac; } .code .cm { color:#5a5a70; } .code .fn { color:#60a5fa; }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header">
-    <div class="decision-badge">Decision 3 of 4</div>
-    <h1>How Do People Get In?</h1>
-    <p>Twelve people who already know each other in real life. This decides how much friction sits between finishing a run and logging it.</p>
-  </div>
+  .mock { background:#0b0b12; border:1px solid #22222e; border-radius:12px; padding:14px; }
+  .mock-bar { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .mock-title { font-size:13px; font-weight:800; color:#e8e8f0; letter-spacing:-0.2px; }
+  .mock-sub { font-size:9.5px; color:#6a6a80; text-transform:uppercase; letter-spacing:1.2px; }
+  .m-row { display:grid; grid-template-columns:18px 1fr auto; gap:9px; align-items:center; padding:6px 0; border-top:1px solid #1c1c28; font-size:12px; }
+  .m-row .rk { color:#5a5a70; font-family:ui-monospace,monospace; font-size:11px; }
+  .m-row .nm { color:#d5d5e0; } .m-row .val { color:#e8e8f0; font-family:ui-monospace,monospace; font-weight:700; }
+  .m-row.me { background:#101526; margin:0 -8px; padding:6px 8px; border-radius:6px; border-top-color:transparent; }
+  .m-row.me .nm { color:#60a5fa; font-weight:700; }
+  .pod { display:flex; align-items:flex-end; gap:8px; justify-content:center; margin:6px 0 12px; }
+  .pod-col { flex:1; text-align:center; }
+  .pod-av { width:34px; height:34px; border-radius:50%; margin:0 auto 6px; background:#22222e; border:2px solid #2f2f40; }
+  .pod-col.p1 .pod-av { width:44px; height:44px; border-color:#fbbf24; }
+  .pod-col.p2 .pod-av { border-color:#9aa0b4; } .pod-col.p3 .pod-av { border-color:#b06a3a; }
+  .pod-bar { border-radius:8px 8px 0 0; background:#181824; border:1px solid #2a2a3a; border-bottom:none; }
+  .pod-col.p1 .pod-bar { height:56px; background:linear-gradient(#2a2416,#181824); border-color:#7a5f1f; }
+  .pod-col.p2 .pod-bar { height:40px; } .pod-col.p3 .pod-bar { height:30px; }
+  .pod-nm { font-size:11px; color:#d5d5e0; font-weight:700; }
+  .pod-val { font-size:10px; color:#7a7a90; font-family:ui-monospace,monospace; }
+  .pod-rest { font-size:11px; color:#6a6a80; text-align:center; padding-top:8px; border-top:1px solid #1c1c28; }
+  .feed-card { display:flex; gap:10px; align-items:center; background:#12121c; border:1px solid #22222e; border-radius:10px; padding:9px 11px; margin-bottom:7px; }
+  .feed-av { width:26px; height:26px; border-radius:50%; background:#22222e; flex:none; }
+  .feed-body { flex:1; min-width:0; }
+  .feed-top { font-size:11.5px; color:#d5d5e0; } .feed-top b { color:#e8e8f0; }
+  .feed-meta { font-size:10px; color:#6a6a80; margin-top:1px; }
+  .feed-kudos { font-size:10px; color:#60a5fa; white-space:nowrap; }
+  .big { text-align:center; padding:6px 0 10px; }
+  .big-n { font-size:34px; font-weight:800; color:#e8e8f0; letter-spacing:-1px; line-height:1; font-family:ui-monospace,monospace; }
+  .big-u { font-size:11px; color:#6a6a80; margin-top:3px; }
+  .spark { display:flex; align-items:flex-end; gap:5px; height:44px; margin:10px 0 8px; }
+  .spark div { flex:1; background:#243047; border-radius:3px 3px 0 0; }
+  .spark div.on { background:#3b82f6; }
+  .ctx { font-size:11px; color:#7a7a90; text-align:center; padding-top:8px; border-top:1px solid #1c1c28; }
+  .ctx b { color:#d5d5e0; }
+</style></head>
+<body><div class="container">
+  <div class="header"><div class="decision-badge">Decision 3 of 4</div><h1>How Do People Get In?</h1><p>Twelve people who already know each other in real life. This decides how much friction sits between finishing a run and logging it.</p></div>
   <div class="options-grid">
-    <div class="option-card chosen">
-      <div class="badge chosen-badge">Chosen</div>
+    <div class="option-card chosen"><div class="badge chosen-badge">Chosen</div>
       <div class="option-label a">Option A</div>
       <div class="option-title">Magic link</div>
       <div class="option-subtitle">Type your email, click the link, you are in</div>
@@ -272,7 +293,6 @@
       <div class="pros-cons"><div class="pro"><span class="icon">+</span>No passwords to store, reset, or leak</div><div class="pro"><span class="icon">+</span>Works with a thumb and no memory</div><div class="con"><span class="icon">&minus;</span>Depends on an email provider actually delivering</div><div class="con"><span class="icon">&minus;</span>Link-in-email is slow when you are standing outside sweating</div></div>
     </div>
     <div class="option-card not-chosen">
-      
       <div class="option-label b">Option B</div>
       <div class="option-title">Sign in with Strava</div>
       <div class="option-subtitle">Borrow the identity they already use for running</div>
@@ -289,7 +309,6 @@
       <div class="pros-cons"><div class="pro"><span class="icon">+</span>One tap, and it is the account they already associate with running</div><div class="pro"><span class="icon">+</span>Opens the door to importing runs automatically later</div><div class="con"><span class="icon">&minus;</span>Anyone without Strava is locked out of a twelve person club</div><div class="con"><span class="icon">&minus;</span>You inherit their rate limits and their outages</div></div>
     </div>
     <div class="option-card not-chosen">
-      
       <div class="option-label c">Option C</div>
       <div class="option-title">One shared club code</div>
       <div class="option-subtitle">No accounts at all. Know the code, log a run.</div>
@@ -302,11 +321,21 @@
 <span class="cm">// it is a running club, not a bank.</span></div></div>
       <div class="pros-cons"><div class="pro"><span class="icon">+</span>Nothing to build, reset, or breach</div><div class="pro"><span class="icon">+</span>Zero friction, which is most of the point</div><div class="con"><span class="icon">&minus;</span>Anyone with the code can log a run as anyone</div><div class="con"><span class="icon">&minus;</span>Removing one person means changing it for everyone</div></div>
     </div>
-  </div>
-  <div class="footer">
-    <p><strong>Decision 3 of 4</strong> &mdash; Auth</p>
-    <p>Respond with <strong>A</strong>, <strong>B</strong>, or <strong>C</strong> to choose a direction, or ask questions about any option.</p>
-  </div>
-</div>
-</body>
-</html>
+    <div class="option-card not-chosen">
+      <div class="option-label d">Option D</div>
+      <div class="option-title">Passkeys</div>
+      <div class="option-subtitle">Face or thumb, no email round trip at all</div>
+      <div class="visual-preview"><div class="code"><span class="cm">// face or thumb, no email round trip</span>
+<span class="k">const</span> options = <span class="k">await</span> <span class="fn">generateRegistrationOptions</span>({
+  rpName: <span class="st">"Run Club"</span>,
+  userName: runner.displayName,
+  authenticatorSelection: {
+    residentKey: <span class="st">"required"</span>,
+    userVerification: <span class="st">"preferred"</span>
+  }
+})</div></div>
+      <div class="pros-cons"><div class="pro"><span class="icon">+</span>The fastest possible sign-in on a phone</div><div class="pro"><span class="icon">+</span>Nothing phishable, nothing to remember</div><div class="con"><span class="icon">&minus;</span>Recovery is genuinely hard when someone loses their phone</div><div class="con"><span class="icon">&minus;</span>Still enough browser edge cases to cost you a weekend</div></div>
+    </div></div>
+  <div class="footer"><p><strong>Decision 3 of 4</strong> &mdash; Auth</p>
+  <p>Respond with <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, or <strong>D</strong> to choose a direction, or ask questions about any option.</p></div>
+</div></body></html>
