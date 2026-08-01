@@ -4,6 +4,8 @@
 
 You bring a situation. Decision Kit figures out the 5-7 decisions hiding inside it, stack-ranked from most critical to least. For each one, it does the work *around* the decision: gathers the research, builds the options, renders visual previews, lays out the tradeoffs as a side-by-side comparison. Then it stops and waits for you to make the call. Every decision becomes a real artifact you can open in a browser and compare. You pick. It remembers. On to the next one, which builds on what you just chose.
 
+**This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
+
 Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
 
 ```
@@ -267,14 +269,14 @@ The examples in this repo include a [food truck launch](examples/food-truck/), a
 
 ## How this compares
 
-| | Decision Kit | Prompt Libraries | Agent Frameworks | Traditional Planning |
-|---|---|---|---|---|
-| **Decisions are** | Structured artifacts | Ephemeral chat | Implicit in code | Docs nobody reads |
-| **Human judgment** | Required at every gate | Optional | Minimal | Upfront only |
-| **Decisions compound** | Yes (each skill reads prior) | No | No | Manually |
-| **Visual options** | Always | Never | Never | Sometimes |
-| **Execution** | After decisions, not before | Immediate | Immediate | Separate process |
-| **Tracks changes** | History + reasoning | No | Git only | Version hell |
+| | Decision Kit | Vibe Coding | Prompt Libraries | Agent Frameworks | Traditional Planning |
+|---|---|---|---|---|---|
+| **Decisions are** | Structured artifacts | Made for you, invisibly | Ephemeral chat | Implicit in code | Docs nobody reads |
+| **Human judgment** | Required at every gate | Skipped by design | Optional | Minimal | Upfront only |
+| **Decisions compound** | Yes (each skill reads prior) | No | No | No | Manually |
+| **Visual options** | Always | Never | Never | Never | Sometimes |
+| **Execution** | After decisions, not before | Instead of decisions | Immediate | Immediate | Separate process |
+| **Tracks changes** | History + reasoning | No | No | Git only | Version hell |
 
 ---
 
