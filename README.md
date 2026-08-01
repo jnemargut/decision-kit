@@ -26,11 +26,13 @@ It reads your situation and finds the 5 to 7 decisions hiding inside it, ranked 
 
 **This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
 
+**AI explores. You judge. Things get built.** That separation is the whole idea, and it has a name: Decision Driven Development. Make the decisions structured, visual, and fast, and the building gets better, because a human was in the loop at every point that mattered.
+
 Every skill is a folder of plain markdown, so this runs on whatever agentic coding tool you already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI, your own. Nothing to install, no API key, no account.
 
 Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
 
-When you're done thinking, you can hand the whole stack of decisions to an AI coding tool and tell it to build. The decisions become the spec. Every choice you made, every reason you gave, every tradeoff you weighed... it's all there, structured, ready to inform the code. You're not starting from a blank prompt. You're starting from a decision record. Want to skip the build? Feel free. Decision Kit is happy being just a thinking tool. But if you want the thinking to turn into code, the path is right there.
+When you're done, the decisions become the spec: hand them to an AI coding tool and it starts from a decision record instead of a blank prompt. Or don't. Decision Kit is happy being only a thinking tool.
 
 ---
 
@@ -64,13 +66,11 @@ screen are already settled. The whole run is in
 ## Contents
 
 - [The same thing, for code](#the-same-thing-for-code)
-- [The separation that matters](#the-separation-that-matters)
 - [Start here in 2 minutes](#start-here-in-2-minutes)
 - [How it works](#how-it-works)
 - [The decision artifact](#the-decision-artifact)
 - [Decisions compound](#decisions-compound)
-- [Idea to code, at a glance](#idea-to-code-at-a-glance)
-- [Greenfield and brownfield](#greenfield-and-brownfield)
+- [Already have code?](#already-have-code)
 - [What you can use this for](#what-you-can-use-this-for)
 - [How this compares](#how-this-compares)
 - [Skills](#skills)
@@ -80,15 +80,6 @@ screen are already settled. The whole run is in
 
 ---
 
-## The separation that matters
-
-**AI explores. You judge. Things get built.**
-
-When the roles are explicit and the handoff is clean, decisions that used to take days take minutes. They also get better, because you can see them side by side, compare them, and go back to them months later without relying on anyone's memory.
-
-This is Decision Driven Development. Software (and everything else) is built through decisions. Make those decisions structured, visual, and fast, and the building gets better. The output isn't slop because a human was in the loop at every point that mattered.
-
----
 
 ## Start here in 2 minutes
 
@@ -220,112 +211,35 @@ Your strategy informs your design. Your design informs your engineering. Context
 
 ---
 
-## Idea to code, at a glance
 
-It starts with one sentence about a thing you want to exist. By the time you're done, every meaningful decision has been made on purpose, and the build has something real to work from.
+## Already have code?
 
-Here's what a full run looks like, end to end. Every step writes decisions. Every next step reads them. By the time you're building, the AI already knows everything you decided and why.
+Every line of code is a decision someone made: the framework, the way errors are
+handled, whether sessions live in cookies or JWTs. None of it is written down. It is
+encoded in the code, and the code is the only place it exists.
 
-```
-You:        /decide I want to build a daily briefing app for my calendar
-Decision Kit:  [routes to /product-strategy, this sounds like a product idea]
-            [asks the real questions: who is this for? what problem?
-            why does it beat just opening Google Calendar?]
-            [surfaces 5 strategic decisions you didn't know you had]
-            [you pick, you judge, you argue with the recommendations]
-            [writes .decisions/strategy-brief.md]
-
-You:        /product-design the app we just planned
-Decision Kit:  [reads the strategy brief, doesn't re-ask who it's for]
-            [walks through framework, data model, auth, UX flows, component design]
-            [you decide: server components, Postgres, OAuth, card-based UI]
-            [writes the design decisions to .decisions/]
-
-You:        /ticket-breakdown
-Decision Kit:  [reads every prior decision, knows your stack]
-            [breaks the work into tickets, surfaces the implementation
-            decisions for each: scope, approach, testing, PR plan, risks]
-            [writes implementation-plan.md, a mini-spec]
-
-You:        "Now build it" (to any AI coding tool: Claude, Cursor, Codex)
-AI:         [reads .decisions/, your full decision record]
-            [builds against real decisions: who it's for, why it exists,
-            how it should feel, what stack to use, how to test it]
-```
-
-One sentence in, working code out, and none of the thinking got skipped along the way. Every choice is in `.decisions/` with the reason attached, so a week from now you can open the folder and see exactly why the app is the way it is.
-
-(Pairs well with Spec Kit and similar spec-driven tools - Decision Kit handles the thinking, they handle the building.)
-
----
-
-## Greenfield and brownfield
-
-Works whether you're dreaming something up or knee-deep in existing code.
-
-### Greenfield (new ideas, exploration)
-
-When you have an idea but no code yet, the danger isn't that you'll make bad decisions. It's that you'll skip them. You'll start building and assume you can figure it out as you go. Three weeks later you've made 40 decisions without realizing it, half of them contradict each other, and you can't remember why you chose any of them.
-
-Greenfield mode is the antidote. You tell `/strategize`, `/shape`, `/product-strategy`, or `/product-design` what you're working on, and it surfaces the decisions you actually need to make before code gets in the way. Not every decision. The ones that matter. The ones that will haunt you if you skip them.
-
-```
-/strategize should we build a tool-sharing app for neighbors?
-```
-
-It identifies the decisions hiding in your idea. Who's this actually for? How do strangers learn to trust each other? What's the model that makes this not feel like an awkward favor? You see options for each one, you pick, you move on. Twenty minutes later you have a strategy brief that captures every choice and every reason. Now you can build, and every line of code traces back to a decision you made on purpose.
-
-### Brownfield (existing code, no decisions recorded)
-
-Every line of code is a decision someone made. The framework you chose. The way you handle errors. Whether sessions live in cookies or JWTs. The fact that signups need email verification but password resets don't. None of those are written down anywhere. They're not in the docs. They're not in the commit messages. They're encoded in the code itself, and the code is the only place they exist.
-
-Your codebase is a graveyard of decisions nobody can see anymore.
-
-`/excavate` reads your code and digs them out.
-
-```
-/excavate
-```
+`/excavate` reads a codebase and digs those decisions back out.
 
 <p align="center"><img src="assets/doomhiddendecisions.png" alt="Excavate results from the Doom source code showing hidden decisions grouped by category: Game Feel findings like view bobbing tied to momentum, UX Design findings like Doomguy having 42 face states as an emotional dashboard, and Game Design findings like monsters hearing through walls via recursive sound flooding" width="450"></p>
 
-It scans in layers: configs and dependencies first, then architecture, then patterns like error handling and state management, then higher-level signals like UX patterns and business model decisions. You confirm, review, or reject findings. Every confirmed finding becomes a recorded decision. The invisible becomes browsable.
+You confirm, edit, or reject each finding, and the confirmed ones become recorded
+decisions. From there `/journal` keeps them current as things change.
 
-From there, `/journal` evolves those decisions over time:
-
-```
-/journal our target user ended up being suburban homeowners, not urban renters
-```
-
-<p align="center"><img src="assets/example-journal-entry.png" alt="Decision journal entry showing reasoning in quotes: They have garages full of tools and love lending them out, with an expanded change history showing the decision was changed from Urban Renters to Suburban Homeowners with a dated trail of why" width="450"></p>
-
-Decisions mature: early sketch (no reasoning) becomes firmed up (has reasoning) becomes evolved (has reasoning + history of changes). You can look at any decision and immediately know how mature it is.
-
-> **Bonus for coders:** lost your context window? No problem. Your context is embedded in your decisions. Start a fresh session, point the AI at `.decisions/`, and it picks up exactly where you left off. The reasoning is right there in the JSON. The tradeoffs are in the HTML. The history is in the journal. You don't re-explain yourself, you just keep going.
+More on both modes: [greenfield and brownfield](docs/greenfield-and-brownfield.md).
 
 ---
 
 ## What you can use this for
 
-These are just a handful of examples. Anywhere you need to make thoughtful decisions before committing to a direction, Decision Kit has a place. The pattern is always the same: you bring the situation, AI surfaces the decisions, you judge.
+Anywhere you need to think before committing to a direction. A few that come up a lot:
 
-**In software:**
+- **Prototype from scratch** &mdash; "I have an idea for an app" becomes a strategy brief, design decisions, and an implementation plan before you write a line.
+- **Think through a hard technical problem** &mdash; stop debating microservices in Slack. Get four framed options with real tradeoffs, pick one, move on.
+- **Design a system architecture** &mdash; framework, database, auth, API design, each decision informing the next. Basically ADRs that write themselves.
+- **Audit an inherited codebase** &mdash; `/excavate` surfaces the decisions the last team made but never documented.
+- **Launch something that isn't software** &mdash; a food truck, a conference, a wedding. Same machinery.
 
-- **Prototype from scratch** - "I have an idea for an app" turns into a strategy brief, design decisions, and implementation plan before you write a line of code. Then you hand the decisions to an AI coding tool and what comes out actually makes sense.
-- **Write a PRD** - Instead of staring at a blank doc, run `/product-strategy` and let it surface the decisions a good PRD needs to answer. Target user, positioning, business model, success metrics. Each one with options you can actually compare. The PRD writes itself from the decisions.
-- **Think through a hard technical problem** - "Should we migrate to microservices or keep the monolith?" Stop debating in Slack. Run `/strategize` and get four well-framed options with real tradeoffs. Pick one. Move on.
-- **Design a system architecture** - Run `/product-design` and walk through framework, database, auth, API design, state management. Each decision informs the next. You end up with an architecture that's deliberate, not accidental. And every choice is stored as a browsable artifact, basically ADRs that write themselves.
-- **Break down a complex ticket** - Run `/ticket-breakdown` on a gnarly feature request. It reads your codebase, identifies the scope decisions, surfaces the testing strategy, and produces an implementation plan grounded in your actual code, not generic best practices.
-- **Prepare for a design review** - Run `/strategize` on the problem space before you open Figma. Show up to the review with decisions already made about who it's for, what the constraints are, and why you went this direction.
-- **Audit an inherited codebase** - Run `/excavate` on code you didn't write. It surfaces every decision the previous team made but never documented: why they chose JWT over sessions, why errors are handled that way, why the data model looks like that.
-
-**Outside software:**
-
-- **Launch a business** - Food truck, consulting practice, online store. Strategy first, then an operational game plan with concrete tasks and timelines.
-- **Write a difficult email** - Run `/strategize` on "I need to push back on a client's timeline." It surfaces the decisions you need to make about framing, tone, what to include, what to leave out. The email you write afterward is deliberate, not reactive.
-- **Plan an event** - Conference, workshop series, team offsite. Run `/shape` and walk through format, schedule, venue, content structure, guest experience. Each decision builds on the last.
-
-The examples in this repo include [planning an app before building it](examples/running-club-app/), [Decision Kit redesigning its own design skills](examples/design-skills-upgrade/), a [neighborhood tool library](examples/community-app/), a [food truck launch](examples/food-truck/), and [wedding planning](examples/wedding-planning/).
+The full list, in and out of software: [use cases](docs/use-cases.md).
 
 ---
 
