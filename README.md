@@ -72,11 +72,13 @@ the actual tables, with real column names. Auth as the code each choice makes yo
 
 And then the part people do not expect:
 
-<p align="center"><img src="assets/example-leaderboard-ui.png" alt="Decision page asking What Does The Leaderboard Look Like, showing four working leaderboard mockups built from the same data: a dense standings table, a podium, an activity feed, and a personal progress view, each with honest tradeoffs" width="760"></p>
+<p align="center"><img src="assets/example-leaderboard-ui.png" alt="Four working leaderboard mockups built from the same data and shown side by side: a dense standings table, a three-person podium, a scrolling activity feed, and a personal weekly progress view" width="880"></p>
 
-You are not reading a description of four layouts. You are looking at four layouts,
-built from the same data, with the tradeoffs spelled out (*"nine of twelve people are
-literally below the fold"*). You pick the one you actually want before anyone writes
+You are not reading a description of four layouts. You are looking at four layouts, built
+from the same data, and the differences are the entire argument. The podium celebrates three
+people and buries nine. The activity feed is the liveliest of them and also quietly hides
+the ranking that was the actual request. The page spells out every one of those tradeoffs
+(*"nine of twelve people are literally below the fold"*), and you pick before anyone writes
 the component.
 
 Four decisions later the folder is a spec. Hand it to Claude Code, Cursor, Codex, or
