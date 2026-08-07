@@ -2,20 +2,28 @@
 
 **AI does the busywork around your decisions. You make the calls.**
 
-<p align="center"><img src="assets/decision-kit-sizzle.gif" alt="Decision Kit in 48 seconds: one sentence in, five ranked decisions out, four rendered options for each, you make the call, and the decisions compound into a spec" width="900"></p>
-
 <p align="center">
 <a href="#start-here-in-2-minutes"><strong>Install in 2 minutes</strong></a> &nbsp;·&nbsp;
 <a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
 <a href="#the-decision-artifact">The decision artifact</a> &nbsp;·&nbsp;
-<a href="#decisions-compound">Decisions compound</a><br>
-<a href="#already-have-code">Already have code?</a> &nbsp;·&nbsp;
+<a href="#decisions-compound">Decisions compound</a> &nbsp;·&nbsp;
+<a href="#already-have-code">Already have code?</a><br>
 <a href="#how-this-compares">How this compares</a> &nbsp;·&nbsp;
 <a href="examples/">Browse real runs</a> &nbsp;·&nbsp;
 <a href="docs/skills.md">All 34 skills</a>
 </p>
 
-Decision Kit is the planning layer that runs before the building starts. Here it is again slowly, with a real example.
+<p align="center"><img src="assets/decision-kit-sizzle.gif" alt="Decision Kit in 48 seconds: one sentence in, five ranked decisions out, four rendered options for each, you make the call, and the decisions compound into a spec" width="900"></p>
+
+That is the whole loop. One sentence in. The decisions hiding inside that sentence pulled
+out and ranked by what actually matters. Four real options built and rendered for each one.
+Your call, recorded with your reasoning. And at the end, a folder your coding agent can read
+instead of a blank prompt.
+
+Decision Kit is the planning layer that runs before the building starts, and the rest of
+this page is that same loop slowly, with real pages from real runs.
+
+It begins with a sentence you would type without thinking twice about it:
 
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
