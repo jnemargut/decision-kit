@@ -72,7 +72,7 @@ One sentence in (*"an app where my running club can log runs and see a leaderboa
 four decisions out. Architecture drawn as a stack diagram per option. The data model as
 the actual tables, with real column names. Auth as the code each choice makes you write.
 
-And then the part people do not expect:
+The fourth one is not an engineering question at all:
 
 <p align="center"><img src="assets/example-leaderboard-ui.png" alt="Four working leaderboard mockups built from the same data and shown side by side: a dense standings table, a three-person podium, a scrolling activity feed, and a personal weekly progress view" width="880"></p>
 
@@ -153,7 +153,7 @@ A decision page pops open in your browser. Pick an option. Watch the next decisi
 
 ## How it works
 
-The system has two types of skills, and the boundary between them is everything.
+There are two kinds of skill, and neither is allowed to do the other's job.
 
 <p align="center"><img src="assets/diagram-think-gate-act.png" alt="Three stacked layers: Think, where thinking skills surface decisions and render options but never execute; the Decision Gate, where nothing moves forward until you judge and your choice becomes a browsable artifact; and Act, where action skills read your decisions and produce deliverables but never make judgment calls" width="860"></p>
 
@@ -163,8 +163,8 @@ The system has two types of skills, and the boundary between them is everything.
 
 **The decision** is the gate between thinking and doing. Nothing moves forward until a human has judged.
 
-In practice that means the AI lays out its options, tells you which one it likes, and then
-stops. Overriding the recommendation is normal, and it is the whole reason the gate exists:
+So the AI lays out its options, tells you which one it likes, and then stops. Disagreeing
+with it costs you one click:
 
 <p align="center"><img src="assets/loop-the-gate.gif" alt="Three trust-model options side by side with one marked Recommended; the cursor picks a different one and it turns green and reads Chosen" width="800"></p>
 
