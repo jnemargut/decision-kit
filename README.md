@@ -35,9 +35,9 @@ Here is what it looks like in practice. You type this:
 
 And this comes back:
 
-<p align="center"><img src="assets/example-trust-model.png" alt="Decision page asking How Do Neighbors Build Trust, with four options side by side — a reputation system, a deposit hold, neighbor vouching, and verified identity — each drawn as the five-step flow a neighbour walks through, and neighbor vouching marked as chosen" width="880"></p>
+<p align="center"><img src="assets/example-trust-model.png" alt="Decision page asking How Do Neighbors Build Trust, with four options side by side — a reputation system, a deposit hold, neighbor vouching, and verified identity — each drawn as the five-step flow a neighbour walks through, and neighbor vouching carrying both the amber Recommended label the AI gave it and the green Chosen label" width="880"></p>
 
-You didn't ask for this. You didn't design it. You didn't even know this was a decision you needed to make. The AI built the whole page out of nothing: the question, the four options above, the flow each one puts a neighbour through, and below them the honest tradeoffs, a comparison table, and a recommendation. It read your one sentence, understood what you were actually trying to do, and surfaced the decision that makes or breaks the entire thing. "How do neighbors build trust?" Yeah. Obviously. How did you not think of that?
+You didn't ask for this. You didn't design it. You didn't even know this was a decision you needed to make. The AI built the whole page out of nothing: the question, the four options above, the flow each one puts a neighbour through, its own recommendation, and below them the honest tradeoffs and a comparison table. It read your one sentence, understood what you were actually trying to do, and surfaced the decision that makes or breaks the entire thing. "How do neighbors build trust?" Yeah. Obviously. How did you not think of that?
 
 That keeps happening. Decision after decision, each one building on what you chose before. You came in with an idea and Decision Kit pulled out every decision hiding inside it, ordered them by what matters most, and walked you through each one with options you can actually see and compare. Not too many that you get decision fatigue, not too few that you're left wondering "wait, what are we actually building?"
 
