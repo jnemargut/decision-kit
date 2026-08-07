@@ -2,7 +2,16 @@
 
 **AI does the busywork around your decisions. You make the calls.**
 
-Decision Kit is the planning layer that runs before the building starts. Here's what that looks like.
+<p align="center"><img src="assets/decision-kit-sizzle.gif" alt="Decision Kit in 48 seconds: one sentence in, five ranked decisions out, four rendered options for each, you make the call, and the decisions compound into a spec" width="900"></p>
+
+<p align="center">
+<a href="#start-here-in-2-minutes"><strong>Install in 2 minutes</strong></a> &nbsp;·&nbsp;
+<a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
+<a href="examples/">Browse real runs</a> &nbsp;·&nbsp;
+<a href="docs/skills.md">All 34 skills</a>
+</p>
+
+Decision Kit is the planning layer that runs before the building starts. Here it is again slowly, with a real example.
 
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
@@ -23,6 +32,8 @@ You pick. It remembers. On to the next one. Go ahead, argue with the AI's recomm
 ## So what is it doing?
 
 It reads your situation and finds the 5 to 7 decisions hiding inside it, ranked from most critical to least. For each one it does the work *around* the decision and then gets out of the way: gathers the research, builds four real options, renders visual previews, and lays the tradeoffs out side by side. Then it stops and waits for you. Every decision becomes an artifact you can open in a browser, compare, and still understand six months from now.
+
+<p align="center"><img src="assets/loop-decisions-found.gif" alt="One sentence expands into five decisions ranked from critical to medium: who is this for, how do neighbors build trust, what actually gets shared, how do people find each other, what should it look and feel like" width="800"></p>
 
 **This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
 
@@ -140,13 +151,15 @@ That also installs the **X tier**: `x-` prefixed versions of the core skills tha
 
 A decision page pops open in your browser. Pick an option. Watch the next decision build on yours. Tell the AI its recommendation is wrong. Bring your own answer. Change your mind later. It's all part of the process.
 
+<p align="center"><img src="assets/loop-the-gate.gif" alt="Three trust-model options side by side with one marked Recommended; the cursor picks a different one and it turns green and reads Chosen" width="800"></p>
+
 ---
 
 ## How it works
 
 The system has two types of skills, and the boundary between them is everything.
 
-<p align="center"><img src="assets/diagram-system.png" alt="System diagram showing three layers: Think (thinking skills like strategize, shape, product-strategy generate options), Decision Gate (browsable HTML artifacts in a .decisions folder that carry forward), and Act (action skills like game-plan, product-plan, brief execute on your decisions)" width="800"></p>
+<p align="center"><img src="assets/diagram-think-gate-act.png" alt="Three stacked layers: Think, where thinking skills surface decisions and render options but never execute; the Decision Gate, where nothing moves forward until you judge and your choice becomes a browsable artifact; and Act, where action skills read your decisions and produce deliverables but never make judgment calls" width="860"></p>
 
 **Thinking skills** do the thinking. They identify the decisions that matter for your situation, put them in order from most critical to least, and walk you through each one with visual options, comparisons, and a recommendation. Then they stop and wait for you to judge. They never execute anything. Their entire job is to surface the right decisions and make your judgment call as informed as possible.
 
@@ -159,6 +172,8 @@ The system has two types of skills, and the boundary between them is everything.
 ## The decision artifact
 
 Every decision produces a real, tangible artifact you can open in a browser. Not notes buried in a doc. Not a Slack message someone will scroll past. A beautiful, structured page that lays out exactly what was considered and what was chosen.
+
+<p align="center"><img src="assets/diagram-anatomy-of-a-decision.png" alt="Anatomy of a decision page, annotated: the question it surfaced, four real options with rendered previews, honest tradeoffs for each, and a side-by-side comparison on the dimensions that decide it" width="860"></p>
 
 <p align="center"><img src="assets/decision-pages-showcase.gif" alt="Animated showcase of a food truck brand identity decision page with four menu board mockups in different visual styles: Retro Diner, Street Culture, Minimal and Premium, and Neighborhood Joint, each with rendered previews and pros and cons" width="500"></p>
 
@@ -184,6 +199,8 @@ Open `.decisions/index.html` six months from now. See exactly what was decided, 
 ## Decisions compound
 
 Each skill reads the previous skill's decisions. No re-asking. No lost context. It just builds.
+
+<p align="center"><img src="assets/loop-decisions-compound.gif" alt="Three decisions stacking in order, each one reading the one above it, while the .decisions folder fills up with index.html and one file per decision" width="800"></p>
 
 ### Any domain: Strategize, Game Plan, Brief
 ```
@@ -245,6 +262,8 @@ The full list, in and out of software: [use cases](docs/use-cases.md).
 
 ## How this compares
 
+<p align="center"><img src="assets/diagram-vs-vibe-coding.png" alt="Side by side: vibe coding, where the trust model, data schema, and who it is for all got decided for you invisibly, versus Decision Kit, where you chose each one" width="860"></p>
+
 | | Decision Kit | Vibe Coding | Prompt Libraries | Agent Frameworks | Traditional Planning |
 |---|---|---|---|---|---|
 | **Decisions are** | Structured artifacts | Made for you, invisibly | Ephemeral chat | Implicit in code | Docs nobody reads |
@@ -266,11 +285,11 @@ You rarely need to pick one. `/decide` reads what you said and routes you.
 
 | | |
 |---|---|
-| **Thinking skills** | Surface the decisions and wait for your judgment: `/strategize`, `/shape`, `/product-strategy`, `/product-design`, `/ticket-breakdown`, `/excavate`, `/journal`, `/core-principles`, `/red-team`, `/self-code-review`, `/design-system` |
-| **Action skills** | Execute on what you decided: `/game-plan`, `/product-plan`, `/launch-playbook`, `/brief`, `/challenge`, `/visual-design` |
-| **Configuration** | Teach it about you: `/whoiam`, `/research-sources` |
-| **Routing** | `/decide`, plus `/autodecide`, `/overdecide`, `/underdecide` to change how many decisions you get |
-| **The X tier** | `x-` versions that think harder and cost more usage: `/x-decide`, `/x-strategize`, `/x-shape`, `/x-product-strategy`, `/x-product-plan`, `/x-product-design`, `/x-game-plan`, `/x-visual-design`, `/x-challenge` |
+| **Thinking skills** (12) | Surface the decisions and wait for your judgment: `/strategize`, `/shape`, `/product-strategy`, `/product-design`, `/ticket-breakdown`, `/excavate`, `/journal`, `/core-principles`, `/self-code-review`, `/design-system`, `/visual-design`, `/state-your-case` |
+| **Action skills** (6) | Execute on what you decided: `/game-plan`, `/product-plan`, `/brief`, `/challenge`, `/investigate`, `/observe` |
+| **Configuration** (3) | Teach it about you: `/whoiam`, `/research-sources`, `/hook-init` |
+| **Routing** (4) | `/decide`, plus `/autodecide`, `/overdecide`, `/underdecide` to change how many decisions you get |
+| **The X tier** (9) | `x-` versions that think harder and cost more usage: `/x-decide`, `/x-strategize`, `/x-shape`, `/x-product-strategy`, `/x-product-plan`, `/x-product-design`, `/x-game-plan`, `/x-visual-design`, `/x-challenge` |
 
 **[Full skills reference](docs/skills.md)** for what each one does, when to use it, and what it produces.
 
