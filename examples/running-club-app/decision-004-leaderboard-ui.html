@@ -251,17 +251,22 @@
   .m-row.me .nm { color:#60a5fa; font-weight:700; }
   .pod { display:flex; align-items:flex-end; gap:8px; justify-content:center; margin:6px 0 12px; }
   .pod-col { flex:1; text-align:center; }
-  .pod-av { width:34px; height:34px; border-radius:50%; margin:0 auto 6px; background:#22222e; border:2px solid #2f2f40; }
-  .pod-col.p1 .pod-av { width:44px; height:44px; border-color:#fbbf24; }
-  .pod-col.p2 .pod-av { border-color:#9aa0b4; } .pod-col.p3 .pod-av { border-color:#b06a3a; }
-  .pod-bar { border-radius:8px 8px 0 0; background:#181824; border:1px solid #2a2a3a; border-bottom:none; }
-  .pod-col.p1 .pod-bar { height:56px; background:linear-gradient(#2a2416,#181824); border-color:#7a5f1f; }
+  .pod-av { width:34px; height:34px; border-radius:50%; margin:0 auto 6px; background:#22222e; border:2px solid #2f2f40;
+            display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#c8ccd8; }
+  .pod-col.p1 .pod-av { width:44px; height:44px; border-color:#fbbf24; background:#2b2517; color:#fbbf24; font-size:17px; }
+  .pod-col.p2 .pod-av { border-color:#9aa0b4; background:#212430; color:#c7ccdb; }
+  .pod-col.p3 .pod-av { border-color:#b06a3a; background:#261b14; color:#d59367; }
+  .pod-bar { border-radius:8px 8px 0 0; background:#181824; border:1px solid #2a2a3a; border-bottom:none;
+             display:flex; align-items:flex-start; justify-content:center; padding-top:5px;
+             font-family:ui-monospace,monospace; font-size:11px; font-weight:700; color:#45455a; }
+  .pod-col.p1 .pod-bar { height:56px; background:linear-gradient(#2a2416,#181824); border-color:#7a5f1f; color:#8a6d2f; }
   .pod-col.p2 .pod-bar { height:40px; } .pod-col.p3 .pod-bar { height:30px; }
   .pod-nm { font-size:11px; color:#d5d5e0; font-weight:700; }
   .pod-val { font-size:10px; color:#7a7a90; font-family:ui-monospace,monospace; }
   .pod-rest { font-size:11px; color:#6a6a80; text-align:center; padding-top:8px; border-top:1px solid #1c1c28; }
   .feed-card { display:flex; gap:10px; align-items:center; background:#12121c; border:1px solid #22222e; border-radius:10px; padding:9px 11px; margin-bottom:7px; }
-  .feed-av { width:26px; height:26px; border-radius:50%; background:#22222e; flex:none; }
+  .feed-av { width:26px; height:26px; border-radius:50%; background:#252533; flex:none;
+             display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#9aa0b4; }
   .feed-body { flex:1; min-width:0; }
   .feed-top { font-size:11.5px; color:#d5d5e0; } .feed-top b { color:#e8e8f0; }
   .feed-meta { font-size:10px; color:#6a6a80; margin-top:1px; }
@@ -291,9 +296,9 @@
       <div class="option-subtitle">Top three get the stage, everyone else scrolls</div>
       <div class="visual-preview"><div class="mock"><div class="mock-bar"><span class="mock-title">This week</span><span class="mock-sub">Top 3</span></div>
 <div class="pod">
-  <div class="pod-col p2"><div class="pod-av"></div><div class="pod-nm">Priya</div><div class="pod-val">44.9</div><div class="pod-bar"></div></div>
-  <div class="pod-col p1"><div class="pod-av"></div><div class="pod-nm">Marcus</div><div class="pod-val">48.2</div><div class="pod-bar"></div></div>
-  <div class="pod-col p3"><div class="pod-av"></div><div class="pod-nm">You</div><div class="pod-val">41.0</div><div class="pod-bar"></div></div>
+  <div class="pod-col p2"><div class="pod-av">P</div><div class="pod-nm">Priya</div><div class="pod-val">44.9</div><div class="pod-bar">2</div></div>
+  <div class="pod-col p1"><div class="pod-av">M</div><div class="pod-nm">Marcus</div><div class="pod-val">48.2</div><div class="pod-bar">1</div></div>
+  <div class="pod-col p3"><div class="pod-av">Y</div><div class="pod-nm">You</div><div class="pod-val">41.0</div><div class="pod-bar">3</div></div>
 </div><div class="pod-rest">9 more runners &#8595;</div></div></div>
       <div class="pros-cons"><div class="pro"><span class="icon">+</span>The top of the club gets a real reward</div><div class="pro"><span class="icon">+</span>Feels like an event rather than a spreadsheet</div><div class="con"><span class="icon">&minus;</span>Nine of twelve people are literally below the fold</div><div class="con"><span class="icon">&minus;</span>Discourages the slower half, who are the ones most likely to quit</div></div>
     </div>
@@ -302,9 +307,9 @@
       <div class="option-title">The activity feed</div>
       <div class="option-subtitle">Runs as they happen, with kudos</div>
       <div class="visual-preview"><div class="mock"><div class="mock-bar"><span class="mock-title">Recent</span><span class="mock-sub">Club feed</span></div>
-<div class="feed-card"><div class="feed-av"></div><div class="feed-body"><div class="feed-top"><b>Marcus</b> ran 8.2 km</div><div class="feed-meta">This morning &middot; 4:52 /km</div></div><div class="feed-kudos">3 &#9829;</div></div>
-<div class="feed-card"><div class="feed-av"></div><div class="feed-body"><div class="feed-top"><b>You</b> ran 5.0 km</div><div class="feed-meta">Yesterday &middot; 5:31 /km</div></div><div class="feed-kudos">5 &#9829;</div></div>
-<div class="feed-card"><div class="feed-av"></div><div class="feed-body"><div class="feed-top"><b>Dana</b> ran 12.4 km</div><div class="feed-meta">Sunday &middot; long run</div></div><div class="feed-kudos">8 &#9829;</div></div></div></div>
+<div class="feed-card"><div class="feed-av">M</div><div class="feed-body"><div class="feed-top"><b>Marcus</b> ran 8.2 km</div><div class="feed-meta">This morning &middot; 4:52 /km</div></div><div class="feed-kudos">3 &#9829;</div></div>
+<div class="feed-card"><div class="feed-av">Y</div><div class="feed-body"><div class="feed-top"><b>You</b> ran 5.0 km</div><div class="feed-meta">Yesterday &middot; 5:31 /km</div></div><div class="feed-kudos">5 &#9829;</div></div>
+<div class="feed-card"><div class="feed-av">D</div><div class="feed-body"><div class="feed-top"><b>Dana</b> ran 12.4 km</div><div class="feed-meta">Sunday &middot; long run</div></div><div class="feed-kudos">8 &#9829;</div></div></div></div>
       <div class="pros-cons"><div class="pro"><span class="icon">+</span>Gives people a reason to open it more than once a week</div><div class="pro"><span class="icon">+</span>Kudos turn logging a run into a social act</div><div class="con"><span class="icon">&minus;</span>Buries the leaderboard, which was the actual request</div><div class="con"><span class="icon">&minus;</span>Goes quiet and sad in a week where nobody runs</div></div>
     </div>
     <div class="option-card not-chosen">
