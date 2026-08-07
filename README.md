@@ -7,6 +7,10 @@
 <p align="center">
 <a href="#start-here-in-2-minutes"><strong>Install in 2 minutes</strong></a> &nbsp;·&nbsp;
 <a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
+<a href="#the-decision-artifact">The decision artifact</a> &nbsp;·&nbsp;
+<a href="#decisions-compound">Decisions compound</a><br>
+<a href="#already-have-code">Already have code?</a> &nbsp;·&nbsp;
+<a href="#how-this-compares">How this compares</a> &nbsp;·&nbsp;
 <a href="examples/">Browse real runs</a> &nbsp;·&nbsp;
 <a href="docs/skills.md">All 34 skills</a>
 </p>
@@ -74,24 +78,6 @@ screen are already settled. The whole run is in
 
 ---
 
-## Contents
-
-- [The same thing, for code](#the-same-thing-for-code)
-- [Start here in 2 minutes](#start-here-in-2-minutes)
-- [How it works](#how-it-works)
-- [The decision artifact](#the-decision-artifact)
-- [Decisions compound](#decisions-compound)
-- [Already have code?](#already-have-code)
-- [What you can use this for](#what-you-can-use-this-for)
-- [How this compares](#how-this-compares)
-- [Skills](#skills)
-- [Hooks](#hooks)
-- [Build your own thinking skill](#build-your-own-thinking-skill)
-- [Try it](#try-it-tell-us-what-happened)
-
----
-
-
 ## Start here in 2 minutes
 
 **1. Clone:**
@@ -151,8 +137,6 @@ That also installs the **X tier**: `x-` prefixed versions of the core skills tha
 
 A decision page pops open in your browser. Pick an option. Watch the next decision build on yours. Tell the AI its recommendation is wrong. Bring your own answer. Change your mind later. It's all part of the process.
 
-<p align="center"><img src="assets/loop-the-gate.gif" alt="Three trust-model options side by side with one marked Recommended; the cursor picks a different one and it turns green and reads Chosen" width="800"></p>
-
 ---
 
 ## How it works
@@ -167,30 +151,53 @@ The system has two types of skills, and the boundary between them is everything.
 
 **The decision** is the gate between thinking and doing. Nothing moves forward until a human has judged.
 
+In practice that means the AI lays out its options, tells you which one it likes, and then
+stops. Overriding the recommendation is normal, and it is the whole reason the gate exists:
+
+<p align="center"><img src="assets/loop-the-gate.gif" alt="Three trust-model options side by side with one marked Recommended; the cursor picks a different one and it turns green and reads Chosen" width="800"></p>
+
 ---
 
 ## The decision artifact
 
 Every decision produces a real, tangible artifact you can open in a browser. Not notes buried in a doc. Not a Slack message someone will scroll past. A beautiful, structured page that lays out exactly what was considered and what was chosen.
 
-<p align="center"><img src="assets/diagram-anatomy-of-a-decision.png" alt="Anatomy of a decision page, annotated: the question it surfaced, four real options with rendered previews, honest tradeoffs for each, and a side-by-side comparison on the dimensions that decide it" width="860"></p>
+Every page has the same bones, whether the decision is a database schema or a wedding
+venue: the question, the options, what each one costs you, and how they stack up against
+each other. Then the two things no AI can supply — what you picked, and why you picked it.
 
-<p align="center"><img src="assets/decision-pages-showcase.gif" alt="Animated showcase of a food truck brand identity decision page with four menu board mockups in different visual styles: Retro Diner, Street Culture, Minimal and Premium, and Neighborhood Joint, each with rendered previews and pros and cons" width="500"></p>
+<p align="center"><img src="assets/diagram-anatomy-of-a-decision.png" alt="Anatomy of a decision page, annotated: the question it surfaced, four real options with rendered previews, honest tradeoffs for each, and a side-by-side comparison on the dimensions that decide it" width="860"></p>
 
 Each page includes:
 
 - **Context** - what's being decided and why it matters
 - **Options** - 4 visual options with rendered previews (UI mockups, flow diagrams, persona cards, revenue models, whatever makes the difference visible)
-- **Tradeoffs** - honest pros and cons for every option
+- **Tradeoffs** - honest pros and cons for every option, including the one it recommends
+- **Comparison** - side-by-side across the dimensions that matter
+- **Your choice** - what you decided
+- **Your reasoning** - why you chose it (captured when you volunteer it, never nagged out of you)
+
+The word *rendered* is doing real work in that list. Options are not described to you in a
+paragraph and left to your imagination — they are built. A UI decision gets four working
+mockups. A schema decision gets four sets of real tables. Here is a food truck deciding its
+brand identity, and the four options are four menu boards you can simply look at:
+
+<p align="center"><img src="assets/decision-pages-showcase.gif" alt="Animated showcase of a food truck brand identity decision page with four menu board mockups in different visual styles: Retro Diner, Street Culture, Minimal and Premium, and Neighborhood Joint, each with rendered previews and pros and cons" width="500"></p>
+
+Nobody wrote a paragraph describing what "retro diner" might feel like. You just look.
+
+<details>
+<summary><strong>Close-ups from that same page</strong></summary>
 
 <p align="center"><img src="assets/example-pros-cons.png" alt="Two option cards side by side for Smash Burgers and Gourmet Tacos, each showing a green Pros list and red Cons list with specific tradeoffs like speed of service and crave factor" width="600"></p>
 
-- **Comparison** - side-by-side across the dimensions that matter
+Tradeoffs are specific enough to argue with, and the recommended option gets the same
+scrutiny as the rest.
 
 <p align="center"><img src="assets/example-comparison-table.png" alt="Side-by-side comparison table rating four food truck concepts across six dimensions: menu simplicity, speed of service, repeat customer potential, ingredient cost, and Instagram factor" width="700"></p>
 
-- **Your choice** - what you decided
-- **Your reasoning** - why you chose it (captured when you volunteer it, never nagged out of you)
+Then the same four, scored across the dimensions that actually decide it.
+</details>
 
 Open `.decisions/index.html` six months from now. See exactly what was decided, when, and why. New team member? Point them at the folder. Argument about why something was built a certain way? The answer is right there. Decisions stop being ephemeral things that happened in someone's head and start being artifacts that persist and compound.
 
@@ -262,7 +269,11 @@ The full list, in and out of software: [use cases](docs/use-cases.md).
 
 ## How this compares
 
+The decisions get made either way. The only question is whether you were there.
+
 <p align="center"><img src="assets/diagram-vs-vibe-coding.png" alt="Side by side: vibe coding, where the trust model, data schema, and who it is for all got decided for you invisibly, versus Decision Kit, where you chose each one" width="860"></p>
+
+Against the other ways people try to solve this:
 
 | | Decision Kit | Vibe Coding | Prompt Libraries | Agent Frameworks | Traditional Planning |
 |---|---|---|---|---|---|
