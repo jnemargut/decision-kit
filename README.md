@@ -15,21 +15,25 @@
 
 <p align="center"><img src="assets/decision-kit-sizzle.gif" alt="Decision Kit in 48 seconds: one sentence in, five ranked decisions out, four rendered options for each, you make the call, and the decisions compound into a spec" width="900"></p>
 
-That is the whole loop. One sentence in. The decisions hiding inside that sentence pulled
-out and ranked by what actually matters. Four real options built and rendered for each one.
-Your call, recorded with your reasoning. And at the end, a folder your coding agent can read
-instead of a blank prompt.
+Decision Kit is the planning layer that runs before the building starts. It does not write
+your app. It is the part that comes first, where somebody works out what is being built and
+why — and that somebody is you.
 
-Decision Kit is the planning layer that runs before the building starts, and the rest of
-this page is that same loop slowly, with real pages from real runs.
+**AI explores. You judge. Things get built.** That separation is the whole idea, and it has a
+name: Decision Driven Development. Make the decisions structured, visual, and fast, and the
+building gets better, because a human was in the loop at every point that mattered.
 
-It begins with a sentence you would type without thinking twice about it:
+Every skill is a folder of plain markdown, so this runs on whatever agentic coding tool you
+already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI, your own. Nothing to install,
+no API key, no account.
+
+Here is what it looks like in practice. You type this:
 
 ```
 /decide I wanna make a tool-sharing app for my neighborhood
 ```
 
-You said one sentence. And then this shows up:
+And this comes back:
 
 <p align="center"><img src="assets/example-trust-model.png" alt="Decision page asking How Do Neighbors Build Trust, showing two options side by side: Reputation System and Deposit Hold, each with step-by-step flows and pros and cons" width="700"></p>
 
@@ -47,15 +51,11 @@ It reads your situation and finds the 5 to 7 decisions hiding inside it, ranked 
 
 <p align="center"><img src="assets/loop-decisions-found.gif" alt="One sentence expands into five decisions ranked from critical to medium: who is this for, how do neighbors build trust, what actually gets shared, how do people find each other, what should it look and feel like" width="800"></p>
 
-**This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit is the planning layer that goes first. It slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
-
-**AI explores. You judge. Things get built.** That separation is the whole idea, and it has a name: Decision Driven Development. Make the decisions structured, visual, and fast, and the building gets better, because a human was in the loop at every point that mattered.
-
-Every skill is a folder of plain markdown, so this runs on whatever agentic coding tool you already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI, your own. Nothing to install, no API key, no account.
-
-Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
+**This is the opposite of vibe coding.** Vibe coding is a blast: describe a thing, watch it get built, keep going. It works right up until you're hours deep in something nobody actually thought through, full of decisions that got made for you while you weren't looking. Decision Kit slows you down at the handful of moments where slow is worth it, then hands the build a real spec instead of a vibe.
 
 When you're done, the decisions become the spec: hand them to an AI coding tool and it starts from a decision record instead of a blank prompt. Or don't. Decision Kit is happy being only a thinking tool.
+
+Sibling project: [be-smarter](https://github.com/jnemargut/be-smarter). Decision Kit puts you in the loop. Be-smarter thinks that way even when you're not.
 
 ---
 
