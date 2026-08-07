@@ -19,9 +19,9 @@ Decision Kit is the planning layer that runs before the building starts. It does
 your app. It is the part that comes first, where somebody works out what is being built and
 why — and that somebody is you.
 
-**AI explores. You judge. Things get built.** That separation is the whole idea, and it has a
-name: Decision Driven Development. Make the decisions structured, visual, and fast, and the
-building gets better, because a human was in the loop at every point that mattered.
+**AI explores. You judge. Things get built.** That separation has a name: Decision Driven
+Development. Make the decisions structured, visual, and fast, and the building gets better,
+because a human was in the loop at every point that mattered.
 
 Every skill is a folder of plain markdown, so this runs on whatever agentic coding tool you
 already use: Claude Code, Cursor, Codex, Copilot, Gemini CLI, your own. Nothing to install,
@@ -76,12 +76,11 @@ The fourth one is not an engineering question at all:
 
 <p align="center"><img src="assets/example-leaderboard-ui.png" alt="Four working leaderboard mockups built from the same data and shown side by side: a dense standings table, a three-person podium, a scrolling activity feed, and a personal weekly progress view" width="880"></p>
 
-You are not reading a description of four layouts. You are looking at four layouts, built
-from the same data, and the differences are the entire argument. The podium celebrates three
-people and buries nine. The activity feed is the liveliest of them and also quietly hides
-the ranking that was the actual request. The page spells out every one of those tradeoffs
-(*"nine of twelve people are literally below the fold"*), and you pick before anyone writes
-the component.
+You are not reading a description of four layouts. You are looking at four layouts, built from
+the same data. The podium celebrates three people and buries nine. The activity feed is the
+liveliest of them and also quietly hides the ranking that was the actual request. The page
+spells out every one of those tradeoffs (*"nine of twelve people are literally below the
+fold"*), and you pick before anyone writes the component.
 
 Four decisions later the folder is a spec. Hand it to Claude Code, Cursor, Codex, or
 whatever you use, and the stack, the schema, the auth model, and the shape of the main
@@ -138,7 +137,7 @@ The skills are plain markdown instructions. Anything that can read a file can ru
 /decide my friend and I are thinking about launching a food truck
 ```
 
-Don't know which skill to use? That's the whole point of `/decide`. Say what's on your mind and it figures out the rest.
+Don't know which skill to use? That's what `/decide` is for. Say what's on your mind and it figures out the rest.
 
 Or go direct if you already know what you need:
 ```
@@ -172,7 +171,7 @@ with it costs you one click:
 
 ## The decision artifact
 
-Every decision produces a real, tangible artifact you can open in a browser. Not notes buried in a doc. Not a Slack message someone will scroll past. A beautiful, structured page that lays out exactly what was considered and what was chosen.
+Every decision produces a real, tangible artifact you can open in a browser. Not notes buried in a doc. Not a Slack message someone will scroll past. A structured page that lays out exactly what was considered and what was chosen.
 
 Every page has the same bones, whether the decision is a database schema or a wedding
 venue: the question, the options, what each one costs you, and how they stack up against
@@ -189,10 +188,10 @@ Each page includes:
 - **Your choice** - what you decided
 - **Your reasoning** - why you chose it (captured when you volunteer it, never nagged out of you)
 
-The word *rendered* is doing real work in that list. Options are not described to you in a
-paragraph and left to your imagination — they are built. A UI decision gets four working
-mockups. A schema decision gets four sets of real tables. Here is a food truck deciding its
-brand identity, and the four options are four menu boards you can simply look at:
+Options are not described in a paragraph and left to your imagination — they are built. A UI
+decision gets four working mockups. A schema decision gets four sets of real tables. Here is a
+food truck deciding its brand identity, and the four options are four menu boards you can
+simply look at:
 
 <p align="center"><img src="assets/decision-pages-showcase.gif" alt="Animated showcase of a food truck brand identity decision page with four menu board mockups in different visual styles: Retro Diner, Street Culture, Minimal and Premium, and Neighborhood Joint, each with rendered previews and pros and cons" width="500"></p>
 
